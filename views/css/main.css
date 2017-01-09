@@ -1,0 +1,273 @@
+*{
+	box-sizing: border-box;
+	user-select: none;
+	font-family: 'Roboto Condensed', sans-serif;
+}
+
+body{
+	margin: 0;
+	padding: 0;
+	background-color: #EEE;
+}
+
+.modal{
+	position: fixed;
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		background: rgba(255,255,255,.9);
+	z-index: 600;
+	display: none;
+	overflow: auto;
+}
+
+.modal-content{
+	background-color: #212121;
+	color: #EEE;
+	margin: 0;
+		position: absolute;
+		top: 50%;
+	left: 50%;
+		margin-right: -50%;
+	transform: translate(-50%, -50%);
+	padding: 15px;
+}
+
+.moving{
+	position: absolute;
+	user-select: none;
+	cursor: default;
+}
+
+.card{
+	width: 120px;
+	min-height: 171px;
+	z-index: 2;
+}
+.card[private="true"]{
+	border: 4px solid rgba(50, 255, 255, .6);
+}
+.deck{
+	background-color: #212121;
+	color: #EEE;
+	box-shadow: 3px 3px 0px 0px rgba(33,33,33,.7);
+	border-radius: 5px;
+	width: 125px;
+	height: 175px;
+	z-index: 1;
+	text-align: center;
+	padding-top: 15px;
+	font-size: 25px;
+	overflow: hidden;
+	top: 300px;
+}
+
+.viewedCard{
+	width: 140px;
+	min-height: 200px;
+	margin: 15px;
+}
+
+
+.pannel{
+	position: fixed;
+	left: 0;
+	top: 0;
+	z-index: 100500;
+	margin: 0;
+	padding: 0;
+	font-size:0px;
+}
+
+.add{
+	background-color: #212121;
+	color: #EEE;
+	font-size: 25px;
+	width: 50px;
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+	cursor: pointer;
+	display: inline-block;
+	word-spacing: -1;
+	vertical-align: top
+}
+.playersColor{
+	margin: 0;
+	background-color: #212121;
+	color: #EEE;
+	height: 50px;
+	line-height: 50px;
+	width: 10px;
+	text-align: center;
+	display: inline-block;
+	vertical-align: top
+}
+
+.addDeck textarea{
+	border: 0;
+	background-color: #EEE;
+	color: #212121;
+	padding: 10px;
+	width: 600px;
+	height: 150px;
+	resize: none;
+}
+.button button{
+	width: 600px;
+	padding: 10px;
+	border: 0;
+	background-color: #212121;
+	color: #EEE;
+	font-size: 20px;
+	margin-top: 0px;
+}
+.button button:hover{
+	background-color: #EEE;
+	color: #212121;
+}
+.deckList{
+	width: 720px;
+	overflow-y: auto;
+	height: 400px;
+}
+
+a{
+	color: #808080;
+	cursor: pointer;
+}
+.deck a{
+	color: #EEE;
+	cursor: pointer;
+}
+
+.deck-card-count{
+	font-size: 60px;
+	font-weight: bold;
+	margin-top: 7px;
+}
+
+
+.counter{
+	width: 40px;
+	height: 40px;
+	background-color: rgb(33, 33, 33);
+	border-radius:50%;
+	text-align: center;
+	font-size: 25px;
+	font-weight: bold;
+	box-sizing: border-box;
+	padding-top: 5px;
+	position: absolute;
+	user-select: none;
+	cursor: default;
+	z-index: 100400;
+}
+
+
+
+/* .squaredThree */
+/* https://codepen.io/bbodine1/pen/novBm */
+.squaredThree {
+	width: 20px;
+	position: relative;
+	float: right;
+	clear:both;
+}
+.squaredThree label {
+	width: 20px;
+	height: 20px;
+	cursor: pointer;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-color: #EEE;
+}
+.squaredThree label:after {
+	content: '';
+	width: 9px;
+	height: 5px;
+	position: absolute;
+	top: 4px;
+	left: 4px;
+	border: 3px solid #212121;
+	border-top: none;
+	border-right: none;
+	background: transparent;
+	opacity: 0;
+	transform: rotate(-45deg);
+}
+.squaredThree label:hover::after {
+	opacity: 0.3;
+}
+.squaredThree input[type=checkbox] {
+	visibility: hidden;
+}
+.squaredThree input[type=checkbox]:checked + label:after {
+	opacity: 1;
+}
+
+/* end .squaredThree */
+
+
+.moreOptions{
+	width: 350px;
+}
+.moreOptions .input-field{
+	color: #EEE;
+	padding: 15px;
+	margin-top: 5px;
+	font-size: 20px;
+}
+.moreOptions input{
+	border: 0px;
+	background-color: #EEE;
+	color: #212121;
+	font-size: 20px;
+	width: 60px;
+	float: right;
+	padding-left: 5px;
+}
+
+.input-field button{
+	width: 100%;
+	border:0;
+	padding: 15px;
+	font-size: 20px;
+	background-color: #EEE;
+	color: #212121;
+}
+
+.input-field button:hover{
+	background-color: #808080;
+	color: #EEE;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button {	
+	 opacity: 1;
+}
+
+
+
+/*
+
+Copyright 2016-2017 Ivan Alexandrov
+
+This file is part of OpenTabletop.
+
+	OpenTabletop is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	OpenTabletop is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with OpenTabletop.  If not, see <http://www.gnu.org/licenses/>.
+
+*/

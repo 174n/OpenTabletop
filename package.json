@@ -1,0 +1,18 @@
+{
+  "name": "opentabletop",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Rundik",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.14.0",
+    "valid-url": "^1.0.9"
+  },
+  "description": "Browser-based online project in which you can play any card games with your friends"
+}
