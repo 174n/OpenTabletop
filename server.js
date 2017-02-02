@@ -245,11 +245,11 @@ app.get('/auth', function(req, res){
 
 app.use(authorized, express.static(__dirname + '/views'));
 
-/*app.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
-  console.log("Server listening on port "+process.env.PORT);
-});*/
-app.listen(80, function(){
-	console.log('Server listening on port  80!');
+var server_port = process.env.OPENSHIFT_NODEJS_PORT || process.env.PORT ||  80;
+var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || process.env.IP || '127.0.0.1';
+
+server.listen(server_port, server_ip_address, function () {
+  console.log( "Listening on " + server_ip_address + ", port " + server_port )
 });
 
 
