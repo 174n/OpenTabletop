@@ -1,0 +1,1112 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"j",
+				"jc-sb\tjustify-content: space-between;"
+			],
+			[
+				"tra",
+				"transform"
+			],
+			[
+				"d",
+				"draggable"
+			],
+			[
+				"lo",
+				"log"
+			],
+			[
+				"y",
+				"yourId"
+			],
+			[
+				"fr",
+				"friendId"
+			],
+			[
+				"ge",
+				"getters"
+			],
+			[
+				"co",
+				"context"
+			],
+			[
+				"cur",
+				"cur-p\tcursor: pointer;"
+			],
+			[
+				"f",
+				"firebase"
+			],
+			[
+				"da",
+				"database"
+			],
+			[
+				"cons",
+				"console"
+			],
+			[
+				"user",
+				"userdata"
+			],
+			[
+				"use",
+				"userId"
+			],
+			[
+				"T",
+				"Toolbar.vue"
+			],
+			[
+				"db",
+				"dbSet"
+			],
+			[
+				"vide",
+				"videoPrev"
+			],
+			[
+				"vi",
+				"videoId"
+			],
+			[
+				"video",
+				"videoId"
+			],
+			[
+				"au",
+				"audioEnded"
+			],
+			[
+				"fun",
+				"function"
+			],
+			[
+				"vo",
+				"volumeControl"
+			],
+			[
+				"re",
+				"return"
+			],
+			[
+				"bac",
+				"background-color"
+			],
+			[
+				"pas",
+				"passhash"
+			],
+			[
+				"br",
+				"border-radius"
+			],
+			[
+				"rg",
+				"rgba()"
+			],
+			[
+				"jc",
+				"jc-c\tjustify-content: center;"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "src/App.vue",
+			"settings":
+			{
+				"buffer_size": 310,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/store/index.js",
+			"settings":
+			{
+				"buffer_size": 2686,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/components/Toolbar.vue",
+			"settings":
+			{
+				"buffer_size": 4478,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/components/WelcomeCard.vue",
+			"settings":
+			{
+				"buffer_size": 2843,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/components/Auth.vue",
+			"settings":
+			{
+				"buffer_size": 1237,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/components/Tabletop.vue",
+			"settings":
+			{
+				"buffer_size": 6850,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "webpack.config.js",
+			"settings":
+			{
+				"buffer_size": 1844,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": ".gitignore",
+			"settings":
+			{
+				"buffer_size": 173,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/components/MainPage.vue",
+			"settings":
+			{
+				"buffer_size": 414,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 354.0,
+		"last_filter": "ssj",
+		"selected_items":
+		[
+			[
+				"ssj",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"prett",
+				"HTMLPrettify"
+			],
+			[
+				"sort",
+				"Sort Lines"
+			],
+			[
+				"pr",
+				"Pretty JSON: Format and Sort JSON"
+			],
+			[
+				"ip",
+				"Package Control: Install Package"
+			],
+			[
+				"ma",
+				"Material Theme: Activate theme"
+			],
+			[
+				"ssv",
+				"Set Syntax: Vue Component"
+			],
+			[
+				"rem",
+				"Package Control: Remove Package"
+			],
+			[
+				"remo",
+				"Package Control: Remove Package"
+			],
+			[
+				"com",
+				"Snippet: Vue component"
+			],
+			[
+				"termi",
+				"Preferences: Terminal Key Bindings – Default"
+			],
+			[
+				"previe",
+				"Markdown Preview: Preview in Browser"
+			],
+			[
+				"ssh",
+				"Set Syntax: HTML"
+			],
+			[
+				"pre",
+				"Pretty JSON: Format and Sort JSON"
+			],
+			[
+				"json",
+				"Pretty JSON: Minify (compress) JSON"
+			],
+			[
+				"pret",
+				"Pretty JSON: Format and Sort JSON"
+			],
+			[
+				"list",
+				"Package Control: List Packages"
+			],
+			[
+				"jso",
+				"Set Syntax: JSON"
+			],
+			[
+				"ssjs",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"no",
+				"Notes: List…"
+			],
+			[
+				"gist",
+				"Gist: Create Private Gist"
+			],
+			[
+				"ip ",
+				"Package Control: Install Package"
+			],
+			[
+				"sett",
+				"Preferences: Settings"
+			],
+			[
+				"pl",
+				"Package Control: List Packages"
+			],
+			[
+				"sft",
+				"SFTP: Browse Server…"
+			],
+			[
+				"fz",
+				"SublimeZilla: Import FileZilla Server"
+			],
+			[
+				"packa",
+				"Package Control: List Packages"
+			],
+			[
+				"not",
+				"Notes: List…"
+			],
+			[
+				"br",
+				"Preferences: Browse Packages"
+			],
+			[
+				"broe",
+				"Preferences: Browse Packages"
+			],
+			[
+				"v",
+				"View In Browser"
+			],
+			[
+				"vie",
+				"View In Browser"
+			],
+			[
+				"ssm",
+				"Set Syntax: Markdown"
+			],
+			[
+				"view",
+				"View In Browser"
+			],
+			[
+				"note",
+				"Notes: List…"
+			],
+			[
+				"mater",
+				"Material Theme: Configuration"
+			],
+			[
+				"settin",
+				"Preferences: Settings"
+			],
+			[
+				"ssy",
+				"Set Syntax: YAML"
+			]
+		],
+		"width": 496.0
+	},
+	"console":
+	{
+		"height": 206.0,
+		"history":
+		[
+			"cd \"$env:appdata\\Sublime Text 3\\Packages\\\"",
+			"import urllib.request,os,hashlib; h = 'df21e130d211cfc94d9b0905775a7c0f' + '1e3d39e33b79698005270310898eea76'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/C/home/coding (projects)/github/OpenTabletop",
+		"/C/home/coding (projects)/github/OpenTabletop/public"
+	],
+	"file_history":
+	[
+		"/C/Users/Ivan Alexandrov/Desktop/twitch/out.txt",
+		"/C/home/coding (projects)/github/OpenTabletop/firebase.json",
+		"/C/Users/Ivan Alexandrov/Desktop/index.html",
+		"/C/Users/Ivan Alexandrov/Downloads/Encrypted 快速響應代碼! (2).user.js",
+		"/C/Users/Ivan Alexandrov/Downloads/Encrypted 快速響應代碼! (1).user.js",
+		"/C/Users/Ivan Alexandrov/Downloads/dlText.txt",
+		"/C/Users/Ivan Alexandrov/Desktop/Encrypted 快速響應代碼!.user.js",
+		"/C/Users/Ivan Alexandrov/Downloads/Encrypted 快速響應代碼!.user.js",
+		"/C/Users/Ivan Alexandrov/AppData/Local/Temp/Temp1_extensionizr_custom1504877061288.zip/ext/src/bg/background.js",
+		"/C/home/coding (projects)/github/OpenTabletop/index.html",
+		"/C/home/coding (projects)/github/OpenTabletop/concept/chat.html",
+		"/C/home/coding (projects)/github/OpenTabletop/src/routes/index.js",
+		"/C/Users/Ivan Alexandrov/AppData/Roaming/Sublime Text 3/Packages/User/SideBarEnhancements/Open With/Side Bar.sublime-menu",
+		"/C/Users/Ivan Alexandrov/Desktop/freetabletop-export.json",
+		"/C/home/coding (projects)/github/OpenTabletop/.gitignore",
+		"/C/home/coding (projects)/github/OpenTabletop/src/main.js",
+		"/C/home/coding (projects)/github/OpenTabletop/src/firebase-config.js",
+		"/C/home/coding (projects)/github/OpenTabletop/src/components/WelcomeCard.vue",
+		"/C/home/coding (projects)/github/OpenTabletop/.babelrc",
+		"/C/home/coding (projects)/github/OpenTabletop/src/firebase.js",
+		"/C/home/coding (projects)/github/OpenTabletop/src/mixins/storage.js",
+		"/C/home/coding (projects)/github/OpenTabletop/src/components/PlaylistCard.vue",
+		"/C/home/coding (projects)/github/OpenTabletop/src/components/SinglePlaylist.vue",
+		"/C/home/coding (projects)/github/OpenTabletop/src/components/Playlist.vue",
+		"/C/home/coding (projects)/github/OpenTabletop/src/components/Loading.vue",
+		"/C/home/coding (projects)/github/OpenTabletop/src/components/Settings.vue",
+		"/C/home/coding (projects)/github/OpenTabletop/src/components/Player.vue",
+		"/home/ivan/YTListen/src/routes.js",
+		"/home/ivan/YTListen/src/main.js",
+		"/home/ivan/YTListen/src/styles/settings.scss",
+		"/home/ivan/YTListen/src/event-bus.js",
+		"/C/home/coding (projects)/github/YTListen/src/components/TopSection.vue",
+		"/C/home/coding (projects)/github/YTListen/webpack.config.js",
+		"/C/Users/Ivan Alexandrov/Desktop/retropie.sh",
+		"/C/home/coding (projects)/github/YTListen/src/components/SinglePlaylist.vue",
+		"/C/home/coding (projects)/github/YTListen/src/components/Playlist.vue",
+		"/C/home/coding (projects)/github/YTListen/src/components/PlaylistCard.vue",
+		"/C/home/coding (projects)/github/YTListen/src/components/template.vue",
+		"/C/home/coding (projects)/github/YTListen/package.json",
+		"/C/home/coding (projects)/github/YTListen/component.bat",
+		"/C/home/coding (projects)/github/YTListen/newcomp.bat",
+		"/C/Users/Ivan Alexandrov/AppData/Roaming/Sublime Text 3/Packages/Terminal/Default (Windows).sublime-keymap",
+		"/C/home/coding (projects)/github/YTListen/src/components",
+		"/C/home/coding (projects)/github/YTListen/src/styles/settings.scss",
+		"/C/home/coding (projects)/github/YTListen/index.html",
+		"/C/Users/Ivan Alexandrov/Desktop/ytlisten/src/App.vue",
+		"/C/Users/Ivan Alexandrov/Desktop/ytlisten/index.html",
+		"/C/Users/Ivan Alexandrov/Desktop/ytlisten/README.md",
+		"/C/Users/Ivan Alexandrov/Desktop/ytlisten/package.json",
+		"/C/Users/Ivan Alexandrov/Desktop/ytlisten/.gitignore",
+		"/C/Users/Ivan Alexandrov/Desktop/ytlisten/src/main.js",
+		"/C/Users/Ivan Alexandrov/Desktop/Neuer Ordner/'ytlisten'/webpack.config.js",
+		"/C/Users/Ivan Alexandrov/Desktop/Neuer Ordner/'ytlisten'/src/App.vue",
+		"/C/Users/Ivan Alexandrov/Desktop/index.php",
+		"/C/Users/Ivan Alexandrov/AppData/Local/Temp/fz3temp-2/db1354152.php",
+		"/C/Users/Ivan Alexandrov/Desktop/USBWebserver v8.6/root/register.php",
+		"/C/Users/Ivan Alexandrov/Desktop/manifest.json",
+		"/C/Users/Ivan Alexandrov/AppData/Local/Temp/fz3temp-2/.htaccess",
+		"/C/Users/Ivan Alexandrov/Desktop/USBWebserver v8.6/root/css/css-index.css",
+		"/C/Users/Ivan Alexandrov/Desktop/USBWebserver v8.6/root/index.php",
+		"/C/Users/Ivan Alexandrov/AppData/Local/Temp/fz3temp-2/register.php",
+		"/C/Users/Ivan Alexandrov/AppData/Local/Temp/fz3temp-2/index.php",
+		"/C/Users/Ivan Alexandrov/Desktop/test.html",
+		"/C/Users/Ivan Alexandrov/Desktop/USBWebserver v8.6/root/js/custom.js",
+		"/C/Users/Ivan Alexandrov/Desktop/USBWebserver v8.6/root/register.html",
+		"/C/Users/Ivan Alexandrov/Desktop/USBWebserver v8.6/root/index.html",
+		"/C/Users/Ivan Alexandrov/Desktop/site/css/css-index.css",
+		"/C/Users/Ivan Alexandrov/Desktop/site/register.html",
+		"/C/Users/Ivan Alexandrov/Desktop/site/js/custom.js",
+		"/C/Users/Ivan Alexandrov/Desktop/site/index.html",
+		"/C/Users/Ivan Alexandrov/Desktop/site/css/css-index-green.css",
+		"/C/Users/Ivan Alexandrov/Desktop/site/css/font-awesome.css",
+		"/C/Users/Ivan Alexandrov/Desktop/samp.js",
+		"/C/Users/Ivan Alexandrov/Desktop/style.cfg",
+		"/C/home/coding (projects)/github/rundik_github_com/c-test/style.css",
+		"/C/home/coding (projects)/github/rundik_github_com/c-test/script.js",
+		"/C/home/coding (projects)/github/rundik_github_com/c-test/index.html",
+		"/C/home/coding (projects)/github/c-test/style.css",
+		"/C/home/coding (projects)/github/c-test/script.js",
+		"/C/home/coding (projects)/github/c-test/manifest.json",
+		"/C/home/coding (projects)/github/c-test/index.html",
+		"/C/home/coding (projects)/github/rundik_github_com/c-test/manifest.json",
+		"/C/Users/Ivan Alexandrov/AppData/Local/Temp/Temp1_5d2fa5339d7996abe09a2091ed8f292b.ico.zip/browserconfig.xml",
+		"/C/Users/Ivan Alexandrov/Dropbox/FloodScript.user.js",
+		"/C/Users/Ivan Alexandrov/AppData/Local/Temp/Temp1_samprp_fake_site.zip/samprp_spam_scripts.js",
+		"/C/Users/Ivan Alexandrov/Desktop/FloodScript.user.js",
+		"/C/home/docs/txt/scripts/ali_reg.js",
+		"/C/home/docs/txt/scripts/names.js",
+		"/C/home/docs/txt/scripts/yandexmail.js",
+		"/C/Users/Ivan Alexandrov/AppData/Local/Temp/fz3temp-2/index 2.php",
+		"/C/Users/Ivan Alexandrov/AppData/Local/Temp/fz3temp-2/index 3.php",
+		"/C/Users/Ivan Alexandrov/Desktop/Neuer Ordner/samprp_spam_scripts.js",
+		"/C/Users/Ivan Alexandrov/Desktop/OmegaOptions.bak",
+		"/C/Users/Ivan Alexandrov/AppData/Roaming/Sublime Text 3/Packages/Pretty JSON/Pretty JSON.sublime-settings",
+		"/C/Users/Ivan Alexandrov/Desktop/3VS0AmhQ.txt",
+		"/C/Users/Ivan Alexandrov/Desktop/1.txt",
+		"/C/Users/Ivan Alexandrov/Desktop/1.html",
+		"/C/Program Files (x86)/Steam/skins/Metro 4.2.4/resource/menus/steam.menu",
+		"/C/Program Files (x86)/Steam/skins/Metro 4.2.4/caption.styles",
+		"/C/Program Files (x86)/Steam/skins/Metro 4.2.4/custom.styles",
+		"/C/Program Files (x86)/Steam/skins/Metro 4.2.4/settings.styles",
+		"/C/Program Files (x86)/Steam/skins/Metro 4.2.4/colors.styles",
+		"/C/home/programs/tools/nodecast-master/public/css/main.css",
+		"/C/home/programs/tools/nodecast-master/public/index.html",
+		"/C/home/programs/tools/gaming/node-virtual-gamepads/package.json",
+		"/C/Program Files (x86)/Steam/skins/skins_readme.txt",
+		"/C/Users/Ivan Alexandrov/AppData/Local/Temp/Temp1_NOOBS_lite_v2_1.zip/INSTRUCTIONS-README.txt",
+		"/C/Users/Ivan Alexandrov/Dropbox/Notes/minecraft.note",
+		"/c/users/ivanal~1/appdata/local/temp/test.html",
+		"/C/Users/Ivan Alexandrov/AppData/Roaming/Sublime Text 3/Packages/User/Gist.sublime-settings",
+		"/C/Users/Ivan Alexandrov/AppData/Roaming/Sublime Text 3/Packages/Gist/Gist.sublime-settings",
+		"/C/Users/Ivan Alexandrov/AppData/Roaming/Sublime Text 3/Packages/Gist/Default (Windows).sublime-keymap",
+		"/C/Users/Ivan Alexandrov/Desktop/hosts",
+		"/C/Windows/System32/drivers/etc/hosts",
+		"/C/Users/Ivan Alexandrov/AppData/Roaming/Sublime Text 3/Packages/SFTP/servers/sftp-config.json",
+		"/C/Users/Ivan Alexandrov/AppData/Local/Temp/fz3temp-2/config.yml",
+		"/C/home/programs/windows_installators/Adobe CS6 Master Collection/crack/patch instructions.txt",
+		"/C/home/programs/windows_installators/Adobe CS6 Master Collection/crack/x64/Инструкция..txt",
+		"/C/Users/Ivan Alexandrov/Dropbox/txt/bonus-mts.txt",
+		"/C/Users/Ivan Alexandrov/Desktop/addfwrs.bat.txt",
+		"/C/home/docs/txt/f_url_ph",
+		"/C/home/docs/txt/packages.txt",
+		"/C/Users/Ivan Alexandrov/AppData/Roaming/Sublime Text 3/Packages/Emmet/Emmet.sublime-settings",
+		"/C/Users/Ivan Alexandrov/AppData/Roaming/Sublime Text 3/Packages/User/StatusBarTime.sublime-settings",
+		"/C/Users/Ivan Alexandrov/AppData/Roaming/Sublime Text 3/Packages/User/View In Browser.sublime-settings",
+		"/C/Users/Ivan Alexandrov/AppData/Roaming/Sublime Text 3/Packages/View In Browser/View In Browser.sublime-settings",
+		"/C/Users/Ivan Alexandrov/AppData/Roaming/Sublime Text 3/Packages/Status Bar Time/StatusBarTime.sublime-settings",
+		"/C/home/Keypirinha/portable/Profile/User/Keypirinha.ini"
+	],
+	"find":
+	{
+		"height": 70.0
+	},
+	"find_in_files":
+	{
+		"height": 158.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"&quot;",
+			" ",
+			"   ",
+			"\\n",
+			"\"(.*?)\"",
+			" \"",
+			"\" ",
+			"\"",
+			"\\n\\n",
+			"http(.*)\\n(.*)",
+			"\\n\\n",
+			"href=",
+			"\"",
+			"<(.*)",
+			">",
+			"  ",
+			"\\t",
+			"href=\\\"(.*)\">\\n(.*)<",
+			"'./',",
+			"\\n",
+			" \\+= ",
+			" &&",
+			" \\+ ",
+			" \\? ",
+			" . ",
+			" < ",
+			" > ",
+			" !== ",
+			" : ",
+			" {",
+			"\\n",
+			" === ",
+			" = ",
+			"  ",
+			", ",
+			"\\) {",
+			"\\n",
+			"  ",
+			"\\)}",
+			")}",
+			";",
+			"\\n.(.*)\\n",
+			"\\n.\\n",
+			".*?",
+			".",
+			"draggable",
+			"startConnection",
+			"sender",
+			"msg",
+			"startConnection",
+			"readMessage",
+			"sendMessage",
+			"function",
+			"pc",
+			"servers",
+			"yourId",
+			"database",
+			"lobbyOwners",
+			"let ",
+			"let",
+			"var",
+			"this",
+			"databa",
+			"frie",
+			"refs",
+			"ended",
+			"en",
+			"10px",
+			"crossorigin",
+			"before",
+			"contro",
+			"#cu",
+			"currentTime",
+			"null",
+			"#",
+			"ani",
+			"v-bind",
+			"loaders",
+			"_SESSION",
+			"зар",
+			"logo",
+			"logo2.png",
+			"logo.png",
+			";\n",
+			"img",
+			"landi",
+			"id=\"client\"",
+			"f6f6f6",
+			"{\n",
+			"10%",
+			"echo",
+			"name=\"(.*?)\"",
+			"tabindex=\"(.*?)\"",
+			"autocomplete=\"(.*?)\"",
+			"jsname=\"(.*?)\"",
+			"class=\"(.*?)\"",
+			"<input(.*?)>",
+			"<form(.*?)>",
+			"sign",
+			"h3",
+			"sign",
+			"{\n",
+			"png",
+			"\">",
+			"&+#",
+			"\"\\/",
+			"\\\"\\\\\\/",
+			"\\n",
+			"'",
+			"newU",
+			"GM_setValue(\"nickname\",",
+			"setva",
+			"GM_setValue\\(\"(.*?)\",(.*?),true\\);",
+			"GM_setValue(\"yandex\",false,true);",
+			"GM_setValue\\(\"(.*?)\",(.*?),true\\);",
+			"GM_getValue\\(\"(.*?)\",true\\)",
+			"GM_getValue\\(\"(.*)\",true\\)",
+			"\\\\n",
+			"\\n",
+			"  ",
+			"\\t",
+			"Donate",
+			"\\\"http(.*?)\\\"",
+			"\\>",
+			"\\n\\n",
+			"\\+-\\+-\\+-\\+-\\+",
+			"+-\\+-\\+-\\+-\\+",
+			"+-+-+-+-+"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": true,
+		"replace_history":
+		[
+			"\\n",
+			" \\n",
+			" ",
+			"\\n\\n\"",
+			"\"\\n\\n",
+			"\\n\\n",
+			"\\n",
+			"$2 - http$1",
+			"",
+			"\\n",
+			"",
+			"\\\\n",
+			"+=",
+			"&&",
+			"+",
+			"?",
+			"$1",
+			"<",
+			">",
+			"!==",
+			":",
+			"{",
+			"",
+			"===",
+			"=",
+			"",
+			",",
+			"){",
+			"",
+			");}",
+			";\\n",
+			"\\n$1\\n",
+			"$1\\n",
+			"this.startConnection",
+			"this.readMessage",
+			"this.sendMessage",
+			"this.pc",
+			"this.servers",
+			"this.yourId",
+			"this.database",
+			"this.lobbyOwners",
+			"",
+			"sitelogo.png",
+			"&#",
+			"\"\\/icons/",
+			"\"\\/icons",
+			"\"",
+			"GM_setValue(\"$1\",$2);",
+			"GM_setValue(\"$1\",$2,true);",
+			"GM_getValue(\"$1\")",
+			"\\n",
+			"",
+			" ",
+			"",
+			"\\>\\n",
+			">\\n",
+			"\\n",
+			"\\n\\n",
+			"\\n",
+			"\\\\n",
+			"+-+-+-+-+"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 7,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "src/App.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 310,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								144,
+								144
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Vue Syntax Highlight/vue.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "src/store/index.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2686,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1480,
+								1484
+							]
+						],
+						"settings":
+						{
+							"open_with_edit": true,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 315.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/components/Toolbar.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4478,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2202,
+								2202
+							]
+						],
+						"settings":
+						{
+							"open_with_edit": true,
+							"syntax": "Packages/Vue Syntax Highlight/vue.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1508.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "src/components/WelcomeCard.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2843,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2699,
+								2699
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Vue Syntax Highlight/vue.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 900.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "src/components/Auth.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1237,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								416,
+								416
+							]
+						],
+						"settings":
+						{
+							"open_with_edit": true,
+							"syntax": "Packages/Vue Syntax Highlight/vue.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "src/components/Tabletop.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6850,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								822,
+								822
+							]
+						],
+						"settings":
+						{
+							"open_with_edit": true,
+							"syntax": "Packages/Vue Syntax Highlight/vue.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "webpack.config.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1844,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								332,
+								332
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/zzz A File Icon zzz/aliases/JavaScript (Webpack).sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": ".gitignore",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 173,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								27,
+								27
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/zzz A File Icon zzz/aliases/Shell Script (Git).sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "src/components/MainPage.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 414,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								76,
+								76
+							]
+						],
+						"settings":
+						{
+							"open_with_edit": true,
+							"syntax": "Packages/Vue Syntax Highlight/vue.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 25.0
+	},
+	"input":
+	{
+		"height": 63.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": false,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.sftp":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "project.sublime-project",
+	"replace":
+	{
+		"height": 114.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 223.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
