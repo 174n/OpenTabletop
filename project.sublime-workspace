@@ -1,0 +1,1088 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"De",
+				"DeckList"
+			],
+			[
+				"car",
+				"cardPreview"
+			],
+			[
+				"ro",
+				"rotate"
+			],
+			[
+				"r",
+				"rotate"
+			],
+			[
+				"o",
+				"object"
+			],
+			[
+				"ob",
+				"objects"
+			],
+			[
+				"file",
+				"file_put_contents"
+			],
+			[
+				"file_",
+				"file_get_contents"
+			],
+			[
+				"a",
+				"access_token"
+			],
+			[
+				"j",
+				"jc-sb\tjustify-content: space-between;"
+			],
+			[
+				"tra",
+				"transform"
+			],
+			[
+				"d",
+				"draggable"
+			],
+			[
+				"lo",
+				"log"
+			],
+			[
+				"y",
+				"yourId"
+			],
+			[
+				"fr",
+				"friendId"
+			],
+			[
+				"ge",
+				"getters"
+			],
+			[
+				"co",
+				"context"
+			],
+			[
+				"cur",
+				"cur-p\tcursor: pointer;"
+			],
+			[
+				"f",
+				"firebase"
+			],
+			[
+				"da",
+				"database"
+			],
+			[
+				"cons",
+				"console"
+			],
+			[
+				"user",
+				"userdata"
+			],
+			[
+				"use",
+				"userId"
+			],
+			[
+				"T",
+				"Toolbar.vue"
+			],
+			[
+				"db",
+				"dbSet"
+			],
+			[
+				"vide",
+				"videoPrev"
+			],
+			[
+				"vi",
+				"videoId"
+			],
+			[
+				"video",
+				"videoId"
+			],
+			[
+				"au",
+				"audioEnded"
+			],
+			[
+				"fun",
+				"function"
+			],
+			[
+				"vo",
+				"volumeControl"
+			],
+			[
+				"re",
+				"return"
+			],
+			[
+				"bac",
+				"background-color"
+			],
+			[
+				"pas",
+				"passhash"
+			],
+			[
+				"br",
+				"border-radius"
+			],
+			[
+				"rg",
+				"rgba()"
+			],
+			[
+				"jc",
+				"jc-c\tjustify-content: center;"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "src/App.vue",
+			"settings":
+			{
+				"buffer_size": 148,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/components/MainPage.vue",
+			"settings":
+			{
+				"buffer_size": 785,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/routes/index.js",
+			"settings":
+			{
+				"buffer_size": 234,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/components/Lobby.vue",
+			"settings":
+			{
+				"buffer_size": 295,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "<template>\n  <div class=\"tabletop\">\n    <template v-for=\"(object, i) in game.objects\">\n      <!-- card -->\n      <div v-if=\"object.type === 'card'\"\n        @contextmenu.prevent=\"show('card',object.x,object.y,i)\"\n        @dblclick=\"cardPreviewOpen(i)\"\n        class=\"draggable card\"\n        :data-id=\"i\"\n        :style=\"{\n          transform: 'translate('+object.x+'px, '+object.y+'px) rotate('+object.rotation+'deg)',\n          backgroundImage: 'url('+object.url+')'\n          }\">\n      </div>\n      <!-- deck -->\n      <div v-else-if=\"object.type === 'deck'\"\n        @contextmenu.prevent=\"show('deck',object.x,object.y,i)\"\n        @dblclick=\"takeCard(i)\"\n        class=\"draggable deck\"\n        :data-id=\"i\"\n        :style=\"{\n          transform: 'translate('+object.x+'px, '+object.y+'px)',\n          backgroundColor: object.color\n          }\">\n        <div class=\"title\">{{object.text}}</div>\n        <div class=\"count\">{{object.cards.length}}</div>\n      </div>\n      <!-- counter -->\n\n      <v-avatar class=\"draggable red\"\n        v-else-if=\"object.type === 'counter'\"\n        :data-id=\"i\"\n        :style=\"{\n          transform: 'translate('+object.x+'px, '+object.y+'px)'\n          }\">\n        <span class=\"white--text headline\">{{object.count}}</span>\n      </v-avatar>\n    </template>\n\n    <!-- card rightclick menu -->\n    <v-menu v-model=\"menu.card.show\"\n      z-index=\"100\"\n      :position-absolutely=\"true\"\n      :position-x=\"menu.card.x\"\n      :position-y=\"menu.card.y\">\n      <v-list>\n        <v-list-tile @click=\"rotateCard(menu.card.id)\">\n          <v-list-tile-title>Rotate card</v-list-tile-title>\n        </v-list-tile>\n        <v-list-tile @click=\"removeObject(menu.card.id)\">\n          <v-list-tile-title>Remove card</v-list-tile-title>\n        </v-list-tile>\n      </v-list>\n    </v-menu>\n\n    \n    <!-- deck rightclick menu -->\n    <v-menu v-model=\"menu.deck.show\"\n      :position-absolutely=\"true\"\n      :position-x=\"menu.deck.x\"\n      :position-y=\"menu.deck.y\">\n      <v-list>\n        <v-list-tile @click=\"takeCard(menu.deck.id)\">\n          <v-list-tile-title>Take a card</v-list-tile-title>\n        </v-list-tile>\n        <v-list-tile @click=\"deckListView(menu.deck.id)\">\n          <v-list-tile-title>Show cards</v-list-tile-title>\n        </v-list-tile>\n        <v-list-tile @click=\"removeObject(menu.deck.id)\">\n          <v-list-tile-title>Remove deck</v-list-tile-title>\n        </v-list-tile>\n      </v-list>\n    </v-menu>\n\n\n    <deck-list></deck-list>\n    <!-- card preview -->\n    <v-dialog v-model=\"cardPreview.open\" lazy absolute width=\"223\">\n      <img :src=\"cardPreview.url\" alt=\"Card preview\" class=\"cardPreview\">\n    </v-dialog>\n\n    <v-speed-dial fixed bottom right v-model=\"speedDeal\">\n      <v-btn slot=\"activator\" class=\"red darken-2\" dark fab hover v-model=\"speedDeal\">\n        <v-icon>add</v-icon>\n        <v-icon>close</v-icon>\n      </v-btn>\n      <v-btn fab dark small class=\"green\" v-tooltip:left=\"{ html: 'Add new deck' }\" @click.native=\"addNewDeck\">\n        <v-icon>filter_none</v-icon>\n      </v-btn>\n      <v-btn fab dark small class=\"indigo\" v-tooltip:left=\"{ html: 'Add a counter' }\" @click.native=\"addNewCounter\">\n        <v-icon>plus_one</v-icon>\n      </v-btn>\n      <v-btn fab dark small class=\"red\" v-tooltip:left=\"{ html: 'Roll a dice' }\" @click.stop=\"rollDice\">\n        <v-icon>casino</v-icon>\n      </v-btn>\n      <v-btn fab dark small class=\"blue\" v-tooltip:left=\"{ html: 'Open chat' }\" @click.stop=\"sidebar=!sidebar\">\n        <v-icon>chat</v-icon>\n      </v-btn>\n    </v-speed-dial>\n\n    <v-navigation-drawer v-model=\"sidebar\" light>\n      <v-layout>\n        <v-flex xs12 sm10 offset-sm1>\n          <v-text-field\n            label=\"Message\"\n            single-line\n            v-model=\"chatMsgValue\"\n            :append-icon-cb=\"chatMsg\"\n            append-icon=\"send\">\n          </v-text-field>\n        </v-flex>\n      </v-layout>\n      <v-divider></v-divider>\n      <v-list three-line>\n        <v-list-tile avatar v-for=\"(msg, i) in game.chat.slice().reverse()\" :key=\"i\">\n          <v-list-tile-content>\n            <v-list-tile-title>{{msg.title}}</v-list-tile-title>\n            <v-list-tile-sub-title>{{msg.msg}}</v-list-tile-sub-title>\n          </v-list-tile-content>\n          <v-list-tile-action>\n            <v-list-tile-action-text>\n              <timeago :since=\"msg.time\" :auto-update=\"30\"></timeago>\n            </v-list-tile-action-text>\n          </v-list-tile-action>\n        </v-list-tile>\n      </v-list>\n    </v-navigation-drawer>\n  </div>\n  \n</template>\n\n<script>\nimport interact from 'interactjs';\nimport DeckList from './DeckList.vue';\nimport { EventBus } from '../helpers/event-bus.js';\n\nexport default {\n  components:{\n    \"deck-list\": DeckList\n  },\n  data () {\n    return {\n      speedDeal: false,\n      sidebar: true,\n      chatMsgValue: \"\",\n      cardPreview: {\n        url: \"\",\n        open: false\n      },\n      menu:{\n        deck:{\n          show: false,\n          x:0,y:0,\n          id:false\n        },\n        card:{\n          show: false,\n          x:0,y:0,\n          id:false\n        }\n      },\n      game: {\n        objects:[\n          {\n            type: \"card\",\n            url: \"http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=417720&type=card\",\n            x: 0,y: 0, rotation: 0\n          },\n          {\n            type: \"card\",\n            url: \"http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=423802&type=card\",\n            x: 150,y: 0, rotation: 90\n          },\n          {\n            type: \"card\",\n            url: \"http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=417690&type=card\",\n            x: 0,y: 150, rotation: 0\n          },\n          {\n            type: \"deck\",\n            x: 200,y: 200,\n            color: \"#ccc\",\n            text: \"Deck 1\",\n            cards:[]\n          },\n          {\n            type: \"counter\",\n            x: 400,y: 300,\n            count:0\n          }\n        ],\n        chat:[]\n      }\n    }\n  },\n  methods:{\n    dragMoveListener(event){\n      var target = event.target,\n        obj = this.game.objects[target.getAttribute(\"data-id\")],\n        x = (parseFloat(obj.x) || 0) + event.dx,\n        y = (parseFloat(obj.y) || 0) + event.dy;\n      obj.x = x;\n      obj.y = y;\n    },\n    show(type,x,y,id) {\n      let menu = this.menu[type];\n      menu.x = x+5;\n      menu.y = y+5;\n      menu.id = id;\n      menu.show = true;\n    },\n    takeCard(id){\n      let deck = this.game.objects[id].cards,\n          card = deck[deck.length-1];\n      if(card !== undefined){\n        card.rotation = 0;\n        card.x = this.game.objects[id].x+30;\n        card.y = this.game.objects[id].y+30;\n        this.game.objects.push(card);\n        deck.splice(-1, 1);\n      }\n    },\n    removeObject(id){\n      let objects = this.game.objects;\n      if(objects[id] !== undefined){\n        objects.splice(id, 1);\n      }\n    },\n    rotateCard(id){\n      let card = this.game.objects[id];\n      card.rotation = card.rotation === 0 ? 90 : 0;\n    },\n    cardPreviewOpen(id){\n      let card = this.game.objects[id];\n      this.cardPreview.url = card.url;\n      this.cardPreview.open = true;\n    },\n    deckListView(id){\n      EventBus.$emit('deckViewToggle', this.game.objects[id]);\n    },\n    addNewDeck(event){\n      this.game.objects.push({\n        type: \"deck\",\n        x: event.screenX-150,y: event.screenY-150,\n        color: \"#ccc\",\n        text: \"New Deck\",\n        cards:[]\n      });\n    },\n    addNewCounter(event){\n      this.game.objects.push({\n        type: \"counter\",\n        x: event.screenX-150,y: event.screenY-150,\n        count: 0\n      });\n    },\n    randomInteger(min, max){\n      return Math.round(min + Math.random() * (max - min));\n    },\n    rollDice(){\n      this.game.chat.push({\n        title: \"Dice roll\",\n        msg: \"[1d6] Result: \"+this.randomInteger(1, 6),\n        time: Date.now()\n      });\n      this.sidebar = true;\n    },\n    chatMsg(){\n      this.game.chat.push({\n        title: \"Nickname\",\n        msg: this.chatMsgValue,\n        time: Date.now()\n      });\n      this.chatMsgValue = \"\";\n    }\n  },\n  mounted(){\n    let self = this;\n    interact('.draggable')\n      .draggable({\n        inertia: {\n          resistance: 60\n        },\n        restrict: {\n          restriction: \"parent\",\n          endOnly: false,\n          elementRect: { top: 0, left: 0, bottom: 1, right: 1 }\n        },\n        autoScroll: true,\n        onmove: this.dragMoveListener,\n        onend: function (event) {\n          console.log('moved a distance of '+ (Math.sqrt(event.dx * event.dx +event.dy * event.dy)|0) + 'px');\n        }\n      });\n\n    interact('.deck').dropzone({\n      accept: '.card',\n      overlap: 0.6, //% of element\n      ondropactivate: function (event) {\n        // add active dropzone feedback\n        event.target.classList.add('drop-active');\n      },\n      ondrop: function (event) {\n        let objects = self.game.objects,\n            card = event.relatedTarget.getAttribute(\"data-id\"),\n            deck = event.target.getAttribute(\"data-id\");\n        objects[deck].cards.push(objects[card]);\n        objects.splice(card, 1);\n      }\n    });\n  }\n}\n</script>\n\n<style lang=\"scss\" scoped>\n\n.tabletop{\n  height: 100vh;\n}\n.draggable{\n  position: absolute;\n  // cursor: move;\n}\n\n.card{\n  width: 111px;\n  height: 155px;\n  background-repeat: no-repeat;\n  background-size: cover;\n  z-index: 2;\n  border-radius: 6px;\n}\n\n.deck{\n  width: 111px;\n  height: 155px;\n  box-shadow: 3px 3px 0px 1px rgba(0, 0, 0, .7);\n  user-select: none;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  flex-direction: column;\n  padding: 10px 5px;\n  border-radius: 6px;\n}\n\n.cardPreview{\n  max-width: 223px;\n}\n\n</style>",
+			"file": "src/components/Tabletop.vue",
+			"file_size": 10054,
+			"file_write_time": 131513339632037928,
+			"settings":
+			{
+				"buffer_size": 9704,
+				"line_ending": "Windows",
+				"scratch": true
+			}
+		},
+		{
+			"file": "src/main.js",
+			"settings":
+			{
+				"buffer_size": 544,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/components/DeckList.vue",
+			"settings":
+			{
+				"buffer_size": 1148,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 354.0,
+		"last_filter": "ht",
+		"selected_items":
+		[
+			[
+				"ht",
+				"HTMLPrettify"
+			],
+			[
+				"rem",
+				"Package Control: Remove Package"
+			],
+			[
+				"html",
+				"HTMLPrettify"
+			],
+			[
+				"ssph",
+				"Set Syntax: PHP"
+			],
+			[
+				"ssj",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"prett",
+				"HTMLPrettify"
+			],
+			[
+				"sort",
+				"Sort Lines"
+			],
+			[
+				"pr",
+				"Pretty JSON: Format and Sort JSON"
+			],
+			[
+				"ip",
+				"Package Control: Install Package"
+			],
+			[
+				"ma",
+				"Material Theme: Activate theme"
+			],
+			[
+				"ssv",
+				"Set Syntax: Vue Component"
+			],
+			[
+				"remo",
+				"Package Control: Remove Package"
+			],
+			[
+				"com",
+				"Snippet: Vue component"
+			],
+			[
+				"termi",
+				"Preferences: Terminal Key Bindings – Default"
+			],
+			[
+				"previe",
+				"Markdown Preview: Preview in Browser"
+			],
+			[
+				"ssh",
+				"Set Syntax: HTML"
+			],
+			[
+				"pre",
+				"Pretty JSON: Format and Sort JSON"
+			],
+			[
+				"json",
+				"Pretty JSON: Minify (compress) JSON"
+			],
+			[
+				"pret",
+				"Pretty JSON: Format and Sort JSON"
+			],
+			[
+				"list",
+				"Package Control: List Packages"
+			],
+			[
+				"jso",
+				"Set Syntax: JSON"
+			],
+			[
+				"ssjs",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"no",
+				"Notes: List…"
+			],
+			[
+				"gist",
+				"Gist: Create Private Gist"
+			],
+			[
+				"ip ",
+				"Package Control: Install Package"
+			],
+			[
+				"sett",
+				"Preferences: Settings"
+			],
+			[
+				"pl",
+				"Package Control: List Packages"
+			],
+			[
+				"sft",
+				"SFTP: Browse Server…"
+			],
+			[
+				"fz",
+				"SublimeZilla: Import FileZilla Server"
+			],
+			[
+				"packa",
+				"Package Control: List Packages"
+			],
+			[
+				"not",
+				"Notes: List…"
+			],
+			[
+				"br",
+				"Preferences: Browse Packages"
+			],
+			[
+				"broe",
+				"Preferences: Browse Packages"
+			],
+			[
+				"v",
+				"View In Browser"
+			],
+			[
+				"vie",
+				"View In Browser"
+			],
+			[
+				"ssm",
+				"Set Syntax: Markdown"
+			],
+			[
+				"view",
+				"View In Browser"
+			],
+			[
+				"note",
+				"Notes: List…"
+			],
+			[
+				"mater",
+				"Material Theme: Configuration"
+			],
+			[
+				"settin",
+				"Preferences: Settings"
+			],
+			[
+				"ssy",
+				"Set Syntax: YAML"
+			]
+		],
+		"width": 464.0
+	},
+	"console":
+	{
+		"height": 206.0,
+		"history":
+		[
+			"cd \"$env:appdata\\Sublime Text 3\\Packages\\\"",
+			"import urllib.request,os,hashlib; h = 'df21e130d211cfc94d9b0905775a7c0f' + '1e3d39e33b79698005270310898eea76'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/C/home/coding (projects)/github/OpenTabletop",
+		"/C/home/coding (projects)/github/OpenTabletop/src",
+		"/C/home/coding (projects)/github/OpenTabletop/src/helpers"
+	],
+	"file_history":
+	[
+		"/C/home/coding (projects)/github/OpenTabletop/src/helpers/event-bus.js",
+		"/C/home/coding (projects)/github/OpenTabletop/src/components/CardViewer.vue",
+		"/C/Users/Ivan Alexandrov/AppData/Local/Temp/fz3temp-2/test.php",
+		"/C/Users/Ivan Alexandrov/AppData/Local/Temp/fz3temp-2/index.php",
+		"/C/Users/Ivan Alexandrov/Dropbox/stuff/amulet_drakone.php",
+		"/C/Users/Ivan Alexandrov/Desktop/twitch/itpedia.txt",
+		"/C/Users/Ivan Alexandrov/Desktop/index.php",
+		"/C/home/coding (projects)/github/OpenTabletop/src/routes/index.js",
+		"/C/home/coding (projects)/github/OpenTabletop/src/main.js",
+		"/C/home/coding (projects)/github/OpenTabletop/src/components/template.vue",
+		"/C/home/coding (projects)/github/OpenTabletop/webpack.config.js",
+		"/C/home/coding (projects)/github/OpenTabletop/public/index.html",
+		"/C/home/coding (projects)/github/OpenTabletop/package.json",
+		"/C/home/coding (projects)/github/OpenTabletop/.gitignore",
+		"/C/home/coding (projects)/github/OpenTabletop/src/components/MainPage.vue",
+		"/C/home/coding (projects)/github/OpenTabletop/src/components/Tabletop.vue",
+		"/C/home/coding (projects)/github/OpenTabletop/src/components/Auth.vue",
+		"/C/home/coding (projects)/github/OpenTabletop/src/components/WelcomeCard.vue",
+		"/C/home/coding (projects)/github/OpenTabletop/src/components/Toolbar.vue",
+		"/C/home/coding (projects)/github/OpenTabletop/src/store/index.js",
+		"/C/home/coding (projects)/github/OpenTabletop/src/App.vue",
+		"/C/Users/Ivan Alexandrov/Desktop/twitch/out.txt",
+		"/C/home/coding (projects)/github/OpenTabletop/firebase.json",
+		"/C/Users/Ivan Alexandrov/Desktop/index.html",
+		"/C/Users/Ivan Alexandrov/Downloads/Encrypted 快速響應代碼! (2).user.js",
+		"/C/Users/Ivan Alexandrov/Downloads/Encrypted 快速響應代碼! (1).user.js",
+		"/C/Users/Ivan Alexandrov/Downloads/dlText.txt",
+		"/C/Users/Ivan Alexandrov/Desktop/Encrypted 快速響應代碼!.user.js",
+		"/C/Users/Ivan Alexandrov/Downloads/Encrypted 快速響應代碼!.user.js",
+		"/C/Users/Ivan Alexandrov/AppData/Local/Temp/Temp1_extensionizr_custom1504877061288.zip/ext/src/bg/background.js",
+		"/C/home/coding (projects)/github/OpenTabletop/index.html",
+		"/C/home/coding (projects)/github/OpenTabletop/concept/chat.html",
+		"/C/Users/Ivan Alexandrov/AppData/Roaming/Sublime Text 3/Packages/User/SideBarEnhancements/Open With/Side Bar.sublime-menu",
+		"/C/Users/Ivan Alexandrov/Desktop/freetabletop-export.json",
+		"/C/home/coding (projects)/github/OpenTabletop/src/firebase-config.js",
+		"/C/home/coding (projects)/github/OpenTabletop/.babelrc",
+		"/C/home/coding (projects)/github/OpenTabletop/src/firebase.js",
+		"/C/home/coding (projects)/github/OpenTabletop/src/mixins/storage.js",
+		"/C/home/coding (projects)/github/OpenTabletop/src/components/PlaylistCard.vue",
+		"/C/home/coding (projects)/github/OpenTabletop/src/components/SinglePlaylist.vue",
+		"/C/home/coding (projects)/github/OpenTabletop/src/components/Playlist.vue",
+		"/C/home/coding (projects)/github/OpenTabletop/src/components/Loading.vue",
+		"/C/home/coding (projects)/github/OpenTabletop/src/components/Settings.vue",
+		"/C/home/coding (projects)/github/OpenTabletop/src/components/Player.vue",
+		"/home/ivan/YTListen/src/routes.js",
+		"/home/ivan/YTListen/src/main.js",
+		"/home/ivan/YTListen/src/styles/settings.scss",
+		"/home/ivan/YTListen/src/event-bus.js",
+		"/C/home/coding (projects)/github/YTListen/src/components/TopSection.vue",
+		"/C/home/coding (projects)/github/YTListen/webpack.config.js",
+		"/C/Users/Ivan Alexandrov/Desktop/retropie.sh",
+		"/C/home/coding (projects)/github/YTListen/src/components/SinglePlaylist.vue",
+		"/C/home/coding (projects)/github/YTListen/src/components/Playlist.vue",
+		"/C/home/coding (projects)/github/YTListen/src/components/PlaylistCard.vue",
+		"/C/home/coding (projects)/github/YTListen/src/components/template.vue",
+		"/C/home/coding (projects)/github/YTListen/package.json",
+		"/C/home/coding (projects)/github/YTListen/component.bat",
+		"/C/home/coding (projects)/github/YTListen/newcomp.bat",
+		"/C/Users/Ivan Alexandrov/AppData/Roaming/Sublime Text 3/Packages/Terminal/Default (Windows).sublime-keymap",
+		"/C/home/coding (projects)/github/YTListen/src/components",
+		"/C/home/coding (projects)/github/YTListen/src/styles/settings.scss",
+		"/C/home/coding (projects)/github/YTListen/index.html",
+		"/C/Users/Ivan Alexandrov/Desktop/ytlisten/src/App.vue",
+		"/C/Users/Ivan Alexandrov/Desktop/ytlisten/index.html",
+		"/C/Users/Ivan Alexandrov/Desktop/ytlisten/README.md",
+		"/C/Users/Ivan Alexandrov/Desktop/ytlisten/package.json",
+		"/C/Users/Ivan Alexandrov/Desktop/ytlisten/.gitignore",
+		"/C/Users/Ivan Alexandrov/Desktop/ytlisten/src/main.js",
+		"/C/Users/Ivan Alexandrov/Desktop/Neuer Ordner/'ytlisten'/webpack.config.js",
+		"/C/Users/Ivan Alexandrov/Desktop/Neuer Ordner/'ytlisten'/src/App.vue",
+		"/C/Users/Ivan Alexandrov/AppData/Local/Temp/fz3temp-2/db1354152.php",
+		"/C/Users/Ivan Alexandrov/Desktop/USBWebserver v8.6/root/register.php",
+		"/C/Users/Ivan Alexandrov/Desktop/manifest.json",
+		"/C/Users/Ivan Alexandrov/AppData/Local/Temp/fz3temp-2/.htaccess",
+		"/C/Users/Ivan Alexandrov/Desktop/USBWebserver v8.6/root/css/css-index.css",
+		"/C/Users/Ivan Alexandrov/Desktop/USBWebserver v8.6/root/index.php",
+		"/C/Users/Ivan Alexandrov/AppData/Local/Temp/fz3temp-2/register.php",
+		"/C/Users/Ivan Alexandrov/Desktop/test.html",
+		"/C/Users/Ivan Alexandrov/Desktop/USBWebserver v8.6/root/js/custom.js",
+		"/C/Users/Ivan Alexandrov/Desktop/USBWebserver v8.6/root/register.html",
+		"/C/Users/Ivan Alexandrov/Desktop/USBWebserver v8.6/root/index.html",
+		"/C/Users/Ivan Alexandrov/Desktop/site/css/css-index.css",
+		"/C/Users/Ivan Alexandrov/Desktop/site/register.html",
+		"/C/Users/Ivan Alexandrov/Desktop/site/js/custom.js",
+		"/C/Users/Ivan Alexandrov/Desktop/site/index.html",
+		"/C/Users/Ivan Alexandrov/Desktop/site/css/css-index-green.css",
+		"/C/Users/Ivan Alexandrov/Desktop/site/css/font-awesome.css",
+		"/C/Users/Ivan Alexandrov/Desktop/samp.js",
+		"/C/Users/Ivan Alexandrov/Desktop/style.cfg",
+		"/C/home/coding (projects)/github/rundik_github_com/c-test/style.css",
+		"/C/home/coding (projects)/github/rundik_github_com/c-test/script.js",
+		"/C/home/coding (projects)/github/rundik_github_com/c-test/index.html",
+		"/C/home/coding (projects)/github/c-test/style.css",
+		"/C/home/coding (projects)/github/c-test/script.js",
+		"/C/home/coding (projects)/github/c-test/manifest.json",
+		"/C/home/coding (projects)/github/c-test/index.html",
+		"/C/home/coding (projects)/github/rundik_github_com/c-test/manifest.json",
+		"/C/Users/Ivan Alexandrov/AppData/Local/Temp/Temp1_5d2fa5339d7996abe09a2091ed8f292b.ico.zip/browserconfig.xml",
+		"/C/Users/Ivan Alexandrov/Dropbox/FloodScript.user.js",
+		"/C/Users/Ivan Alexandrov/AppData/Local/Temp/Temp1_samprp_fake_site.zip/samprp_spam_scripts.js",
+		"/C/Users/Ivan Alexandrov/Desktop/FloodScript.user.js",
+		"/C/home/docs/txt/scripts/ali_reg.js",
+		"/C/home/docs/txt/scripts/names.js",
+		"/C/home/docs/txt/scripts/yandexmail.js",
+		"/C/Users/Ivan Alexandrov/AppData/Local/Temp/fz3temp-2/index 2.php",
+		"/C/Users/Ivan Alexandrov/AppData/Local/Temp/fz3temp-2/index 3.php",
+		"/C/Users/Ivan Alexandrov/Desktop/Neuer Ordner/samprp_spam_scripts.js",
+		"/C/Users/Ivan Alexandrov/Desktop/OmegaOptions.bak",
+		"/C/Users/Ivan Alexandrov/AppData/Roaming/Sublime Text 3/Packages/Pretty JSON/Pretty JSON.sublime-settings",
+		"/C/Users/Ivan Alexandrov/Desktop/3VS0AmhQ.txt",
+		"/C/Users/Ivan Alexandrov/Desktop/1.txt",
+		"/C/Users/Ivan Alexandrov/Desktop/1.html",
+		"/C/Program Files (x86)/Steam/skins/Metro 4.2.4/resource/menus/steam.menu",
+		"/C/Program Files (x86)/Steam/skins/Metro 4.2.4/caption.styles",
+		"/C/Program Files (x86)/Steam/skins/Metro 4.2.4/custom.styles",
+		"/C/Program Files (x86)/Steam/skins/Metro 4.2.4/settings.styles",
+		"/C/Program Files (x86)/Steam/skins/Metro 4.2.4/colors.styles",
+		"/C/home/programs/tools/nodecast-master/public/css/main.css",
+		"/C/home/programs/tools/nodecast-master/public/index.html",
+		"/C/home/programs/tools/gaming/node-virtual-gamepads/package.json",
+		"/C/Program Files (x86)/Steam/skins/skins_readme.txt",
+		"/C/Users/Ivan Alexandrov/AppData/Local/Temp/Temp1_NOOBS_lite_v2_1.zip/INSTRUCTIONS-README.txt",
+		"/C/Users/Ivan Alexandrov/Dropbox/Notes/minecraft.note",
+		"/c/users/ivanal~1/appdata/local/temp/test.html",
+		"/C/Users/Ivan Alexandrov/AppData/Roaming/Sublime Text 3/Packages/User/Gist.sublime-settings",
+		"/C/Users/Ivan Alexandrov/AppData/Roaming/Sublime Text 3/Packages/Gist/Gist.sublime-settings",
+		"/C/Users/Ivan Alexandrov/AppData/Roaming/Sublime Text 3/Packages/Gist/Default (Windows).sublime-keymap",
+		"/C/Users/Ivan Alexandrov/Desktop/hosts"
+	],
+	"find":
+	{
+		"height": 70.0
+	},
+	"find_in_files":
+	{
+		"height": 158.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"modal",
+			"\\n\\n",
+			"</",
+			" class=\"form-control\" rows=\"3\">",
+			"textarea",
+			"textarea(.*?)textarea",
+			" ",
+			",",
+			" ",
+			"&quot;",
+			" ",
+			"   ",
+			"\\n",
+			"\"(.*?)\"",
+			" \"",
+			"\" ",
+			"\"",
+			"\\n\\n",
+			"http(.*)\\n(.*)",
+			"\\n\\n",
+			"href=",
+			"\"",
+			"<(.*)",
+			">",
+			"  ",
+			"\\t",
+			"href=\\\"(.*)\">\\n(.*)<",
+			"'./',",
+			"\\n",
+			" \\+= ",
+			" &&",
+			" \\+ ",
+			" \\? ",
+			" . ",
+			" < ",
+			" > ",
+			" !== ",
+			" : ",
+			" {",
+			"\\n",
+			" === ",
+			" = ",
+			"  ",
+			", ",
+			"\\) {",
+			"\\n",
+			"  ",
+			"\\)}",
+			")}",
+			";",
+			"\\n.(.*)\\n",
+			"\\n.\\n",
+			".*?",
+			".",
+			"draggable",
+			"startConnection",
+			"sender",
+			"msg",
+			"startConnection",
+			"readMessage",
+			"sendMessage",
+			"function",
+			"pc",
+			"servers",
+			"yourId",
+			"database",
+			"lobbyOwners",
+			"let ",
+			"let",
+			"var",
+			"this",
+			"databa",
+			"frie",
+			"refs",
+			"ended",
+			"en",
+			"10px",
+			"crossorigin",
+			"before",
+			"contro",
+			"#cu",
+			"currentTime",
+			"null",
+			"#",
+			"ani",
+			"v-bind",
+			"loaders",
+			"_SESSION",
+			"зар",
+			"logo",
+			"logo2.png",
+			"logo.png",
+			";\n",
+			"img",
+			"landi",
+			"id=\"client\"",
+			"f6f6f6",
+			"{\n",
+			"10%",
+			"echo",
+			"name=\"(.*?)\"",
+			"tabindex=\"(.*?)\"",
+			"autocomplete=\"(.*?)\"",
+			"jsname=\"(.*?)\"",
+			"class=\"(.*?)\"",
+			"<input(.*?)>",
+			"<form(.*?)>",
+			"sign",
+			"h3",
+			"sign",
+			"{\n",
+			"png",
+			"\">",
+			"&+#",
+			"\"\\/",
+			"\\\"\\\\\\/",
+			"\\n",
+			"'",
+			"newU",
+			"GM_setValue(\"nickname\",",
+			"setva",
+			"GM_setValue\\(\"(.*?)\",(.*?),true\\);",
+			"GM_setValue(\"yandex\",false,true);",
+			"GM_setValue\\(\"(.*?)\",(.*?),true\\);",
+			"GM_getValue\\(\"(.*?)\",true\\)",
+			"GM_getValue\\(\"(.*)\",true\\)",
+			"\\\\n",
+			"\\n"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": true,
+		"replace_history":
+		[
+			"\\n",
+			" \\n",
+			" ",
+			"\\n\\n\"",
+			"\"\\n\\n",
+			"\\n\\n",
+			"\\n",
+			"$2 - http$1",
+			"",
+			"\\n",
+			"",
+			"\\\\n",
+			"+=",
+			"&&",
+			"+",
+			"?",
+			"$1",
+			"<",
+			">",
+			"!==",
+			":",
+			"{",
+			"",
+			"===",
+			"=",
+			"",
+			",",
+			"){",
+			"",
+			");}",
+			";\\n",
+			"\\n$1\\n",
+			"$1\\n",
+			"this.startConnection",
+			"this.readMessage",
+			"this.sendMessage",
+			"this.pc",
+			"this.servers",
+			"this.yourId",
+			"this.database",
+			"this.lobbyOwners",
+			"",
+			"sitelogo.png",
+			"&#",
+			"\"\\/icons/",
+			"\"\\/icons",
+			"\"",
+			"GM_setValue(\"$1\",$2);",
+			"GM_setValue(\"$1\",$2,true);",
+			"GM_getValue(\"$1\")",
+			"\\n",
+			"",
+			" ",
+			"",
+			"\\>\\n",
+			">\\n",
+			"\\n",
+			"\\n\\n",
+			"\\n",
+			"\\\\n",
+			"+-+-+-+-+"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 4,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "src/App.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 148,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								10,
+								10
+							]
+						],
+						"settings":
+						{
+							"is_init_dirty_state": false,
+							"syntax": "Packages/Vue Syntax Highlight/vue.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "src/components/MainPage.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 785,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								141,
+								130
+							]
+						],
+						"settings":
+						{
+							"is_init_dirty_state": false,
+							"open_with_edit": true,
+							"syntax": "Packages/Vue Syntax Highlight/vue.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/routes/index.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 234,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								189,
+								189
+							]
+						],
+						"settings":
+						{
+							"is_init_dirty_state": false,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "src/components/Lobby.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 295,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								19,
+								19
+							]
+						],
+						"settings":
+						{
+							"is_init_dirty_state": false,
+							"open_with_edit": true,
+							"syntax": "Packages/Vue Syntax Highlight/vue.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "src/components/Tabletop.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 9704,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1497,
+								1497
+							]
+						],
+						"settings":
+						{
+							"force_encoding": "GBK",
+							"in_converting": true,
+							"is_init_dirty_state": false,
+							"open_with_edit": true,
+							"origin_encoding": "GBK",
+							"revert_to_scratch": true,
+							"syntax": "Packages/Vue Syntax Highlight/vue.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 448.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "src/main.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 544,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								413,
+								413
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "src/components/DeckList.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1148,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1007,
+								1021
+							]
+						],
+						"settings":
+						{
+							"open_with_edit": true,
+							"syntax": "Packages/Vue Syntax Highlight/vue.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 135.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 25.0
+	},
+	"input":
+	{
+		"height": 63.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": false,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.sftp":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "project.sublime-project",
+	"replace":
+	{
+		"height": 114.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 223.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
