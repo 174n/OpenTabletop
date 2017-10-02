@@ -99,17 +99,16 @@
     </v-speed-dial>
 
     <v-navigation-drawer v-model="sidebar" light>
-      <v-layout>
-        <v-flex xs12 sm10 offset-sm1>
-          <v-text-field
-            label="Message"
-            single-line
-            v-model="chatMsgValue"
-            :append-icon-cb="chatMsg"
-            append-icon="send">
-          </v-text-field>
-        </v-flex>
-      </v-layout>
+      <div class="sendMsgBox">
+        <v-text-field
+          label="Message"
+          single-line
+          v-model="chatMsgValue"
+          :append-icon-cb="chatMsg"
+          append-icon="send">
+        </v-text-field>
+      </div>
+      
       <v-divider></v-divider>
       <v-list three-line>
         <v-list-tile avatar v-for="(msg, i) in game.chat.slice().reverse()" :key="i">
@@ -138,10 +137,15 @@ export default {
   components:{
     "deck-list": DeckList
   },
+  computed:{
+    /*game: function(){
+      return this.$store.game
+    }*/
+  },
   data () {
     return {
       speedDeal: false,
-      sidebar: true,
+      sidebar: false,
       chatMsgValue: "",
       cardPreview: {
         url: "",
@@ -346,6 +350,10 @@ export default {
 
 .cardPreview{
   max-width: 223px;
+}
+
+.sendMsgBox{
+  padding: 0 15px;
 }
 
 </style>
