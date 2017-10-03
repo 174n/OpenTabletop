@@ -137,10 +137,10 @@ export default {
   components:{
     "deck-list": DeckList
   },
-  computed:{
-    /*game: function(){
-      return this.$store.game
-    }*/
+  computed: {
+    game(){
+      return this.$store.state.game
+    }
   },
   data () {
     return {
@@ -162,7 +162,7 @@ export default {
           x:0,y:0,
           id:false
         }
-      },
+      }/*,
       game: {
         objects:[
           {
@@ -194,7 +194,7 @@ export default {
           }
         ],
         chat:[]
-      }
+      }*/
     }
   },
   methods:{
