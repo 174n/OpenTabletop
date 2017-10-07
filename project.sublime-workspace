@@ -4,6 +4,66 @@
 		"selected_items":
 		[
 			[
+				"da",
+				"dataId"
+			],
+			[
+				"D",
+				"DeckMenu"
+			],
+			[
+				"open",
+				"openChat"
+			],
+			[
+				"cha",
+				"chatMsgValue"
+			],
+			[
+				"dec",
+				"deckId"
+			],
+			[
+				"card",
+				"cardId"
+			],
+			[
+				"De",
+				"DeckList"
+			],
+			[
+				"car",
+				"cardPreview"
+			],
+			[
+				"ro",
+				"rotate"
+			],
+			[
+				"r",
+				"rotate"
+			],
+			[
+				"o",
+				"object"
+			],
+			[
+				"ob",
+				"objects"
+			],
+			[
+				"file",
+				"file_put_contents"
+			],
+			[
+				"file_",
+				"file_get_contents"
+			],
+			[
+				"a",
+				"access_token"
+			],
+			[
 				"j",
 				"jc-sb\tjustify-content: space-between;"
 			],
@@ -42,10 +102,6 @@
 			[
 				"f",
 				"firebase"
-			],
-			[
-				"da",
-				"database"
 			],
 			[
 				"cons",
@@ -120,54 +176,78 @@
 	"buffers":
 	[
 		{
-			"file": "src/main.js",
-			"settings":
-			{
-				"buffer_size": 617,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/store/index.js",
-			"settings":
-			{
-				"buffer_size": 372,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/components/MainPage.vue",
-			"settings":
-			{
-				"buffer_size": 785,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/components/Lobby.vue",
-			"settings":
-			{
-				"buffer_size": 295,
-				"line_ending": "Unix"
-			}
-		},
-		{
+			"contents": "<template>\n  <div class=\"tabletop\">\n    <template v-for=\"(object, i) in game.objects\">\n      <!-- card -->\n      <div v-if=\"object.type === 'card'\"\n        @contextmenu.prevent=\"showMenu('card',object.x,object.y,i)\"\n        @dblclick=\"cardPreviewOpen(i)\"\n        class=\"draggable card\"\n        :data-id=\"i\"\n        :style=\"{\n          transform: 'translate('+object.x+'px, '+object.y+'px) rotate('+object.rotation+'deg)',\n          backgroundImage: 'url('+object.url+')'\n          }\">\n      </div>\n      <!-- deck -->\n      <div v-else-if=\"object.type === 'deck'\"\n        @contextmenu.prevent=\"showMenu('deck',object.x,object.y,i)\"\n        @dblclick=\"takeCard(i)\"\n        class=\"draggable deck\"\n        :data-id=\"i\"\n        :style=\"{\n          transform: 'translate('+object.x+'px, '+object.y+'px)',\n          backgroundColor: object.color\n          }\">\n        <div class=\"title\">{{object.text}}</div>\n        <div class=\"count\">{{object.cards.length}}</div>\n      </div>\n      <!-- counter -->\n\n      <v-avatar class=\"draggable red counter\"\n        v-else-if=\"object.type === 'counter'\"\n        :data-id=\"i\"\n        :style=\"{\n          transform: 'translate('+object.x+'px, '+object.y+'px)'\n          }\">\n        <span class=\"white--text headline\">{{object.count}}</span>\n      </v-avatar>\n    </template>\n    \n\n    <chat></chat>\n    <deck-list></deck-list>\n    <card-preview></card-preview>\n    <speed-dial></speed-dial>\n    <context-menu></context-menu>\n\n  </div>\n  \n</template>\n\n<script>\nimport interact from 'interactjs';\nimport { EventBus } from '../helpers/event-bus.js';\n\nimport Chat from './Chat.vue';\nimport DeckList from './dialogs/DeckList.vue';\nimport CardPreview from './dialogs/CardPreview.vue';\nimport SpeedDial from './SpeedDial.vue';\nimport ContextMenu from './ContextMenu.vue';\n\nexport default {\n  components:{\n    \"deck-list\": DeckList,\n    \"chat\": Chat,\n    \"card-preview\": CardPreview,\n    \"speed-dial\": SpeedDial,\n    \"context-menu\": ContextMenu\n  },\n  computed: {\n    game(){\n      return this.$store.state.game\n    }\n  },\n  data () {\n    return {\n    }\n  },\n  methods:{\n    dragMoveListener(event){\n      this.$store.commit('moveObject', event);\n    },\n    showMenu(type,x,y,id) {\n      EventBus.$emit('openContextMenu', type,x,y,id);\n    },\n    takeCard(deckId){\n      this.$store.commit('takeCardFromDeck', [deckId]);\n    },\n    rotateCard(cardId){\n      this.$store.commit('rotateCard', cardId);\n    },\n    cardPreviewOpen(id){\n      EventBus.$emit('toggleCardPreview', this.game.objects[id].url);\n    }\n  },\n  mounted(){\n    let self = this;\n    interact('.draggable')\n      .draggable({\n        inertia: {\n          resistance: 60\n        },\n        restrict: {\n          restriction: \"parent\",\n          endOnly: false,\n          elementRect: { top: 0, left: 0, bottom: 1, right: 1 }\n        },\n        autoScroll: true,\n        onmove: this.dragMoveListener,\n        onend: function (event) {\n          console.log('moved a distance of '+ (Math.sqrt(event.dx * event.dx +event.dy * event.dy)|0) + 'px');\n        }\n      });\n\n    interact('.deck').dropzone({\n      accept: '.card',\n      overlap: 0.6, //% of element\n      ondragenter: function (event) {\n        event.target.classList.add('drop-target');\n        event.relatedTarget.classList.add('drop-relatedTarget');\n      },\n      ondragleave: function (event) {\n        event.relatedTarget.classList.remove('drop-relatedTarget');\n        event.target.classList.remove('drop-target');\n      },\n      ondrop: function (event) {\n        event.relatedTarget.classList.remove('drop-relatedTarget');\n        event.target.classList.remove('drop-target');\n        let objects = self.game.objects,\n            card = event.relatedTarget.getAttribute(\"data-id\"),\n            deck = event.target.getAttribute(\"data-id\");\n        objects[deck].cards.push(objects[card]);\n        objects.splice(card, 1);\n      }\n    });\n  }\n}\n</script>\n\n<style lang=\"scss\" scoped>\n\n.tabletop{\n  height: 100vh;\n}\n.draggable{\n  position: absolute;\n  // cursor: move;\n}\n\n.card{\n  width: 111px;\n  height: 155px;\n  background-repeat: no-repeat;\n  background-size: cover;\n  z-index: 2;\n  border-radius: 6px;\n}\n\n.deck{\n  transition: width ease-in-out 0.2s,height ease-in-out 0.2s,margin ease-in-out 0.2s;\n  width: 111px;\n  height: 155px;\n  box-shadow: 3px 3px 0px 1px rgba(0, 0, 0, .7);\n  user-select: none;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  flex-direction: column;\n  padding: 10px 5px;\n  border-radius: 6px;\n}\n\n.counter{\n  user-select: none;\n  cursor: move;\n}\n\n.drop-target{\n  transition: width ease-in-out 0.2s,height ease-in-out 0.2s,margin ease-in-out 0.2s;\n  margin: -3px;\n  width: 117px;\n  height: 161px;\n}\n.drop-relatedTarget{\n  transition: opacity ease-in-out 0.2s;\n  opacity: .6;\n}\n</style>",
 			"file": "src/components/Tabletop.vue",
+			"file_size": 4979,
+			"file_write_time": 131517971007539965,
 			"settings":
 			{
-				"buffer_size": 9766,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
+				"buffer_size": 4793,
+				"line_ending": "Windows",
+				"scratch": true
 			}
 		},
 		{
-			"file": "src/components/DeckList.vue",
+			"file": "src/components/ContextMenu.vue",
 			"settings":
 			{
-				"buffer_size": 1148,
-				"line_ending": "Unix"
+				"buffer_size": 2082,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/components/dialogs/DeckList.vue",
+			"settings":
+			{
+				"buffer_size": 1896,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/components/dialogs/CardPreview.vue",
+			"settings":
+			{
+				"buffer_size": 519,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/store/mutations.js",
+			"settings":
+			{
+				"buffer_size": 2262,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/components/SpeedDial.vue",
+			"settings":
+			{
+				"buffer_size": 1524,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/components/Chat.vue",
+			"settings":
+			{
+				"buffer_size": 1495,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/store/state.js",
+			"settings":
+			{
+				"buffer_size": 2522,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
 			}
 		}
 	],
@@ -178,21 +258,33 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 229.0,
-		"last_filter": "new file",
+		"height": 354.0,
+		"last_filter": "ip",
 		"selected_items":
 		[
 			[
-				"new file",
-				"File: New File Relative to Current View"
+				"ip",
+				"Package Control: Install Package"
 			],
 			[
-				"",
-				"A File Icon: Changelog"
+				"git",
+				"GitGutter: Support Info"
 			],
 			[
-				"new fi",
-				"File: New File Relative to Current View"
+				"ht",
+				"HTMLPrettify"
+			],
+			[
+				"rem",
+				"Package Control: Remove Package"
+			],
+			[
+				"html",
+				"HTMLPrettify"
+			],
+			[
+				"ssph",
+				"Set Syntax: PHP"
 			],
 			[
 				"ssj",
@@ -211,20 +303,12 @@
 				"Pretty JSON: Format and Sort JSON"
 			],
 			[
-				"ip",
-				"Package Control: Install Package"
-			],
-			[
 				"ma",
 				"Material Theme: Activate theme"
 			],
 			[
 				"ssv",
 				"Set Syntax: Vue Component"
-			],
-			[
-				"rem",
-				"Package Control: Remove Package"
 			],
 			[
 				"remo",
@@ -347,7 +431,7 @@
 				"Set Syntax: YAML"
 			]
 		],
-		"width": 471.0
+		"width": 496.0
 	},
 	"console":
 	{
@@ -369,26 +453,44 @@
 	},
 	"expanded_folders":
 	[
-		"/home/rundik/projects/OpenTabletop",
-		"/home/rundik/projects/OpenTabletop/src",
-		"/home/rundik/projects/OpenTabletop/src/components",
-		"/home/rundik/projects/OpenTabletop/src/store"
+		"/C/home/coding (projects)/github/OpenTabletop",
+		"/C/home/coding (projects)/github/OpenTabletop/src",
+		"/C/home/coding (projects)/github/OpenTabletop/src/components",
+		"/C/home/coding (projects)/github/OpenTabletop/src/components/dialogs",
+		"/C/home/coding (projects)/github/OpenTabletop/src/store"
 	],
 	"file_history":
 	[
-		"/home/rundik/projects/OpenTabletop/src/store/getters.js",
-		"/home/rundik/projects/OpenTabletop/src/store/actions.js",
-		"/home/rundik/projects/OpenTabletop/src/store/mutations.js",
-		"/home/rundik/projects/OpenTabletop/src/store/state.js",
-		"/home/rundik/projects/OpenTabletop/src/App.vue",
-		"/home/rundik/projects/OpenTabletop/src/components/MainPage.vue",
-		"/home/rundik/projects/OpenTabletop/src/components/Tabletop.vue",
-		"/home/rundik/projects/OpenTabletop/webpack.config.js",
-		"/home/rundik/projects/OpenTabletop/src/components/Auth.vue",
-		"/home/rundik/projects/OpenTabletop/src/components/WelcomeCard.vue",
-		"/home/rundik/projects/OpenTabletop/src/components/Toolbar.vue",
-		"/home/rundik/projects/OpenTabletop/src/store/index.js",
-		"/home/rundik/projects/OpenTabletop/.gitignore",
+		"/C/home/coding (projects)/github/OpenTabletop/src/components/menus/CardMenu.vue",
+		"/C/home/coding (projects)/github/OpenTabletop/src/components/menus/DeckMenu.vue",
+		"/C/home/coding (projects)/github/OpenTabletop/src/components/dialogs/CardPreview.vue",
+		"/C/home/coding (projects)/github/OpenTabletop/src/store/mutations.js",
+		"/C/home/programs/tools/twitch/itpedia.txt",
+		"/C/home/coding (projects)/github/OpenTabletop/src/store/state.js",
+		"/C/home/coding (projects)/github/OpenTabletop/src/store/getters.js",
+		"/C/home/coding (projects)/github/OpenTabletop/src/store/actions.js",
+		"/C/home/coding (projects)/github/OpenTabletop/src/store/index.js",
+		"/C/home/coding (projects)/github/OpenTabletop/src/App.vue",
+		"/C/home/coding (projects)/github/OpenTabletop/src/components/MainPage.vue",
+		"/C/home/coding (projects)/github/OpenTabletop/src/routes/index.js",
+		"/C/home/coding (projects)/github/OpenTabletop/src/components/Lobby.vue",
+		"/C/home/coding (projects)/github/OpenTabletop/package.json",
+		"/C/home/coding (projects)/github/OpenTabletop/src/main.js",
+		"/C/home/coding (projects)/github/OpenTabletop/src/helpers/event-bus.js",
+		"/C/home/coding (projects)/github/OpenTabletop/src/components/CardViewer.vue",
+		"/C/Users/Ivan Alexandrov/AppData/Local/Temp/fz3temp-2/test.php",
+		"/C/Users/Ivan Alexandrov/AppData/Local/Temp/fz3temp-2/index.php",
+		"/C/Users/Ivan Alexandrov/Dropbox/stuff/amulet_drakone.php",
+		"/C/Users/Ivan Alexandrov/Desktop/twitch/itpedia.txt",
+		"/C/Users/Ivan Alexandrov/Desktop/index.php",
+		"/C/home/coding (projects)/github/OpenTabletop/src/components/template.vue",
+		"/C/home/coding (projects)/github/OpenTabletop/webpack.config.js",
+		"/C/home/coding (projects)/github/OpenTabletop/public/index.html",
+		"/C/home/coding (projects)/github/OpenTabletop/.gitignore",
+		"/C/home/coding (projects)/github/OpenTabletop/src/components/Tabletop.vue",
+		"/C/home/coding (projects)/github/OpenTabletop/src/components/Auth.vue",
+		"/C/home/coding (projects)/github/OpenTabletop/src/components/WelcomeCard.vue",
+		"/C/home/coding (projects)/github/OpenTabletop/src/components/Toolbar.vue",
 		"/C/Users/Ivan Alexandrov/Desktop/twitch/out.txt",
 		"/C/home/coding (projects)/github/OpenTabletop/firebase.json",
 		"/C/Users/Ivan Alexandrov/Desktop/index.html",
@@ -400,13 +502,9 @@
 		"/C/Users/Ivan Alexandrov/AppData/Local/Temp/Temp1_extensionizr_custom1504877061288.zip/ext/src/bg/background.js",
 		"/C/home/coding (projects)/github/OpenTabletop/index.html",
 		"/C/home/coding (projects)/github/OpenTabletop/concept/chat.html",
-		"/C/home/coding (projects)/github/OpenTabletop/src/routes/index.js",
 		"/C/Users/Ivan Alexandrov/AppData/Roaming/Sublime Text 3/Packages/User/SideBarEnhancements/Open With/Side Bar.sublime-menu",
 		"/C/Users/Ivan Alexandrov/Desktop/freetabletop-export.json",
-		"/C/home/coding (projects)/github/OpenTabletop/.gitignore",
-		"/C/home/coding (projects)/github/OpenTabletop/src/main.js",
 		"/C/home/coding (projects)/github/OpenTabletop/src/firebase-config.js",
-		"/C/home/coding (projects)/github/OpenTabletop/src/components/WelcomeCard.vue",
 		"/C/home/coding (projects)/github/OpenTabletop/.babelrc",
 		"/C/home/coding (projects)/github/OpenTabletop/src/firebase.js",
 		"/C/home/coding (projects)/github/OpenTabletop/src/mixins/storage.js",
@@ -442,7 +540,6 @@
 		"/C/Users/Ivan Alexandrov/Desktop/ytlisten/src/main.js",
 		"/C/Users/Ivan Alexandrov/Desktop/Neuer Ordner/'ytlisten'/webpack.config.js",
 		"/C/Users/Ivan Alexandrov/Desktop/Neuer Ordner/'ytlisten'/src/App.vue",
-		"/C/Users/Ivan Alexandrov/Desktop/index.php",
 		"/C/Users/Ivan Alexandrov/AppData/Local/Temp/fz3temp-2/db1354152.php",
 		"/C/Users/Ivan Alexandrov/Desktop/USBWebserver v8.6/root/register.php",
 		"/C/Users/Ivan Alexandrov/Desktop/manifest.json",
@@ -450,7 +547,6 @@
 		"/C/Users/Ivan Alexandrov/Desktop/USBWebserver v8.6/root/css/css-index.css",
 		"/C/Users/Ivan Alexandrov/Desktop/USBWebserver v8.6/root/index.php",
 		"/C/Users/Ivan Alexandrov/AppData/Local/Temp/fz3temp-2/register.php",
-		"/C/Users/Ivan Alexandrov/AppData/Local/Temp/fz3temp-2/index.php",
 		"/C/Users/Ivan Alexandrov/Desktop/test.html",
 		"/C/Users/Ivan Alexandrov/Desktop/USBWebserver v8.6/root/js/custom.js",
 		"/C/Users/Ivan Alexandrov/Desktop/USBWebserver v8.6/root/register.html",
@@ -492,22 +588,11 @@
 		"/C/Program Files (x86)/Steam/skins/Metro 4.2.4/settings.styles",
 		"/C/Program Files (x86)/Steam/skins/Metro 4.2.4/colors.styles",
 		"/C/home/programs/tools/nodecast-master/public/css/main.css",
-		"/C/home/programs/tools/nodecast-master/public/index.html",
-		"/C/home/programs/tools/gaming/node-virtual-gamepads/package.json",
-		"/C/Program Files (x86)/Steam/skins/skins_readme.txt",
-		"/C/Users/Ivan Alexandrov/AppData/Local/Temp/Temp1_NOOBS_lite_v2_1.zip/INSTRUCTIONS-README.txt",
-		"/C/Users/Ivan Alexandrov/Dropbox/Notes/minecraft.note",
-		"/c/users/ivanal~1/appdata/local/temp/test.html",
-		"/C/Users/Ivan Alexandrov/AppData/Roaming/Sublime Text 3/Packages/User/Gist.sublime-settings",
-		"/C/Users/Ivan Alexandrov/AppData/Roaming/Sublime Text 3/Packages/Gist/Gist.sublime-settings",
-		"/C/Users/Ivan Alexandrov/AppData/Roaming/Sublime Text 3/Packages/Gist/Default (Windows).sublime-keymap",
-		"/C/Users/Ivan Alexandrov/Desktop/hosts",
-		"/C/Windows/System32/drivers/etc/hosts",
-		"/C/Users/Ivan Alexandrov/AppData/Roaming/Sublime Text 3/Packages/SFTP/servers/sftp-config.json"
+		"/C/home/programs/tools/nodecast-master/public/index.html"
 	],
 	"find":
 	{
-		"height": 24.0
+		"height": 70.0
 	},
 	"find_in_files":
 	{
@@ -522,6 +607,30 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"\\((.*)",
+			"data",
+			"removeObject",
+			"cardPreviewOpen",
+			"takeCard",
+			"deckListView",
+			"cardPreviewOpen",
+			">\n",
+			"';\n",
+			"CardPreview",
+			"addNewDeck",
+			"cardPreviewOpen",
+			"chatMsg",
+			"show",
+			"card",
+			"modal",
+			"\\n\\n",
+			"</",
+			" class=\"form-control\" rows=\"3\">",
+			"textarea",
+			"textarea(.*?)textarea",
+			" ",
+			",",
+			" ",
 			"&quot;",
 			" ",
 			"   ",
@@ -625,31 +734,7 @@
 			"sign",
 			"{\n",
 			"png",
-			"\">",
-			"&+#",
-			"\"\\/",
-			"\\\"\\\\\\/",
-			"\\n",
-			"'",
-			"newU",
-			"GM_setValue(\"nickname\",",
-			"setva",
-			"GM_setValue\\(\"(.*?)\",(.*?),true\\);",
-			"GM_setValue(\"yandex\",false,true);",
-			"GM_setValue\\(\"(.*?)\",(.*?),true\\);",
-			"GM_getValue\\(\"(.*?)\",true\\)",
-			"GM_getValue\\(\"(.*)\",true\\)",
-			"\\\\n",
-			"\\n",
-			"  ",
-			"\\t",
-			"Donate",
-			"\\\"http(.*?)\\\"",
-			"\\>",
-			"\\n\\n",
-			"\\+-\\+-\\+-\\+-\\+",
-			"+-\\+-\\+-\\+-\\+",
-			"+-+-+-+-+"
+			"\">"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -733,110 +818,30 @@
 			[
 				{
 					"buffer": 0,
-					"file": "src/main.js",
+					"file": "src/components/Tabletop.vue",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 617,
+						"buffer_size": 4793,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								591,
-								591
+								156,
+								215
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "src/store/index.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 372,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								202,
-								202
-							]
-						],
-						"settings":
-						{
+							"force_encoding": "GBK",
+							"git_gutter_is_enabled": false,
+							"in_converting": true,
+							"is_init_dirty_state": false,
 							"open_with_edit": true,
-							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "src/components/MainPage.vue",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 785,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Vue Syntax Highlight/vue.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "src/components/Lobby.vue",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 295,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
+							"origin_encoding": "GBK",
+							"revert_to_scratch": true,
 							"syntax": "Packages/Vue Syntax Highlight/vue.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
@@ -849,20 +854,82 @@
 					"type": "text"
 				},
 				{
-					"buffer": 4,
-					"file": "src/components/Tabletop.vue",
+					"buffer": 1,
+					"file": "src/components/ContextMenu.vue",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 9766,
+						"buffer_size": 2082,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								6895,
-								6895
+								1710,
+								1710
+							]
+						],
+						"settings":
+						{
+							"git_gutter_is_enabled": false,
+							"open_with_edit": true,
+							"syntax": "Packages/Vue Syntax Highlight/vue.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 810.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/components/dialogs/DeckList.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1896,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1470,
+								1470
+							]
+						],
+						"settings":
+						{
+							"git_gutter_is_enabled": false,
+							"open_with_edit": true,
+							"syntax": "Packages/Vue Syntax Highlight/vue.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 675.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "src/components/dialogs/CardPreview.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 519,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								510,
+								510
 							]
 						],
 						"settings":
@@ -873,7 +940,38 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 3066.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "src/store/mutations.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2262,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								812,
+								812
+							]
+						],
+						"settings":
+						{
+							"git_gutter_is_enabled": false,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 90.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -881,32 +979,93 @@
 				},
 				{
 					"buffer": 5,
-					"file": "src/components/DeckList.vue",
+					"file": "src/components/SpeedDial.vue",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1148,
+						"buffer_size": 1524,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								892,
+								892
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Vue Syntax Highlight/vue.tmLanguage",
+							"git_gutter_is_enabled": false,
+							"open_with_edit": true,
+							"syntax": "Packages/Vue Syntax Highlight/vue.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 225.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "src/components/Chat.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1495,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1486,
+								1486
+							]
+						],
+						"settings":
+						{
+							"git_gutter_is_enabled": false,
+							"open_with_edit": true,
+							"syntax": "Packages/Vue Syntax Highlight/vue.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 585.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "src/store/state.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2522,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2407,
+								2407
+							]
+						],
+						"settings":
+						{
+							"git_gutter_is_enabled": false,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 450.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 6,
 					"type": "text"
 				}
 			]
@@ -914,11 +1073,11 @@
 	],
 	"incremental_find":
 	{
-		"height": 24.0
+		"height": 28.0
 	},
 	"input":
 	{
-		"height": 63.0
+		"height": 66.0
 	},
 	"layout":
 	{
@@ -955,7 +1114,7 @@
 	"project": "project.sublime-project",
 	"replace":
 	{
-		"height": 44.0
+		"height": 114.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -988,6 +1147,15 @@
 	"selected_group": 0,
 	"settings":
 	{
+		"last_automatic_layout":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		]
 	},
 	"show_minimap": true,
 	"show_open_files": true,
@@ -997,5 +1165,6 @@
 	"status_bar_visible": true,
 	"template_settings":
 	{
+		"max_columns": 1
 	}
 }

@@ -4,25 +4,29 @@
       <v-toolbar-title>OpenTabletop</v-toolbar-title>
     </v-toolbar>
     <main>
-      <v-container fluid>
-        <v-card class="blue-grey darken-2 white--text">
-          <v-card-title primary-title>
-            <div>
-              <div class="headline">Create a new lobby</div>
-              <span class="grey--text">Click the button below to create a new lobby</span>
-            </div>
-          </v-card-title>
-          <v-card-actions>
-            <v-btn flat dark to="lobby">Create lobby</v-btn>
-          </v-card-actions>
-        </v-card>
+      <v-container fluid grid-list-lg>
+        <v-layout row wrap>
+          <v-flex xs12>
+            <auth-card></auth-card>
+          </v-flex>
+          <v-flex xs12>
+            <new-lobby-card></new-lobby-card>
+          </v-flex>
+        </v-layout>
       </v-container>
     </main>
   </v-app>
 </template>
 
 <script>
+import NewLobbyCard from "./cards/NewLobbyCard.vue";
+import AuthCard from "./cards/AuthCard.vue";
+
 export default {
+  components:{
+    "new-lobby-card": NewLobbyCard,
+    "auth-card": AuthCard
+  },
   data () {
     return {
       
