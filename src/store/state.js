@@ -3,9 +3,11 @@
 // root state object.
 // each Vuex instance is just a single state tree.
 export default {
+  user: null,
+  firebaseLoading: false,
   game: {
     objects:[
-      {
+      /*{
         type: "card",
         url: "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=417720&type=card",
         x: 0,y: 0, rotation: 0
@@ -78,7 +80,7 @@ export default {
         x: 400,y: 300,
         count: 0,
         color: "blue"
-      }
+      }*/
     ],
     chat:[]
   }

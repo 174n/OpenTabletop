@@ -7,16 +7,18 @@
       </div>
     </v-card-title>
     <v-card-actions>
-      <v-btn flat dark to="lobby">Create lobby</v-btn>
+      <v-btn flat dark @click.stop="newLobbyDialog">Create lobby</v-btn>
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
+import { EventBus } from '../../helpers/event-bus.js';
+
 export default {
-  data () {
-    return {
-      
+  methods:{
+    newLobbyDialog(){
+      EventBus.$emit('newLobbyToggle');
     }
   }
 }

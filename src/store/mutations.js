@@ -117,11 +117,16 @@ export default {
       msg: data[1],
       time: Date.now()
     });
+  },
+
+
+
+  /* Lobby
+  =======================================*/
+
+  updateGame(state, val){
+    state.game = val;
   }
-
-
-
-
 
 
 }

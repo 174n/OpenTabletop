@@ -1,6 +1,7 @@
 <template>
   <v-app>
     <main>
+      {{$route.params.id}}
       <tabletop></tabletop>
     </main>
   </v-app>
@@ -13,10 +14,8 @@ export default {
   components:{
     tabletop: Tabletop
   },
-  data () {
-    return {
-      
-    }
+  created(){
+    this.$store.dispatch('lobbyGetData', this.$route.params.id);
   }
 }
 </script>

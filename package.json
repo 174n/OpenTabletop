@@ -11,6 +11,7 @@
   "dependencies": {
     "firebase": "^4.5.0",
     "interactjs": "^1.2.9",
+    "shortid": "^2.2.8",
     "shuffle-array": "^1.0.1",
     "vue": "^2.4.2",
     "vue-router": "^2.7.0",

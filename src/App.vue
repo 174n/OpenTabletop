@@ -10,6 +10,9 @@ import Snackbar from "./components/Snackbar.vue";
   export default {
     components:{
       "snackbar": Snackbar
+    },
+    created(){
+      this.$store.dispatch('firebaseInit');
     }
   }
 </script>

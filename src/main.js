@@ -6,9 +6,11 @@ import './stylus/main.styl'
 
 
 import VueRouter from 'vue-router'
-import Firebase from 'firebase'
 import VueTimeago from 'vue-timeago'
+
+import Firebase from 'firebase'
 import Vuex from 'vuex'
+import store from './store'
 
 import Routes from './routes'
 
@@ -29,8 +31,6 @@ Vue.use(VueTimeago, {
 
 
 
-//store
-import store from './store'
 
 new Vue({
   el: '#app',

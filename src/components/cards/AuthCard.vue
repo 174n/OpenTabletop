@@ -7,7 +7,7 @@
       </div>
     </v-card-title>
     <v-card-actions>
-      <v-btn class="blue--text" flat to="lobby"> Auth with Google</v-btn>
+      <v-btn class="blue--text" flat @click="auth">Auth with Google</v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -17,6 +17,11 @@ export default {
   data () {
     return {
       
+    }
+  },
+  methods:{
+    auth(){
+      this.$store.dispatch('signInWithGoogle');
     }
   }
 }
