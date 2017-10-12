@@ -1,7 +1,7 @@
 {
   "name": "opentabletop",
   "description": "Browser-based online project in which you can play any card games with your friends",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "author": "Rundik <rundik@ro.ru>",
   "private": true,
   "scripts": {

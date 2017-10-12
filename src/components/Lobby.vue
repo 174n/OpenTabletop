@@ -16,6 +16,12 @@ export default {
   },
   created(){
     this.$store.dispatch('lobbyGetData', this.$route.params.id);
+      this.$store.watch((state) => {
+        return state.game;
+      }, (val) => {
+        // this.$store.dispatch('lobbyPutData');
+        // console.log(val);
+      },{deep: true});
   }
 }
 </script>

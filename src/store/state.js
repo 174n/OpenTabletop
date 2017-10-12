@@ -5,6 +5,7 @@
 export default {
   user: null,
   firebaseLoading: false,
+  lobbyId: "",
   game: {
     objects:[
       /*{

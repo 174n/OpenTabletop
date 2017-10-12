@@ -79,7 +79,7 @@ export default {
   },
   methods:{
     dragMoveListener(event){
-      this.$store.commit('moveObject', event);
+      this.$store.dispatch('moveObject', event);
     },
     showMenu(type,x,y,id) {
       EventBus.$emit('openContextMenu', type,x,y,id);

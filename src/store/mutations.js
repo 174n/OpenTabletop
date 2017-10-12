@@ -128,5 +128,4 @@ export default {
     state.game = val;
   }
 
-
 }

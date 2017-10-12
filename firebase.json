@@ -1,0 +1,8 @@
+{
+  "hosting": {
+    "public": "public",
+    "ignore": [
+      "dist/build.js.map"
+    ]
+  }
+}
