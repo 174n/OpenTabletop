@@ -39,13 +39,17 @@ export default {
   },
   methods:{
     chatMsg(){
-      this.$store.commit('chatAddMsg', ["Nickname",this.chatMsgValue]);
+      this.$store.commit('chatAddMsg', [this.user.displayName,this.chatMsgValue]);
+      this.$store.dispatch('lobbyUpdateChat');
       this.chatMsgValue = "";
     }
   },
   computed: {
     game(){
       return this.$store.state.game
+    },
+    user(){
+      return this.$store.state.user
     }
   },
   created(){

@@ -79,7 +79,12 @@ export default {
   },
   methods:{
     dragMoveListener(event){
-      this.$store.dispatch('moveObject', event);
+      // this.$store.commit('moveObject', event);
+
+      this.$store.dispatch('lobbyCommitMutation', {
+        mutation: 'moveObject',
+        params: event
+      });
     },
     showMenu(type,x,y,id) {
       EventBus.$emit('openContextMenu', type,x,y,id);
@@ -109,7 +114,7 @@ export default {
         autoScroll: true,
         onmove: this.dragMoveListener,
         onend: function (event) {
-          console.log('moved a distance of '+ (Math.sqrt(event.dx * event.dx +event.dy * event.dy)|0) + 'px');
+          // console.log('moved a distance of '+ (Math.sqrt(event.dx * event.dx +event.dy * event.dy)|0) + 'px');
         }
       });
 
@@ -130,7 +135,13 @@ export default {
 
         let card = event.relatedTarget.getAttribute("data-id");
         let deck = event.target.getAttribute("data-id");
-        self.$store.commit('moveCardToDeck', [card,deck]);
+        // self.$store.commit('moveCardToDeck', [card,deck]);
+
+        self.$store.dispatch('lobbyCommitMutation', {
+          mutation: 'moveCardToDeck',
+          params: [card,deck]
+        });
+
       }
     });
   }

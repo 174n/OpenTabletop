@@ -4,6 +4,22 @@
 		"selected_items":
 		[
 			[
+				"ob",
+				"objects"
+			],
+			[
+				"obj",
+				"objects"
+			],
+			[
+				"d",
+				"dispatch"
+			],
+			[
+				"for",
+				"forEach"
+			],
+			[
 				"p",
 				"public/"
 			],
@@ -26,10 +42,6 @@
 			[
 				"c",
 				"config/"
-			],
-			[
-				"ob",
-				"object"
 			],
 			[
 				"sh",
@@ -102,10 +114,6 @@
 			[
 				"tra",
 				"transform"
-			],
-			[
-				"d",
-				"draggable"
 			],
 			[
 				"y",
@@ -204,13 +212,14 @@
 	"buffers":
 	[
 		{
-			"contents": "<template>\n  <div class=\"tabletop\">\n    <template v-for=\"(object, i) in game.objects\">\n      <!-- card -->\n      <div v-if=\"object.type === 'card'\"\n        @contextmenu.prevent=\"showMenu('card',object.x,object.y,i)\"\n        @dblclick=\"cardPreviewOpen(i)\"\n        class=\"draggable card\"\n        :data-id=\"i\"\n        :style=\"{\n          transform: 'translate('+object.x+'px, '+object.y+'px) rotate('+object.rotation+'deg)',\n          backgroundImage: 'url('+object.url+')'\n          }\">\n      </div>\n      <!-- deck -->\n      <div v-else-if=\"object.type === 'deck'\"\n        @contextmenu.prevent=\"showMenu('deck',object.x,object.y,i)\"\n        @dblclick=\"takeCard(i)\"\n        class=\"draggable deck\"\n        :data-id=\"i\"\n        :style=\"{\n          transform: 'translate('+object.x+'px, '+object.y+'px)',\n          backgroundColor: object.color\n          }\">\n        <div class=\"title\">{{object.text}}</div>\n        <div class=\"count\">{{object.cards.length}}</div>\n      </div>\n      <!-- counter -->\n\n      <v-avatar class=\"draggable counter\"\n        :class=\"[object.color]\"\n        @contextmenu.prevent=\"showMenu('counter',object.x,object.y,i)\"\n        v-else-if=\"object.type === 'counter'\"\n        :data-id=\"i\"\n        :style=\"{\n          transform: 'translate('+object.x+'px, '+object.y+'px)'\n          }\">\n        <span class=\"white--text headline\">{{object.count}}</span>\n      </v-avatar>\n    </template>\n    \n\n    <chat></chat>\n    <deck-list></deck-list>\n    <card-preview></card-preview>\n    <speed-dial></speed-dial>\n    <context-menu></context-menu>\n\n  </div>\n  \n</template>\n\n<script>\nimport interact from 'interactjs';\nimport { EventBus } from '../helpers/event-bus.js';\n\nimport Chat from './Chat.vue';\nimport DeckList from './dialogs/DeckList.vue';\nimport CardPreview from './dialogs/CardPreview.vue';\nimport SpeedDial from './SpeedDial.vue';\nimport ContextMenu from './ContextMenu.vue';\n\nexport default {\n  components:{\n    \"deck-list\": DeckList,\n    \"chat\": Chat,\n    \"card-preview\": CardPreview,\n    \"speed-dial\": SpeedDial,\n    \"context-menu\": ContextMenu\n  },\n  computed: {\n    game(){\n      return this.$store.state.game\n    }\n  },\n  data () {\n    return {\n    }\n  },\n  methods:{\n    dragMoveListener(event){\n      this.$store.dispatch('moveObject', event);\n    },\n    showMenu(type,x,y,id) {\n      EventBus.$emit('openContextMenu', type,x,y,id);\n    },\n    takeCard(deckId){\n      this.$store.commit('takeCardFromDeck', [deckId]);\n    },\n    rotateCard(cardId){\n      this.$store.commit('rotateCard', cardId);\n    },\n    cardPreviewOpen(id){\n      EventBus.$emit('toggleCardPreview', this.game.objects[id].url);\n    }\n  },\n  mounted(){\n    let self = this;\n    interact('.draggable')\n      .draggable({\n        inertia: {\n          resistance: 60\n        },\n        restrict: {\n          restriction: \"parent\",\n          endOnly: false,\n          elementRect: { top: 0, left: 0, bottom: 1, right: 1 }\n        },\n        autoScroll: true,\n        onmove: this.dragMoveListener,\n        onend: function (event) {\n          console.log('moved a distance of '+ (Math.sqrt(event.dx * event.dx +event.dy * event.dy)|0) + 'px');\n        }\n      });\n\n    interact('.deck').dropzone({\n      accept: '.card',\n      overlap: 0.6, //% of element\n      ondragenter: function (event) {\n        event.target.classList.add('drop-target');\n        event.relatedTarget.classList.add('drop-relatedTarget');\n      },\n      ondragleave: function (event) {\n        event.relatedTarget.classList.remove('drop-relatedTarget');\n        event.target.classList.remove('drop-target');\n      },\n      ondrop: function (event) {\n        event.relatedTarget.classList.remove('drop-relatedTarget');\n        event.target.classList.remove('drop-target');\n\n        let card = event.relatedTarget.getAttribute(\"data-id\");\n        let deck = event.target.getAttribute(\"data-id\");\n        self.$store.commit('moveCardToDeck', [card,deck]);\n      }\n    });\n  }\n}\n</script>\n\n<style lang=\"scss\" scoped>\n\n.tabletop{\n  height: 100vh;\n}\n.draggable{\n  position: absolute;\n  // cursor: move;\n}\n\n.card{\n  width: 111px;\n  height: 155px;\n  background-repeat: no-repeat;\n  background-size: cover;\n  z-index: 2;\n  border-radius: 6px;\n}\n\n.deck{\n  transition: width ease-in-out 0.2s,height ease-in-out 0.2s,margin ease-in-out 0.2s;\n  width: 111px;\n  height: 155px;\n  box-shadow: 3px 3px 0px 1px rgba(0, 0, 0, .7);\n  user-select: none;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  flex-direction: column;\n  padding: 10px 5px;\n  border-radius: 6px;\n}\n\n.counter{\n  user-select: none;\n  cursor: move;\n}\n\n.drop-target{\n  transition: width ease-in-out 0.2s,height ease-in-out 0.2s,margin ease-in-out 0.2s;\n  margin: -3px;\n  width: 117px;\n  height: 161px;\n}\n.drop-relatedTarget{\n  transition: opacity ease-in-out 0.2s;\n  opacity: .6;\n}\n</style>",
+			"contents": "<template>\n  <div class=\"tabletop\">\n    <template v-for=\"(object, i) in game.objects\">\n      <!-- card -->\n      <div v-if=\"object.type === 'card'\"\n        @contextmenu.prevent=\"showMenu('card',object.x,object.y,i)\"\n        @dblclick=\"cardPreviewOpen(i)\"\n        class=\"draggable card\"\n        :data-id=\"i\"\n        :style=\"{\n          transform: 'translate('+object.x+'px, '+object.y+'px) rotate('+object.rotation+'deg)',\n          backgroundImage: 'url('+object.url+')'\n          }\">\n      </div>\n      <!-- deck -->\n      <div v-else-if=\"object.type === 'deck'\"\n        @contextmenu.prevent=\"showMenu('deck',object.x,object.y,i)\"\n        @dblclick=\"takeCard(i)\"\n        class=\"draggable deck\"\n        :data-id=\"i\"\n        :style=\"{\n          transform: 'translate('+object.x+'px, '+object.y+'px)',\n          backgroundColor: object.color\n          }\">\n        <div class=\"title\">{{object.text}}</div>\n        <div class=\"count\">{{object.cards.length}}</div>\n      </div>\n      <!-- counter -->\n\n      <v-avatar class=\"draggable counter\"\n        :class=\"[object.color]\"\n        @contextmenu.prevent=\"showMenu('counter',object.x,object.y,i)\"\n        v-else-if=\"object.type === 'counter'\"\n        :data-id=\"i\"\n        :style=\"{\n          transform: 'translate('+object.x+'px, '+object.y+'px)'\n          }\">\n        <span class=\"white--text headline\">{{object.count}}</span>\n      </v-avatar>\n    </template>\n    \n\n    <chat></chat>\n    <deck-list></deck-list>\n    <card-preview></card-preview>\n    <speed-dial></speed-dial>\n    <context-menu></context-menu>\n\n  </div>\n  \n</template>\n\n<script>\nimport interact from 'interactjs';\nimport { EventBus } from '../helpers/event-bus.js';\n\nimport Chat from './Chat.vue';\nimport DeckList from './dialogs/DeckList.vue';\nimport CardPreview from './dialogs/CardPreview.vue';\nimport SpeedDial from './SpeedDial.vue';\nimport ContextMenu from './ContextMenu.vue';\n\nexport default {\n  components:{\n    \"deck-list\": DeckList,\n    \"chat\": Chat,\n    \"card-preview\": CardPreview,\n    \"speed-dial\": SpeedDial,\n    \"context-menu\": ContextMenu\n  },\n  computed: {\n    game(){\n      return this.$store.state.game\n    }\n  },\n  data () {\n    return {\n    }\n  },\n  methods:{\n    dragMoveListener(event){\n      this.$store.commit('moveObject', event);\n    },\n    showMenu(type,x,y,id) {\n      EventBus.$emit('openContextMenu', type,x,y,id);\n    },\n    takeCard(deckId){\n      this.$store.commit('takeCardFromDeck', [deckId]);\n    },\n    rotateCard(cardId){\n      this.$store.commit('rotateCard', cardId);\n    },\n    cardPreviewOpen(id){\n      EventBus.$emit('toggleCardPreview', this.game.objects[id].url);\n    }\n  },\n  mounted(){\n    let self = this;\n    interact('.draggable')\n      .draggable({\n        inertia: {\n          resistance: 60\n        },\n        restrict: {\n          restriction: \"parent\",\n          endOnly: false,\n          elementRect: { top: 0, left: 0, bottom: 1, right: 1 }\n        },\n        autoScroll: true,\n        onmove: this.dragMoveListener,\n        onend: function (event) {\n          // console.log('moved a distance of '+ (Math.sqrt(event.dx * event.dx +event.dy * event.dy)|0) + 'px');\n        }\n      });\n\n    interact('.deck').dropzone({\n      accept: '.card',\n      overlap: 0.6, //% of element\n      ondragenter: function (event) {\n        event.target.classList.add('drop-target');\n        event.relatedTarget.classList.add('drop-relatedTarget');\n      },\n      ondragleave: function (event) {\n        event.relatedTarget.classList.remove('drop-relatedTarget');\n        event.target.classList.remove('drop-target');\n      },\n      ondrop: function (event) {\n        event.relatedTarget.classList.remove('drop-relatedTarget');\n        event.target.classList.remove('drop-target');\n\n        let card = event.relatedTarget.getAttribute(\"data-id\");\n        let deck = event.target.getAttribute(\"data-id\");\n        self.$store.commit('moveCardToDeck', [card,deck]);\n      }\n    });\n  }\n}\n</script>\n\n<style lang=\"scss\" scoped>\n\n.tabletop{\n  height: 100vh;\n}\n.draggable{\n  position: absolute;\n  // cursor: move;\n}\n\n.card{\n  width: 111px;\n  height: 155px;\n  background-repeat: no-repeat;\n  background-size: cover;\n  z-index: 2;\n  border-radius: 6px;\n}\n\n.deck{\n  transition: width ease-in-out 0.2s,height ease-in-out 0.2s,margin ease-in-out 0.2s;\n  width: 111px;\n  height: 155px;\n  box-shadow: 3px 3px 0px 1px rgba(0, 0, 0, .7);\n  user-select: none;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  flex-direction: column;\n  padding: 10px 5px;\n  border-radius: 6px;\n}\n\n.counter{\n  user-select: none;\n  cursor: move;\n}\n\n.drop-target{\n  transition: width ease-in-out 0.2s,height ease-in-out 0.2s,margin ease-in-out 0.2s;\n  margin: -3px;\n  width: 117px;\n  height: 161px;\n}\n.drop-relatedTarget{\n  transition: opacity ease-in-out 0.2s;\n  opacity: .6;\n}\n</style>",
 			"file": "src/components/Tabletop.vue",
-			"file_size": 5018,
-			"file_write_time": 131522184349215429,
+			"file_size": 5019,
+			"file_write_time": 131523805676406803,
 			"settings":
 			{
-				"buffer_size": 4831,
+				"buffer_size": 4832,
+				"encoding": "UTF-8",
 				"line_ending": "Windows",
 				"scratch": true
 			}
@@ -318,7 +327,8 @@
 			"file": "src/store/mutations.js",
 			"settings":
 			{
-				"buffer_size": 3153,
+				"buffer_size": 3272,
+				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
 		},
@@ -326,7 +336,7 @@
 			"file": "src/store/actions.js",
 			"settings":
 			{
-				"buffer_size": 6433,
+				"buffer_size": 7501,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -335,18 +345,9 @@
 			"file": "src/components/Lobby.vue",
 			"settings":
 			{
-				"buffer_size": 547,
+				"buffer_size": 545,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "firebase.json",
-			"settings":
-			{
-				"buffer_size": 94,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
 			}
 		},
 		{
@@ -598,6 +599,7 @@
 	],
 	"file_history":
 	[
+		"/C/home/coding (projects)/github/OpenTabletop/firebase.json",
 		"/C/home/coding (projects)/github/OpenTabletop/package.json",
 		"/C/home/coding (projects)/github/OpenTabletop/src/store/mutations.js",
 		"/C/home/coding (projects)/github/OpenTabletop/src/store/actions.js",
@@ -635,7 +637,6 @@
 		"/C/home/coding (projects)/github/OpenTabletop/src/components/WelcomeCard.vue",
 		"/C/home/coding (projects)/github/OpenTabletop/src/components/Toolbar.vue",
 		"/C/Users/Ivan Alexandrov/Desktop/twitch/out.txt",
-		"/C/home/coding (projects)/github/OpenTabletop/firebase.json",
 		"/C/Users/Ivan Alexandrov/Desktop/index.html",
 		"/C/Users/Ivan Alexandrov/Downloads/Encrypted 快速響應代碼! (2).user.js",
 		"/C/Users/Ivan Alexandrov/Downloads/Encrypted 快速響應代碼! (1).user.js",
@@ -736,6 +737,9 @@
 		"height": 158.0,
 		"where_history":
 		[
+			"-node_modules/*,public/*",
+			"-node_modules-public",
+			"-node_modules",
 			""
 		]
 	},
@@ -744,6 +748,11 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"dispa",
+			"dispatch",
+			" ",
+			"takeCard",
+			"forE",
 			" ",
 			"i",
 			"\\.([а-я])",
@@ -866,12 +875,7 @@
 			"currentTime",
 			"null",
 			"#",
-			"ani",
-			"v-bind",
-			"loaders",
-			"_SESSION",
-			"зар",
-			"logo"
+			"ani"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -879,6 +883,9 @@
 		"regex": true,
 		"replace_history":
 		[
+			"  ",
+			" ",
+			"   ",
 			"\\n",
 			"\\. $1",
 			"\\n",
@@ -967,7 +974,7 @@
 	"groups":
 	[
 		{
-			"selected": 15,
+			"selected": 14,
 			"sheets":
 			[
 				{
@@ -976,15 +983,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4831,
+						"buffer_size": 4832,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2265,
-								2265
+								3038,
+								3038
 							]
 						],
 						"settings":
@@ -1001,10 +1008,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1080.0,
+						"translation.y": 1426.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
@@ -1066,7 +1073,7 @@
 						"translation.y": 548.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
@@ -1191,7 +1198,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
@@ -1237,8 +1244,8 @@
 						"selection":
 						[
 							[
-								1930,
-								1980
+								1948,
+								1948
 							]
 						],
 						"settings":
@@ -1248,10 +1255,10 @@
 							"syntax": "Packages/Vue Syntax Highlight/vue.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 1215.0,
+						"translation.y": 1185.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 17,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
@@ -1343,7 +1350,7 @@
 						"translation.y": 45.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
@@ -1352,15 +1359,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3153,
+						"buffer_size": 3272,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								1580,
+								1580
 							]
 						],
 						"settings":
@@ -1371,10 +1378,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 510.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
@@ -1383,15 +1390,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6433,
+						"buffer_size": 7501,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2864,
-								2864
+								4487,
+								4487
 							]
 						],
 						"settings":
@@ -1402,10 +1409,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1391.0,
+						"translation.y": 1785.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
@@ -1414,15 +1421,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 547,
+						"buffer_size": 545,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								494,
-								494
+								491,
+								491
 							]
 						],
 						"settings":
@@ -1433,43 +1440,14 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 15,
-					"file": "firebase.json",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 94,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								82,
-								82
-							]
-						],
-						"settings":
-						{
-							"git_gutter_is_enabled": false,
-							"syntax": "Packages/JavaScript/JSON.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 90.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
 					"type": "text"
 				},
 				{
-					"buffer": 16,
+					"buffer": 15,
 					"file": "src/store/state.js",
 					"semi_transient": false,
 					"settings":
@@ -1496,11 +1474,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 17,
+					"buffer": 16,
 					"file": "src/routes/index.js",
 					"semi_transient": false,
 					"settings":
@@ -1525,11 +1503,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
-					"buffer": 18,
+					"buffer": 17,
 					"file": "src/components/SpeedDial.vue",
 					"semi_transient": false,
 					"settings":
@@ -1555,11 +1533,11 @@
 						"translation.y": 135.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 19,
+					"stack_index": 18,
 					"type": "text"
 				},
 				{
-					"buffer": 19,
+					"buffer": 18,
 					"file": "src/components/Chat.vue",
 					"semi_transient": false,
 					"settings":
@@ -1585,7 +1563,7 @@
 						"translation.y": 225.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 18,
+					"stack_index": 17,
 					"type": "text"
 				}
 			]
@@ -1644,12 +1622,36 @@
 		"selected_items":
 		[
 			[
+				"",
+				"src\\components\\Lobby.vue"
+			],
+			[
+				"table",
+				"src\\components\\Tabletop.vue"
+			],
+			[
+				"me",
+				"src\\components\\ContextMenu.vue"
+			],
+			[
+				"tab",
+				"src\\components\\Tabletop.vue"
+			],
+			[
+				"tabl",
+				"src\\components\\Tabletop.vue"
+			],
+			[
 				"mu",
 				"src\\store\\mutations.js"
 			],
 			[
-				"",
-				"src\\store\\actions.js"
+				"menu",
+				"src\\components\\ContextMenu.vue"
+			],
+			[
+				"ta",
+				"src\\components\\Tabletop.vue"
 			],
 			[
 				"mai",
@@ -1680,10 +1682,6 @@
 				"src\\store\\state.js"
 			],
 			[
-				"tab",
-				"src\\components\\Tabletop.vue"
-			],
-			[
 				"lo",
 				"src\\components\\Lobby.vue"
 			],
@@ -1696,16 +1694,8 @@
 				"src\\routes\\index.js"
 			],
 			[
-				"ta",
-				"src\\components\\Tabletop.vue"
-			],
-			[
 				"ma",
 				"src\\components\\MainPage.vue"
-			],
-			[
-				"table",
-				"src\\components\\Tabletop.vue"
 			],
 			[
 				"ac",

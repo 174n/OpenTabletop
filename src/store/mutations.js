@@ -19,15 +19,18 @@ export default {
     /*let deckId = params[0];
     let amount = params[1] !== undefined ? params[1] : 1;*/
 
-    let deck = state.game.objects[deckId].cards;
-    let card = deck.slice(amount*(-1));
+    let deck = state.game.objects[deckId];
+    let card = deck.cards.slice(amount*(-1));
     
     card.forEach(v => {
       v.x = state.game.objects[deckId].x+30;
       v.y = state.game.objects[deckId].y+30;
+      v.new = true;
       state.game.objects.push(v);
-      deck.splice(-1);
+      deck.cards.splice(-1);
     });
+
+    deck.new = true;
 
   },
 
@@ -35,42 +38,57 @@ export default {
     /*let deckId = params[0];
     let id = params[1] !== undefined ? params[1] : 0;*/
 
-    let deck = state.game.objects[deckId].cards;
-    let card = deck[id];
-    card.x = state.game.objects[deckId].x+30;
-    card.y = state.game.objects[deckId].y+30;
+    let deck = state.game.objects[deckId];
+    let card = deck.cards[id];
+
+    card.x = deck.x+30;
+    card.y = deck.y+30;
+    card.new = true;
+
     state.game.objects.push(card);
-    deck.splice(id,1);
+    deck.cards.splice(id,1);
+    deck.new = true;
 
   },
 
-  moveCardToDeck(state, [card,deck]){
+  moveCardToDeck(state, [cardId,deckId]){
     let objects = state.game.objects;
-    objects[card].rotation = 0;
+    let deck = objects[deckId];
 
-    objects[deck].cards.push(objects[card]);
-    objects.splice(card, 1);
+    objects[cardId].rotation = 0;
+    deck.cards.push(objects[cardId]);
+
+    objects.splice(cardId, 1);
+    objects.push({
+      type: "updateAll"
+    });
   },
 
   removeObject(state, objectId){
     let objects = state.game.objects;
     if(objects[objectId] !== undefined){
+
       objects.splice(objectId, 1);
+      objects.push({
+        type: "updateAll"
+      });
     }
   },
 
   rotateCard(state, cardId){
     let card = state.game.objects[cardId];
     if(card.type === "card") card.rotation = card.rotation === 0 ? 90 : 0;
+    card.new = true;
   },
 
   addNewDeck(state, event){
     state.game.objects.push({
       type: "deck",
-      x: event.screenX-150,y: event.screenY-150,
+      x: event.clientX-150,y: event.clientY-150,
       color: "#ccc",
       text: "New Deck",
-      cards:[]
+      cards:[],
+      new: true
     });
   },
 
@@ -78,9 +96,10 @@ export default {
   addNewCounter(state, event){
     state.game.objects.push({
       type: "counter",
-      x: event.screenX-50,y: event.screenY-100,
+      x: event.clientX-50,y: event.clientY-100,
       count: 0,
-      color: randomColor()
+      color: randomColor(),
+      new: true
     });
   },
 
@@ -92,19 +111,26 @@ export default {
       y = (parseFloat(obj.y) || 0) + event.dy;
     obj.x = x;
     obj.y = y;
+    obj.new = true;
   },
 
   shuffleDeck(state, deckId){
-    let cards = state.game.objects[deckId].cards;
+    let deck = state.game.objects[deckId];
+    let cards = deck.cards;
     cards = shuffle(cards);
+    deck.new = true;
   },
 
   counterChangeNumber(state, [id,num=1]){
-    state.game.objects[id].count+=num;
+    let counter = state.game.objects[id]
+    counter.count+=num;
+    counter.new = true;
   },
 
   counterChangeColor(state, id){
-    state.game.objects[id].color=randomColor();
+    let counter = state.game.objects[id]
+    counter.color=randomColor();
+    counter.new = true;
   },
 
 
@@ -125,6 +151,9 @@ export default {
   =======================================*/
 
   updateGame(state, val){
+    Object.values(val.objects).forEach((v) => {
+      if(v.type==="deck" && v.cards===undefined) v.cards = [];
+    });
     state.game = val;
   }
 

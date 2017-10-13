@@ -33,13 +33,20 @@ export default {
       return Math.round(min + Math.random() * (max - min));
     },
     addNewDeck(event){
-      this.$store.commit('addNewDeck', event);
+      this.$store.dispatch('lobbyCommitMutation', {
+        mutation: 'addNewDeck',
+        params: event
+      });
     },
     addNewCounter(event){
-      this.$store.commit('addNewCounter', event);
+      this.$store.dispatch('lobbyCommitMutation', {
+        mutation: 'addNewCounter',
+        params: event
+      });
     },
     rollDice(){
       this.$store.commit('chatAddMsg', ["Dice roll","[1d6] Result: "+this.randomInteger(1, 6)]);
+      this.$store.dispatch('lobbyUpdateChat');
       this.openChat();
     },
     openChat(){

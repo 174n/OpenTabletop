@@ -91,6 +91,12 @@ export default {
     }); 
   },
 
+
+
+
+  /* Data manangment
+  ==================================*/
+
   lobbyGetData(context, id){
     context.state.lobbyId = id;
     firebase.database().ref('lobbies/' + id).on('value', function(snapshot){
@@ -111,6 +117,11 @@ export default {
     firebase.database().ref('/lobbies/'+lobbyId+'/game/'+state.path).update(state.data);
   },
 
+  lobbySetState(context, state){
+    let lobbyId = context.state.lobbyId;
+    firebase.database().ref('/lobbies/'+lobbyId+'/game/'+state.path).set(state.data);
+  },
+
   lobbyMoveObject(context, [from,to]){
     let lobbyId = context.state.lobbyId;
     let oldRef = firebase.database().ref('/lobbies/'+lobbyId+'/game/'+from);
@@ -129,42 +140,87 @@ export default {
     firebase.database().ref('/lobbies/'+lobbyId+'/game/'+path).remove();
   },
 
+  lobbyPushObject(context, [path,data]){
+    let lobbyId = context.state.lobbyId;
+    firebase.database().ref('/lobbies/'+lobbyId+'/game/'+path).push(data);
+  },
+
+
+
+
+  lobbyUpdateNewObjects(context){
+    let objects = context.state.game.objects;
+    objects.forEach((v,i) => {
+
+      if(v.new === true){
+        delete v.new;
+        context.dispatch("lobbyUpdateState", {
+          path: "objects/"+i,
+          data: v
+        });
+        // console.log(v.type, i);
+      }
+      else if(v.type === "updateAll"){
+        objects.splice(i, 1);
+        context.dispatch("lobbyPutData");
+      }
+
+    });
+  },
+
+  lobbyCommitMutation({commit, dispatch}, {mutation, params}){
+    // console.log(mutation, params);
+    commit(mutation, params);
+    dispatch("lobbyUpdateNewObjects");
+  },
+
+
+    lobbyUpdateChat(context){
+      let lobbyId = context.state.lobbyId;
+      firebase.database().ref('/lobbies/'+lobbyId+'/game/chat').set(context.state.game.chat);
+    },
+
 
   /* State updates
   ====================================*/
 
-  moveObject(context, event){
-    var target = event.target,
-      id = target.getAttribute("data-id"),
-      obj = context.state.game.objects[id],
-      x = (parseFloat(obj.x) || 0) + event.dx,
-      y = (parseFloat(obj.y) || 0) + event.dy;
-    context.dispatch("lobbyUpdateState", {
-      path: "objects/"+id,
-      data: {x: x, y: y}
-    });
-  }
+  // moveObject(context, event){
+  //   var target = event.target,
+  //     id = target.getAttribute("data-id"),
+  //     obj = context.state.game.objects[id],
+  //     x = (parseFloat(obj.x) || 0) + event.dx,
+  //     y = (parseFloat(obj.y) || 0) + event.dy;
+  //   context.dispatch("lobbyUpdateState", {
+  //     path: "objects/"+id,
+  //     data: {x: x, y: y}
+  //   });
+  // },
 
 
   // // Objects
 
-  // takeCardFromDeck(state, [deckId,amount=1]){
+  // takeCardFromDeck(context, [deckId,amount=1]){
 
-  //   let deck = state.game.objects[deckId].cards;
+  //   let deck = context.state.game.objects[deckId].cards;
   //   let card = deck.slice(amount*(-1));
     
   //   card.forEach(v => {
-  //     v.x = state.game.objects[deckId].x+30;
-  //     v.y = state.game.objects[deckId].y+30;
-  //     state.game.objects.push(v);
+  //     v.x = context.state.game.objects[deckId].x+30;
+  //     v.y = context.state.game.objects[deckId].y+30;
+  //     context.state.game.objects.push(v);
   //     deck.splice(-1);
+  //     // context.dispatch("lobbyPushObject", ["objects/",v]);
   //   });
 
+  //   // context.dispatch("lobbySetState", {
+  //   //   path: "objects/"+deckId+"/cards",
+  //   //   data: deck
+  //   // });
+  //   context.dispatch("lobbyPutData");
+    
   // },
 
   // takeCardFromDeckById(state, [deckId,id=0]){
-  //   /*let deckId = params[0];
-  //   let id = params[1] !== undefined ? params[1] : 0;*/
 
   //   let deck = state.game.objects[deckId].cards;
   //   let card = deck[id];
@@ -172,16 +228,50 @@ export default {
   //   card.y = state.game.objects[deckId].y+30;
   //   state.game.objects.push(card);
   //   deck.splice(id,1);
+    
+  //   // context.dispatch("lobbyPushObject", ["objects/",card]);
+
+  //   // context.dispatch("lobbySetState", {
+  //   //   path: "objects/"+deckId+"/cards",
+  //   //   data: deck
+  //   // });
+  //   context.dispatch("lobbyPutData");
 
   // },
 
-  // moveCardToDeck(state, [card,deck]){
-  //   let objects = state.game.objects;
+  // moveCardToDeck(context, [card,deck]){
+
+  //   let objects = context.state.game.objects;
   //   objects[card].rotation = 0;
 
   //   objects[deck].cards.push(objects[card]);
   //   objects.splice(card, 1);
+
+  //   context.dispatch("lobbyPutData");
+
+  //   // context.dispatch("lobbyRemoveObject", "objects/"+card);
+
+  //   // context.dispatch("lobbySetState", {
+  //   //   path: "objects/"+deck+"/cards",
+  //   //   data: objects[deck].cards
+  //   // });
+
   // },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
 
   // removeObject(state, objectId){
   //   let objects = state.game.objects;

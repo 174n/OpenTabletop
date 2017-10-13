@@ -81,31 +81,55 @@ export default {
   },
   methods:{
     removeObject(){
-      this.$store.commit('removeObject', this.id);
+      this.$store.dispatch('lobbyCommitMutation', {
+        mutation: 'removeObject',
+        params: this.id
+      });
     },
     takeCard(){
-      this.$store.commit('takeCardFromDeck', [this.id]);
+      this.$store.dispatch('lobbyCommitMutation', {
+        mutation: 'takeCardFromDeck',
+        params: [this.id]
+      });
     },
     deckListView(){
       EventBus.$emit('deckViewToggle', this.id);
     },
     rotateCard(){
-      this.$store.commit('rotateCard', this.id);
+      this.$store.dispatch('lobbyCommitMutation', {
+        mutation: 'rotateCard',
+        params: this.id
+      });
     },
     takeCardToObjects(){
-      this.$store.commit('takeCardFromDeckById', [this.id].concat(this.params));
+      this.$store.dispatch('lobbyCommitMutation', {
+        mutation: 'takeCardFromDeckById',
+        params: [this.id].concat(this.params)
+      });
     },
     shuffleDeck(){
-      this.$store.commit('shuffleDeck', this.id);
+      this.$store.dispatch('lobbyCommitMutation', {
+        mutation: 'shuffleDeck',
+        params: this.id
+      });
     },
     counterInc(){
-      this.$store.commit('counterChangeNumber', [this.id]);
+      this.$store.dispatch('lobbyCommitMutation', {
+        mutation: 'counterChangeNumber',
+        params: [this.id]
+      });
     },
     counterDecr(){
-      this.$store.commit('counterChangeNumber', [this.id,-1]);
+      this.$store.dispatch('lobbyCommitMutation', {
+        mutation: 'counterChangeNumber',
+        params: [this.id,-1]
+      });
     },
     counterChangeColor(){
-      this.$store.commit('counterChangeColor', this.id);
+      this.$store.dispatch('lobbyCommitMutation', {
+        mutation: 'counterChangeColor',
+        params: this.id
+      });
     }
   },
   created(){
