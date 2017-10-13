@@ -4,6 +4,14 @@
 		"selected_items":
 		[
 			[
+				"co",
+				"counter"
+			],
+			[
+				"p",
+				"plugins.js"
+			],
+			[
 				"ob",
 				"objects"
 			],
@@ -18,10 +26,6 @@
 			[
 				"for",
 				"forEach"
-			],
-			[
-				"p",
-				"public/"
 			],
 			[
 				"nw",
@@ -128,10 +132,6 @@
 				"getters"
 			],
 			[
-				"co",
-				"context"
-			],
-			[
 				"cur",
 				"cur-p\tcursor: pointer;"
 			],
@@ -212,13 +212,13 @@
 	"buffers":
 	[
 		{
-			"contents": "<template>\n  <div class=\"tabletop\">\n    <template v-for=\"(object, i) in game.objects\">\n      <!-- card -->\n      <div v-if=\"object.type === 'card'\"\n        @contextmenu.prevent=\"showMenu('card',object.x,object.y,i)\"\n        @dblclick=\"cardPreviewOpen(i)\"\n        class=\"draggable card\"\n        :data-id=\"i\"\n        :style=\"{\n          transform: 'translate('+object.x+'px, '+object.y+'px) rotate('+object.rotation+'deg)',\n          backgroundImage: 'url('+object.url+')'\n          }\">\n      </div>\n      <!-- deck -->\n      <div v-else-if=\"object.type === 'deck'\"\n        @contextmenu.prevent=\"showMenu('deck',object.x,object.y,i)\"\n        @dblclick=\"takeCard(i)\"\n        class=\"draggable deck\"\n        :data-id=\"i\"\n        :style=\"{\n          transform: 'translate('+object.x+'px, '+object.y+'px)',\n          backgroundColor: object.color\n          }\">\n        <div class=\"title\">{{object.text}}</div>\n        <div class=\"count\">{{object.cards.length}}</div>\n      </div>\n      <!-- counter -->\n\n      <v-avatar class=\"draggable counter\"\n        :class=\"[object.color]\"\n        @contextmenu.prevent=\"showMenu('counter',object.x,object.y,i)\"\n        v-else-if=\"object.type === 'counter'\"\n        :data-id=\"i\"\n        :style=\"{\n          transform: 'translate('+object.x+'px, '+object.y+'px)'\n          }\">\n        <span class=\"white--text headline\">{{object.count}}</span>\n      </v-avatar>\n    </template>\n    \n\n    <chat></chat>\n    <deck-list></deck-list>\n    <card-preview></card-preview>\n    <speed-dial></speed-dial>\n    <context-menu></context-menu>\n\n  </div>\n  \n</template>\n\n<script>\nimport interact from 'interactjs';\nimport { EventBus } from '../helpers/event-bus.js';\n\nimport Chat from './Chat.vue';\nimport DeckList from './dialogs/DeckList.vue';\nimport CardPreview from './dialogs/CardPreview.vue';\nimport SpeedDial from './SpeedDial.vue';\nimport ContextMenu from './ContextMenu.vue';\n\nexport default {\n  components:{\n    \"deck-list\": DeckList,\n    \"chat\": Chat,\n    \"card-preview\": CardPreview,\n    \"speed-dial\": SpeedDial,\n    \"context-menu\": ContextMenu\n  },\n  computed: {\n    game(){\n      return this.$store.state.game\n    }\n  },\n  data () {\n    return {\n    }\n  },\n  methods:{\n    dragMoveListener(event){\n      this.$store.commit('moveObject', event);\n    },\n    showMenu(type,x,y,id) {\n      EventBus.$emit('openContextMenu', type,x,y,id);\n    },\n    takeCard(deckId){\n      this.$store.commit('takeCardFromDeck', [deckId]);\n    },\n    rotateCard(cardId){\n      this.$store.commit('rotateCard', cardId);\n    },\n    cardPreviewOpen(id){\n      EventBus.$emit('toggleCardPreview', this.game.objects[id].url);\n    }\n  },\n  mounted(){\n    let self = this;\n    interact('.draggable')\n      .draggable({\n        inertia: {\n          resistance: 60\n        },\n        restrict: {\n          restriction: \"parent\",\n          endOnly: false,\n          elementRect: { top: 0, left: 0, bottom: 1, right: 1 }\n        },\n        autoScroll: true,\n        onmove: this.dragMoveListener,\n        onend: function (event) {\n          // console.log('moved a distance of '+ (Math.sqrt(event.dx * event.dx +event.dy * event.dy)|0) + 'px');\n        }\n      });\n\n    interact('.deck').dropzone({\n      accept: '.card',\n      overlap: 0.6, //% of element\n      ondragenter: function (event) {\n        event.target.classList.add('drop-target');\n        event.relatedTarget.classList.add('drop-relatedTarget');\n      },\n      ondragleave: function (event) {\n        event.relatedTarget.classList.remove('drop-relatedTarget');\n        event.target.classList.remove('drop-target');\n      },\n      ondrop: function (event) {\n        event.relatedTarget.classList.remove('drop-relatedTarget');\n        event.target.classList.remove('drop-target');\n\n        let card = event.relatedTarget.getAttribute(\"data-id\");\n        let deck = event.target.getAttribute(\"data-id\");\n        self.$store.commit('moveCardToDeck', [card,deck]);\n      }\n    });\n  }\n}\n</script>\n\n<style lang=\"scss\" scoped>\n\n.tabletop{\n  height: 100vh;\n}\n.draggable{\n  position: absolute;\n  // cursor: move;\n}\n\n.card{\n  width: 111px;\n  height: 155px;\n  background-repeat: no-repeat;\n  background-size: cover;\n  z-index: 2;\n  border-radius: 6px;\n}\n\n.deck{\n  transition: width ease-in-out 0.2s,height ease-in-out 0.2s,margin ease-in-out 0.2s;\n  width: 111px;\n  height: 155px;\n  box-shadow: 3px 3px 0px 1px rgba(0, 0, 0, .7);\n  user-select: none;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  flex-direction: column;\n  padding: 10px 5px;\n  border-radius: 6px;\n}\n\n.counter{\n  user-select: none;\n  cursor: move;\n}\n\n.drop-target{\n  transition: width ease-in-out 0.2s,height ease-in-out 0.2s,margin ease-in-out 0.2s;\n  margin: -3px;\n  width: 117px;\n  height: 161px;\n}\n.drop-relatedTarget{\n  transition: opacity ease-in-out 0.2s;\n  opacity: .6;\n}\n</style>",
+			"contents": "<template>\n  <div class=\"tabletop\">\n    <template v-for=\"(object, i) in game.objects\">\n      <!-- card -->\n      <div v-if=\"object.type === 'card'\"\n        @contextmenu.prevent=\"showMenu('card',object.x,object.y,i)\"\n        @dblclick=\"cardPreviewOpen(i)\"\n        class=\"draggable card\"\n        :data-id=\"i\"\n        :style=\"{\n          transform: 'translate('+object.x+'px, '+object.y+'px) rotate('+object.rotation+'deg)',\n          backgroundImage: 'url('+object.url+')'\n          }\">\n      </div>\n      <!-- deck -->\n      <div v-else-if=\"object.type === 'deck'\"\n        @contextmenu.prevent=\"showMenu('deck',object.x,object.y,i)\"\n        @dblclick=\"takeCard(i)\"\n        class=\"draggable deck\"\n        :data-id=\"i\"\n        :style=\"{\n          transform: 'translate('+object.x+'px, '+object.y+'px)',\n          backgroundColor: object.color\n          }\">\n        <div class=\"title\">{{object.text}}</div>\n        <div class=\"count\">{{object.cards.length}}</div>\n      </div>\n      <!-- counter -->\n\n      <v-avatar class=\"draggable counter\"\n        :class=\"[object.color]\"\n        @contextmenu.prevent=\"showMenu('counter',object.x,object.y,i)\"\n        v-else-if=\"object.type === 'counter'\"\n        :data-id=\"i\"\n        :style=\"{\n          transform: 'translate('+object.x+'px, '+object.y+'px)'\n          }\">\n        <span class=\"white--text headline\">{{object.count}}</span>\n      </v-avatar>\n    </template>\n    \n\n    <chat></chat>\n    <deck-list></deck-list>\n    <card-preview></card-preview>\n    <speed-dial></speed-dial>\n    <context-menu></context-menu>\n\n  </div>\n  \n</template>\n\n<script>\nimport interact from 'interactjs';\nimport { EventBus } from '../helpers/event-bus.js';\n\nimport Chat from './Chat.vue';\nimport DeckList from './dialogs/DeckList.vue';\nimport CardPreview from './dialogs/CardPreview.vue';\nimport SpeedDial from './SpeedDial.vue';\nimport ContextMenu from './ContextMenu.vue';\n\nexport default {\n  components:{\n    \"deck-list\": DeckList,\n    \"chat\": Chat,\n    \"card-preview\": CardPreview,\n    \"speed-dial\": SpeedDial,\n    \"context-menu\": ContextMenu\n  },\n  computed: {\n    game(){\n      return this.$store.state.game\n    }\n  },\n  data () {\n    return {\n    }\n  },\n  methods:{\n    dragMoveListener(event){\n      // this.$store.commit('moveObject', event);\n\n      this.$store.dispatch('lobbyCommitMutation', {\n        mutation: 'moveObject',\n        params: event\n      });\n    },\n    showMenu(type,x,y,id) {\n      EventBus.$emit('openContextMenu', type,x,y,id);\n    },\n    takeCard(deckId){\n      this.$store.commit('takeCardFromDeck', [deckId]);\n    },\n    rotateCard(cardId){\n      this.$store.commit('rotateCard', cardId);\n    },\n    cardPreviewOpen(id){\n      EventBus.$emit('toggleCardPreview', this.game.objects[id].url);\n    }\n  },\n  mounted(){\n    let self = this;\n    interact('.draggable')\n      .draggable({\n        inertia: {\n          resistance: 60\n        },\n        restrict: {\n          restriction: \"parent\",\n          endOnly: false,\n          elementRect: { top: 0, left: 0, bottom: 1, right: 1 }\n        },\n        autoScroll: true,\n        onmove: this.dragMoveListener,\n        onend: function (event) {\n          // console.log('moved a distance of '+ (Math.sqrt(event.dx * event.dx +event.dy * event.dy)|0) + 'px');\n        }\n      });\n\n    interact('.deck').dropzone({\n      accept: '.card',\n      overlap: 0.6, //% of element\n      ondragenter: function (event) {\n        event.target.classList.add('drop-target');\n        event.relatedTarget.classList.add('drop-relatedTarget');\n      },\n      ondragleave: function (event) {\n        event.relatedTarget.classList.remove('drop-relatedTarget');\n        event.target.classList.remove('drop-target');\n      },\n      ondrop: function (event) {\n        event.relatedTarget.classList.remove('drop-relatedTarget');\n        event.target.classList.remove('drop-target');\n\n        let card = event.relatedTarget.getAttribute(\"data-id\");\n        let deck = event.target.getAttribute(\"data-id\");\n        // self.$store.commit('moveCardToDeck', [card,deck]);\n\n        self.$store.dispatch('lobbyCommitMutation', {\n          mutation: 'moveCardToDeck',\n          params: [card,deck]\n        });\n\n      }\n    });\n  }\n}\n</script>\n\n<style lang=\"scss\" scoped>\n\n.tabletop{\n  height: 100vh;\n}\n.draggable{\n  position: absolute;\n  // cursor: move;\n}\n\n.card{\n  width: 111px;\n  height: 155px;\n  background-repeat: no-repeat;\n  background-size: cover;\n  z-index: 2;\n  border-radius: 6px;\n}\n\n.deck{\n  transition: width ease-in-out 0.2s,height ease-in-out 0.2s,margin ease-in-out 0.2s;\n  width: 111px;\n  height: 155px;\n  box-shadow: 3px 3px 0px 1px rgba(0, 0, 0, .7);\n  user-select: none;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  flex-direction: column;\n  padding: 10px 5px;\n  border-radius: 6px;\n}\n\n.counter{\n  user-select: none;\n  cursor: move;\n}\n\n.drop-target{\n  transition: width ease-in-out 0.2s,height ease-in-out 0.2s,margin ease-in-out 0.2s;\n  margin: -3px;\n  width: 117px;\n  height: 161px;\n}\n.drop-relatedTarget{\n  transition: opacity ease-in-out 0.2s;\n  opacity: .6;\n}\n</style>",
 			"file": "src/components/Tabletop.vue",
-			"file_size": 5019,
-			"file_write_time": 131523805676406803,
+			"file_size": 5289,
+			"file_write_time": 131523942867000166,
 			"settings":
 			{
-				"buffer_size": 4832,
+				"buffer_size": 5091,
 				"encoding": "UTF-8",
 				"line_ending": "Windows",
 				"scratch": true
@@ -291,7 +291,7 @@
 			"file": "src/components/ContextMenu.vue",
 			"settings":
 			{
-				"buffer_size": 2972,
+				"buffer_size": 3524,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -327,7 +327,7 @@
 			"file": "src/store/mutations.js",
 			"settings":
 			{
-				"buffer_size": 3272,
+				"buffer_size": 3686,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -336,7 +336,16 @@
 			"file": "src/store/actions.js",
 			"settings":
 			{
-				"buffer_size": 7501,
+				"buffer_size": 8364,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/store/plugins.js",
+			"settings":
+			{
+				"buffer_size": 266,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -345,7 +354,16 @@
 			"file": "src/components/Lobby.vue",
 			"settings":
 			{
-				"buffer_size": 545,
+				"buffer_size": 563,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/store/index.js",
+			"settings":
+			{
+				"buffer_size": 418,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -372,7 +390,7 @@
 			"file": "src/components/SpeedDial.vue",
 			"settings":
 			{
-				"buffer_size": 1524,
+				"buffer_size": 1709,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -381,7 +399,7 @@
 			"file": "src/components/Chat.vue",
 			"settings":
 			{
-				"buffer_size": 1495,
+				"buffer_size": 1608,
 				"encoding": "UTF-8",
 				"line_ending": "Windows"
 			}
@@ -590,10 +608,9 @@
 	"expanded_folders":
 	[
 		"/C/home/coding (projects)/github/OpenTabletop",
-		"/C/home/coding (projects)/github/OpenTabletop/public",
-		"/C/home/coding (projects)/github/OpenTabletop/public/dist",
 		"/C/home/coding (projects)/github/OpenTabletop/src",
 		"/C/home/coding (projects)/github/OpenTabletop/src/components",
+		"/C/home/coding (projects)/github/OpenTabletop/src/components/cards",
 		"/C/home/coding (projects)/github/OpenTabletop/src/components/dialogs",
 		"/C/home/coding (projects)/github/OpenTabletop/src/store"
 	],
@@ -748,6 +765,15 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"C:\\\\home",
+			"C:\\\\",
+			"C:",
+			"screenX",
+			"\\$store\\.commit",
+			"$store\\.commit",
+			"$store.commit",
+			"card",
+			"move",
 			"dispa",
 			"dispatch",
 			" ",
@@ -866,16 +892,7 @@
 			"frie",
 			"refs",
 			"ended",
-			"en",
-			"10px",
-			"crossorigin",
-			"before",
-			"contro",
-			"#cu",
-			"currentTime",
-			"null",
-			"#",
-			"ani"
+			"en"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -983,15 +1000,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4832,
+						"buffer_size": 5091,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3038,
-								3038
+								4055,
+								4055
 							]
 						],
 						"settings":
@@ -1008,10 +1025,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1426.0,
+						"translation.y": 1651.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
@@ -1042,7 +1059,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 17,
 					"type": "text"
 				},
 				{
@@ -1070,10 +1087,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 548.0,
+						"translation.y": 180.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
@@ -1089,8 +1106,8 @@
 						"selection":
 						[
 							[
-								454,
-								454
+								248,
+								259
 							]
 						],
 						"settings":
@@ -1105,7 +1122,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 13,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
@@ -1137,7 +1154,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 14,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
@@ -1169,7 +1186,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 15,
+					"stack_index": 20,
 					"type": "text"
 				},
 				{
@@ -1198,7 +1215,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 15,
 					"type": "text"
 				},
 				{
@@ -1228,7 +1245,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 18,
 					"type": "text"
 				},
 				{
@@ -1237,15 +1254,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2972,
+						"buffer_size": 3524,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1948,
-								1948
+								2044,
+								2044
 							]
 						],
 						"settings":
@@ -1255,10 +1272,10 @@
 							"syntax": "Packages/Vue Syntax Highlight/vue.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 1185.0,
+						"translation.y": 1140.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
@@ -1274,8 +1291,8 @@
 						"selection":
 						[
 							[
-								426,
-								438
+								557,
+								557
 							]
 						],
 						"settings":
@@ -1284,10 +1301,10 @@
 							"syntax": "Packages/Vue Syntax Highlight/vue.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 45.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 16,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
@@ -1318,7 +1335,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 12,
+					"stack_index": 19,
 					"type": "text"
 				},
 				{
@@ -1359,15 +1376,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3272,
+						"buffer_size": 3686,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1580,
-								1580
+								2486,
+								2486
 							]
 						],
 						"settings":
@@ -1378,10 +1395,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 510.0,
+						"translation.y": 1162.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
@@ -1390,15 +1407,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 7501,
+						"buffer_size": 8364,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4487,
-								4487
+								4802,
+								4802
 							]
 						],
 						"settings":
@@ -1409,27 +1426,57 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1785.0,
+						"translation.y": 2100.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
 					"buffer": 14,
-					"file": "src/components/Lobby.vue",
+					"file": "src/store/plugins.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 545,
+						"buffer_size": 266,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								491,
-								491
+								264,
+								264
+							]
+						],
+						"settings":
+						{
+							"git_gutter_is_enabled": false,
+							"open_with_edit": true,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 15,
+					"file": "src/components/Lobby.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 563,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								510,
+								510
 							]
 						],
 						"settings":
@@ -1443,11 +1490,40 @@
 						"translation.y": 90.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
-					"buffer": 15,
+					"buffer": 16,
+					"file": "src/store/index.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 418,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								415,
+								415
+							]
+						],
+						"settings":
+						{
+							"git_gutter_is_enabled": false,
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 13,
+					"type": "text"
+				},
+				{
+					"buffer": 17,
 					"file": "src/store/state.js",
 					"semi_transient": false,
 					"settings":
@@ -1474,11 +1550,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 14,
 					"type": "text"
 				},
 				{
-					"buffer": 16,
+					"buffer": 18,
 					"file": "src/routes/index.js",
 					"semi_transient": false,
 					"settings":
@@ -1503,54 +1579,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 16,
 					"type": "text"
 				},
 				{
-					"buffer": 17,
+					"buffer": 19,
 					"file": "src/components/SpeedDial.vue",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1524,
+						"buffer_size": 1709,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								892,
-								892
-							]
-						],
-						"settings":
-						{
-							"git_gutter_is_enabled": false,
-							"open_with_edit": true,
-							"syntax": "Packages/Vue Syntax Highlight/vue.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 135.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 18,
-					"type": "text"
-				},
-				{
-					"buffer": 18,
-					"file": "src/components/Chat.vue",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1495,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								945,
-								893
+								1585,
+								1585
 							]
 						],
 						"settings":
@@ -1563,7 +1609,37 @@
 						"translation.y": 225.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 17,
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 20,
+					"file": "src/components/Chat.vue",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1608,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1117,
+								1117
+							]
+						],
+						"settings":
+						{
+							"git_gutter_is_enabled": false,
+							"open_with_edit": true,
+							"syntax": "Packages/Vue Syntax Highlight/vue.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 360.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
 					"type": "text"
 				}
 			]
@@ -1623,7 +1699,35 @@
 		[
 			[
 				"",
-				"src\\components\\Lobby.vue"
+				"src\\store\\mutations.js"
+			],
+			[
+				"act",
+				"src\\store\\actions.js"
+			],
+			[
+				"men",
+				"src\\components\\ContextMenu.vue"
+			],
+			[
+				"mu",
+				"src\\store\\mutations.js"
+			],
+			[
+				"mut",
+				"src\\store\\mutations.js"
+			],
+			[
+				"tab",
+				"src\\components\\Tabletop.vue"
+			],
+			[
+				"ac",
+				"src\\components\\cards\\AuthCard.vue"
+			],
+			[
+				"plu",
+				"src\\store\\plugins.js"
 			],
 			[
 				"table",
@@ -1634,16 +1738,8 @@
 				"src\\components\\ContextMenu.vue"
 			],
 			[
-				"tab",
-				"src\\components\\Tabletop.vue"
-			],
-			[
 				"tabl",
 				"src\\components\\Tabletop.vue"
-			],
-			[
-				"mu",
-				"src\\store\\mutations.js"
 			],
 			[
 				"menu",
@@ -1670,10 +1766,6 @@
 				"src\\components\\Lobby.vue"
 			],
 			[
-				"act",
-				"src\\store\\actions.js"
-			],
-			[
 				"lobb",
 				"src\\components\\Lobby.vue"
 			],
@@ -1696,10 +1788,6 @@
 			[
 				"ma",
 				"src\\components\\MainPage.vue"
-			],
-			[
-				"ac",
-				"src\\components\\cards\\AuthCard.vue"
 			]
 		],
 		"width": 0.0
