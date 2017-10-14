@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import shuffle from "shuffle-array";
 // mutations are operations that actually mutates the state.
 // each mutation handler gets the entire state tree as the
@@ -150,11 +151,39 @@ export default {
   /* Lobby
   =======================================*/
 
-  updateGame(state, val){
-    Object.values(val.objects).forEach((v) => {
-      if(v.type==="deck" && v.cards===undefined) v.cards = [];
-    });
-    state.game = val;
+  updateGame(state, {id="firstLoad", val}){
+
+    // Object.values(val.objects).forEach((v) => {
+    //   if(v.type==="deck" && v.cards===undefined) v.cards = [];
+    // });
+    // state.game = val;
+
+    if(id === "chat"){
+      state.game.chat = val;
+    }
+
+    else if(id === "firstLoad"){
+      Object.values(val.objects).forEach((v) => {
+        if(v.type==="deck" && v.cards===undefined) v.cards = [];
+      });
+      state.game = val;
+    }
+
+    else{
+      if(val.type==="deck" && val.cards===undefined) val.cards = [];
+      Vue.set(state.game.objects, id, val);
+    }
+
+
+
+  },
+
+
+
+
+  syncTypeChange(state){
+    if (state.sync === "full") state.sync = "advanced"
+    else state.sync = "full";
   }
 
 }

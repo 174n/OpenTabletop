@@ -2,6 +2,10 @@
   <v-app>
     <v-toolbar class="red" dark fixed>
       <v-toolbar-title>OpenTabletop</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn icon @click="syncTypeChange">
+        <v-icon>sync</v-icon>
+      </v-btn>
     </v-toolbar>
     <main>
       <div>
@@ -56,6 +60,11 @@ export default {
     },
     userIsset(){
       return this.user===null || this.user === undefined;
+    }
+  },
+  methods:{
+    syncTypeChange(){
+      this.$store.commit('syncTypeChange');
     }
   }
 }

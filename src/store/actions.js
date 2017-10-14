@@ -99,13 +99,63 @@ export default {
 
   lobbyGetData(context, id){
     context.state.lobbyId = id;
-    firebase.database().ref('lobbies/' + id).on('value', function(snapshot){
-      let val = snapshot.val().game;
-      if(val.chat === undefined || val.chat === null) val = Object.assign(val,{"chat":[]});
-      // console.log(snapshot);
-      //TODO: individual listeners
-      context.commit('updateGame',val);
-    });
+
+    let lobbyRef = firebase.database().ref('lobbies/' + id);
+
+
+    if(context.state.sync==="full"){
+
+      lobbyRef.on('value', function(snapshot){
+        console.log(snapshot.val());
+        let val = snapshot.val().game;
+        if(val.chat === undefined || val.chat === null) val = Object.assign(val,{"chat":[]});
+        // console.log(snapshot);
+        //TODO: individual listeners
+        context.commit('updateGame',{val});
+      });
+    }
+
+    else if(context.state.sync==="advanced"){
+
+      //game load once
+      let loadOnce = () => {
+        lobbyRef.child('/game').once('value').then(function(snapshot){
+          context.commit('updateGame', {
+            id: "firstLoad",
+            val: snapshot.val()
+          });
+        });
+      }
+
+      loadOnce();
+
+      //objects changed
+      lobbyRef.child('/game/objects').on("child_changed", function(snapshot){
+        context.commit('updateGame', {
+          id: snapshot.ref.key,
+          val: snapshot.val()
+        });
+      });
+      //objects added
+      lobbyRef.child('/game/objects').on("child_moved", function(snapshot){
+        loadOnce();
+      });
+      //objects removed
+      lobbyRef.child('/game/objects').on("child_removed", function(snapshot){
+        loadOnce();
+      });
+
+      //chat
+      lobbyRef.child('/game/chat').on('value', function(snapshot){
+        context.commit('updateGame', {
+          id: "chat",
+          val: snapshot.val()
+        });
+      });
+      
+    }
+
+
   },
 
   lobbyPutData(context){

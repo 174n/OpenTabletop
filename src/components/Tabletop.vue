@@ -90,11 +90,15 @@ export default {
       EventBus.$emit('openContextMenu', type,x,y,id);
     },
     takeCard(deckId){
-      this.$store.commit('takeCardFromDeck', [deckId]);
+      this.$store.dispatch('lobbyCommitMutation', {
+        mutation: 'takeCardFromDeckById',
+        params: [deckId]
+      });
+      // this.$store.commit('takeCardFromDeck', [deckId]);
     },
-    rotateCard(cardId){
-      this.$store.commit('rotateCard', cardId);
-    },
+    // rotateCard(cardId){
+    //   this.$store.commit('rotateCard', cardId);
+    // },
     cardPreviewOpen(id){
       EventBus.$emit('toggleCardPreview', this.game.objects[id].url);
     }
