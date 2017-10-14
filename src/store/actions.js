@@ -103,6 +103,7 @@ export default {
       let val = snapshot.val().game;
       if(val.chat === undefined || val.chat === null) val = Object.assign(val,{"chat":[]});
       // console.log(snapshot);
+      //TODO: individual listeners
       context.commit('updateGame',val);
     });
   },

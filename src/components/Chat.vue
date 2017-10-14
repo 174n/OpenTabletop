@@ -1,10 +1,11 @@
 <template>
-  <v-navigation-drawer v-model="sidebar" light>
+  <v-navigation-drawer v-model="sidebar" :mobile-break-point="4000">
     <div class="sendMsgBox">
       <v-text-field
         label="Message"
         single-line
         v-model="chatMsgValue"
+        @keyup.enter.prevent="chatMsg"
         :append-icon-cb="chatMsg"
         append-icon="send">
       </v-text-field>
@@ -38,7 +39,8 @@ export default {
     }
   },
   methods:{
-    chatMsg(){
+    chatMsg(e){
+      if(e !== undefined) e.target.blur();
       this.$store.commit('chatAddMsg', [this.user.displayName,this.chatMsgValue]);
       this.$store.dispatch('lobbyUpdateChat');
       this.chatMsgValue = "";
