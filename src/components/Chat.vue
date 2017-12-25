@@ -48,7 +48,9 @@ export default {
   },
   computed: {
     game(){
-      return this.$store.state.game
+      let game = this.$store.state.game;
+      if(game.chat === undefined || game.chat === null) game.chat = []
+      return game
     },
     user(){
       return this.$store.state.user

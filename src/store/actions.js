@@ -1,6 +1,7 @@
 import firebase from "firebase";
 import config from "../config/firebase.json";
 import shortid from 'shortid';
+import { EventBus } from '../helpers/event-bus.js';
 
 // actions are functions that cause side effects and can involve
 // asynchronous operations.
@@ -151,6 +152,8 @@ export default {
           id: "chat",
           val: snapshot.val()
         });
+
+        if(snapshot.val().length>0 && snapshot.val().slice(-1)[0].title!==context.state.user.displayName) EventBus.$emit('snackbarOpen', "Chat: "+snapshot.val().slice(-1)[0].msg);
       });
       
     }

@@ -45,12 +45,17 @@ export default {
       });
     },
     rollDice(){
-      this.$store.commit('chatAddMsg', ["Dice roll","[1d6] Result: "+this.randomInteger(1, 6)]);
+      this.$store.commit('chatAddMsg', ["Dice roll: "+this.user.displayName,"[1d6] Result: "+this.randomInteger(1, 6)]);
       this.$store.dispatch('lobbyUpdateChat');
-      this.openChat();
+      // this.openChat();
     },
     openChat(){
       EventBus.$emit('toggleChat', true);
+    }
+  },
+  computed: {
+    user(){
+      return this.$store.state.user
     }
   }
 }

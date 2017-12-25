@@ -6,7 +6,7 @@ export default {
   user: null,
   firebaseLoading: false,
   lobbyId: "",
-  sync: "full",
+  sync: "advanced",
   game: {
     objects:[
       /*{
