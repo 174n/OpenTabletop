@@ -27,9 +27,6 @@ export default {
   methods:{
     newDeckDialog(){
       EventBus.$emit('newDeckToggle');
-    },
-    deckEditorDialog(){
-      EventBus.$emit('deckEditorToggle');
     }
   }
 }

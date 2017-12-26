@@ -48,6 +48,10 @@ export default {
             "func": this.rotateCard
           },
           {
+            "title": "Move to/from hand",
+            "func": this.handMoveCard
+          },
+          {
             "title": "Remove card",
             "func": this.removeObject
           }
@@ -98,6 +102,12 @@ export default {
     rotateCard(){
       this.$store.dispatch('lobbyCommitMutation', {
         mutation: 'rotateCard',
+        params: this.id
+      });
+    },
+    handMoveCard(){
+      this.$store.dispatch('lobbyCommitMutation', {
+        mutation: 'handMoveCard',
         params: this.id
       });
     },

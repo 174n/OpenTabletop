@@ -12,7 +12,8 @@
           </v-list-tile-sub-title>
         </v-list-tile-content>
         <v-list-tile-action>
-          <v-btn flat>Edit</v-btn>
+          <v-btn flat v-if="put" @click.native="putADeck(index)">Put</v-btn>
+          <v-btn flat v-else @click.stop="deckEditorDialog(index)">Edit</v-btn>
         </v-list-tile-action>
       </v-list-tile>
       <v-divider v-if="index + 1 < decks.length"></v-divider>
@@ -27,6 +28,22 @@ export default {
   computed:{
     decks(){
       return this.$store.state.decks;
+    }
+  },
+  props:["put"],
+  methods:{
+    deckEditorDialog(index){
+      EventBus.$emit('deckEditorToggle', index);
+    },
+    putADeck(index){
+      this.$store.dispatch('lobbyCommitMutation', {
+        mutation: 'addNewDeck',
+        params: {
+          index,
+          x: 10,
+          y: 10
+        }
+      });
     }
   }
 }

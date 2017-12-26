@@ -26,5 +26,6 @@ export default {
 <style lang="scss" scoped>
 .cardPreview{
   max-width: 223px;
+  margin-bottom: -6px;
 }
 </style>

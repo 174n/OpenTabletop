@@ -55,40 +55,40 @@ export default {
       firebase.database().ref('lobbies/'+id).set({
         game: {
           objects:[
-            {
-              type: "card",
-              url: "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=417720&type=card",
-              x: 0,y: 0, rotation: 0
-            },
-            {
-              type: "card",
-              url: "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=423802&type=card",
-              x: 150,y: 0, rotation: 90
-            },
-            {
-              type: "card",
-              url: "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=417690&type=card",
-              x: 0,y: 150, rotation: 0
-            },
-            {
-              type: "deck",
-              x: 200,y: 200,
-              color: "#ccc",
-              text: "Deck 1",
-              cards:[
-                {
-                  type: "card",
-                  url: "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=417720&type=card",
-                  x: 0,y: 0, rotation: 0
-                }
-              ]
-            },
-            {
-              type: "counter",
-              x: 400,y: 300,
-              count: 0,
-              color: "blue"
-            }
+            // {
+            //   type: "card",
+            //   url: "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=417720&type=card",
+            //   x: 0,y: 0, rotation: 0
+            // },
+            // {
+            //   type: "card",
+            //   url: "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=423802&type=card",
+            //   x: 150,y: 0, rotation: 90
+            // },
+            // {
+            //   type: "card",
+            //   url: "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=417690&type=card",
+            //   x: 0,y: 150, rotation: 0
+            // },
+            // {
+            //   type: "deck",
+            //   x: 200,y: 200,
+            //   color: "#ccc",
+            //   text: "Deck 1",
+            //   cards:[
+            //     {
+            //       type: "card",
+            //       url: "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=417720&type=card",
+            //       x: 0,y: 0, rotation: 0
+            //     }
+            //   ]
+            // },
+            // {
+            //   type: "counter",
+            //   x: 400,y: 300,
+            //   count: 0,
+            //   color: "blue"
+            // }
           ],
           chat:[]
         }
@@ -101,6 +101,21 @@ export default {
     data.time = {".sv":"timestamp"};
     return new Promise((resolve, reject) => {
       firebase.database().ref('users/'+context.state.user.uid+'/decks/'+id).set(data).then(resolve(id));
+    }); 
+  },
+
+  editDeck(context, input){
+    let id = input.id;
+    let data = input.data;
+    data.time = {".sv":"timestamp"};
+    return new Promise((resolve, reject) => {
+      firebase.database().ref('users/'+context.state.user.uid+'/decks/'+id).set(data).then(resolve(id));
+    }); 
+  },
+
+  removeDeck(context, id){
+    return new Promise((resolve, reject) => {
+      firebase.database().ref('users/'+context.state.user.uid+'/decks/'+id).remove().then(resolve(id));
     }); 
   },
 

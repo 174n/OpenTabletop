@@ -9,6 +9,7 @@
       <card-preview></card-preview>
       <speed-dial></speed-dial>
       <context-menu></context-menu>
+      <place-user-deck></place-user-deck>
     </main>
   </v-app>
 </template>
@@ -21,6 +22,7 @@ import DeckList from './dialogs/DeckList.vue';
 import CardPreview from './dialogs/CardPreview.vue';
 import SpeedDial from './SpeedDial.vue';
 import ContextMenu from './ContextMenu.vue';
+import PlaceUserDeck from './dialogs/PlaceUserDeck.vue';
 
 export default {
   components:{
@@ -29,7 +31,8 @@ export default {
     "card-preview": CardPreview,
     "speed-dial": SpeedDial,
     "context-menu": ContextMenu,
-    "tabletop": Tabletop
+    "tabletop": Tabletop,
+    "place-user-deck": PlaceUserDeck
   },
   created(){
     this.$store.dispatch('lobbyGetData', this.$route.params.id);

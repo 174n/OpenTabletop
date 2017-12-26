@@ -4,7 +4,7 @@
       <v-icon>add</v-icon>
       <v-icon>close</v-icon>
     </v-btn>
-    <v-btn fab dark small class="green" v-tooltip:left="{ html: 'Add new deck' }" @click.native="addNewDeck">
+    <v-btn fab dark small class="green" v-tooltip:left="{ html: 'Add new deck' }" @click.stop="addNewDeck">
       <v-icon>filter_none</v-icon>
     </v-btn>
     <v-btn fab dark small class="indigo" v-tooltip:left="{ html: 'Add a counter' }" @click.native="addNewCounter">
@@ -33,10 +33,11 @@ export default {
       return Math.round(min + Math.random() * (max - min));
     },
     addNewDeck(event){
-      this.$store.dispatch('lobbyCommitMutation', {
+      /*this.$store.dispatch('lobbyCommitMutation', {
         mutation: 'addNewDeck',
         params: event
-      });
+      });*/
+      EventBus.$emit('placeUserDeckToggle', event);
     },
     addNewCounter(event){
       this.$store.dispatch('lobbyCommitMutation', {

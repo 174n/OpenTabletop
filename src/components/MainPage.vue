@@ -41,6 +41,7 @@
     </main>
     <new-lobby></new-lobby>
     <new-deck></new-deck>
+    <deck-editor></deck-editor>
   </v-app>
 </template>
 
@@ -51,6 +52,7 @@ import AuthCard from "./cards/AuthCard.vue";
 import UserInfoCard from "./cards/UserInfoCard.vue";
 import NewLobby from "./dialogs/NewLobby.vue";
 import NewDeck from "./dialogs/NewDeck.vue";
+import DeckEditor from "./dialogs/DeckEditor.vue";
 
 export default {
   components:{
@@ -59,7 +61,8 @@ export default {
     "auth-card": AuthCard,
     "user-info-card": UserInfoCard,
     "new-lobby": NewLobby,
-    "new-deck": NewDeck
+    "new-deck": NewDeck,
+    "deck-editor": DeckEditor
   },
   computed:{
     user(){

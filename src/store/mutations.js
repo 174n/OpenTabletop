@@ -82,13 +82,28 @@ export default {
     card.new = true;
   },
 
-  addNewDeck(state, event){
+  handMoveCard(state, cardId){
+    let card = state.game.objects[cardId];
+    if(card.type === "card") card.hand = !card.hand ? state.user.uid : false;
+    card.new = true;
+  },
+
+  addNewDeck(state, data){
+    let id = data.index;
     state.game.objects.push({
       type: "deck",
-      x: event.clientX-150,y: event.clientY-150,
+      x: data.x,y: data.y,
       color: "#ccc",
-      text: "New Deck",
-      cards:[],
+      text: state.decks[id].name,
+      cards: state.decks[id].urls.map(url => {
+        return {
+          type: "card",
+          url,
+          back: state.decks[id].back,
+          hand: false,
+          x: 0,y: 0, rotation: 0
+        }
+      }),
       new: true
     });
   },

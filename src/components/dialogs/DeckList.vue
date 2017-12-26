@@ -20,7 +20,7 @@
                 :src="card.url"
                 alt="card"
                 class="card"
-                :key="card.url"
+                :key="i"
                 @dblclick="cardPreviewOpen(i)"
                 @contextmenu.prevent="showMenu(i,$event)">
             </template>
@@ -81,11 +81,13 @@ export default {
 }
 
 .container{
-  margin: 0;
-  padding: 0;
+  // margin: 0;
+  // padding: 0;
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
   align-items: flex-start;
+  // justify-content: space-between;
+  width: 100%;
 }
 </style>

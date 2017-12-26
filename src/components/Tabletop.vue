@@ -6,10 +6,11 @@
         @contextmenu.prevent="showMenu('card',object.x,object.y,i)"
         @dblclick="cardPreviewOpen(i)"
         class="draggable card"
+        :class="{ 'inhand': object.hand === user.uid }"
         :data-id="i"
         :style="{
           transform: 'translate('+object.x+'px, '+object.y+'px) rotate('+object.rotation+'deg)',
-          backgroundImage: 'url('+object.url+')'
+          backgroundImage: 'url('+(!object.hand || object.hand === user.uid ? object.url : object.back)+')'
           }">
       </div>
       <!-- deck -->
@@ -21,7 +22,7 @@
         :style="{
           transform: 'translate('+object.x+'px, '+object.y+'px)',
           backgroundColor: object.color,
-          boxShadow: object.cards.length/3+'px '+object.cards.length/3+'px 0px 1px rgba(0, 0, 0, .7)'
+          backgroundImage: 'url('+(object.cards[0] !== undefined ? object.cards[0].back : 'none')+')'
           }">
         <div class="title">{{object.text}}</div>
         <div class="count">{{object.cards.length}}</div>
@@ -53,6 +54,9 @@ export default {
   computed: {
     game(){
       return this.$store.state.game
+    },
+    user(){
+      return this.$store.state.user
     }
   },
   data () {
@@ -75,7 +79,7 @@ export default {
     showMenu(type,x,y,id) {
       let scale = this.getTabletopScale();
       let offset = document.querySelector(".draggable[data-id='"+id+"']").getBoundingClientRect();
-      console.log(offset);
+      // console.log(offset);
       EventBus.$emit('openContextMenu', type,offset.x,offset.y,id);
     },
     takeCard(deckId){
@@ -99,7 +103,7 @@ export default {
         let delta = e.ds === undefined ? e.deltaY*(-0.001) : e.ds;
         let scale = this.getTabletopScale();
         scale += delta;
-        console.log(scale);
+        // console.log(scale);
         if(scale>0.1 && scale < 3){
           let coords = this.getTabletopCoords();
           target.style.transform = "scale("+scale+")";
@@ -176,9 +180,8 @@ export default {
     });
 
 
-
-    window.addEventListener("wheel", this.tabletopScroll);
-    this.tabletopCanvas = interact('html')
+    document.querySelector(".tabletop").addEventListener("wheel", this.tabletopScroll);
+    this.tabletopCanvas = interact('.tabletop')
       .draggable({
         ignoreFrom: '.draggable',
         autoScroll: false,
@@ -216,6 +219,9 @@ export default {
   z-index: 2;
   border-radius: 6px;
 }
+.inhand{
+  border: 5px #8BFF90 solid;
+}
 
 .deck{
   transition: width ease-in-out 0.2s,height ease-in-out 0.2s,margin ease-in-out 0.2s;
@@ -227,8 +233,14 @@ export default {
   align-items: center;
   justify-content: space-between;
   flex-direction: column;
-  padding: 10px 5px;
+  // padding: 10px 5px;
   border-radius: 6px;
+  background-size: cover;
+  div{
+    border-radius: 6px 6px 0 0;
+    background-color: rgba(255,255,255,.7);
+    padding: 10px;
+  }
 }
 
 .counter{
