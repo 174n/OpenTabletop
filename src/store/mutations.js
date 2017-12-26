@@ -105,11 +105,13 @@ export default {
   },
 
 
-  moveObject(state, event){
+  moveObject(state, data){
+    let event = data.event,
+        scale = data.scale;
     var target = event.target,
       obj = state.game.objects[target.getAttribute("data-id")],
-      x = (parseFloat(obj.x) || 0) + event.dx,
-      y = (parseFloat(obj.y) || 0) + event.dy;
+      x = (parseFloat(obj.x) || 0) + event.dx / scale,
+      y = (parseFloat(obj.y) || 0) + event.dy / scale;
     obj.x = x;
     obj.y = y;
     obj.new = true;

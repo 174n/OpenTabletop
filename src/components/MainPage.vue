@@ -6,6 +6,8 @@
       <v-btn icon @click="syncTypeChange">
         <v-icon>sync</v-icon>
       </v-btn>
+      <span>{{sync}}</span>
+      
     </v-toolbar>
     <main>
       <div>
@@ -18,16 +20,19 @@
         <v-container fluid grid-list-lg v-else>
           <v-layout row wrap>
             <template v-if="userIsset">
-              <v-flex xs12>
+              <v-flex md6 offset-md3 sm12>
                 <auth-card></auth-card>
               </v-flex>
             </template>
             <template v-else>
-              <v-flex xs12>
+              <v-flex md6 offset-md3 sm12>
                 <user-info-card></user-info-card>
               </v-flex>
-              <v-flex xs12>
+              <v-flex md6 offset-md3 sm12>
                 <new-lobby-card></new-lobby-card>
+              </v-flex>
+              <v-flex md6 offset-md3 sm12>
+                <decks-card></decks-card>
               </v-flex>
             </template>
           </v-layout>
@@ -35,25 +40,33 @@
       </div>
     </main>
     <new-lobby></new-lobby>
+    <new-deck></new-deck>
   </v-app>
 </template>
 
 <script>
 import NewLobbyCard from "./cards/NewLobbyCard.vue";
+import DecksCard from "./cards/DecksCard.vue";
 import AuthCard from "./cards/AuthCard.vue";
 import UserInfoCard from "./cards/UserInfoCard.vue";
 import NewLobby from "./dialogs/NewLobby.vue";
+import NewDeck from "./dialogs/NewDeck.vue";
 
 export default {
   components:{
     "new-lobby-card": NewLobbyCard,
+    "decks-card": DecksCard,
     "auth-card": AuthCard,
     "user-info-card": UserInfoCard,
-    "new-lobby": NewLobby
+    "new-lobby": NewLobby,
+    "new-deck": NewDeck
   },
   computed:{
     user(){
       return this.$store.state.user;
+    },
+    sync(){
+      return this.$store.state.sync;
     },
     firebaseLoading(){
       return this.$store.state.firebaseLoading

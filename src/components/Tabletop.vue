@@ -20,7 +20,8 @@
         :data-id="i"
         :style="{
           transform: 'translate('+object.x+'px, '+object.y+'px)',
-          backgroundColor: object.color
+          backgroundColor: object.color,
+          boxShadow: object.cards.length/3+'px '+object.cards.length/3+'px 0px 1px rgba(0, 0, 0, .7)'
           }">
         <div class="title">{{object.text}}</div>
         <div class="count">{{object.cards.length}}</div>
@@ -40,12 +41,6 @@
     </template>
     
 
-    <chat></chat>
-    <deck-list></deck-list>
-    <card-preview></card-preview>
-    <speed-dial></speed-dial>
-    <context-menu></context-menu>
-
   </div>
   
 </template>
@@ -54,20 +49,7 @@
 import interact from 'interactjs';
 import { EventBus } from '../helpers/event-bus.js';
 
-import Chat from './Chat.vue';
-import DeckList from './dialogs/DeckList.vue';
-import CardPreview from './dialogs/CardPreview.vue';
-import SpeedDial from './SpeedDial.vue';
-import ContextMenu from './ContextMenu.vue';
-
 export default {
-  components:{
-    "deck-list": DeckList,
-    "chat": Chat,
-    "card-preview": CardPreview,
-    "speed-dial": SpeedDial,
-    "context-menu": ContextMenu
-  },
   computed: {
     game(){
       return this.$store.state.game
@@ -75,6 +57,7 @@ export default {
   },
   data () {
     return {
+      tabletopCanvas: undefined
     }
   },
   methods:{
@@ -83,11 +66,17 @@ export default {
 
       this.$store.dispatch('lobbyCommitMutation', {
         mutation: 'moveObject',
-        params: event
+        params: {
+          event,
+          scale: this.getTabletopScale()
+        }
       });
     },
     showMenu(type,x,y,id) {
-      EventBus.$emit('openContextMenu', type,x,y,id);
+      let scale = this.getTabletopScale();
+      let offset = document.querySelector(".draggable[data-id='"+id+"']").getBoundingClientRect();
+      console.log(offset);
+      EventBus.$emit('openContextMenu', type,offset.x,offset.y,id);
     },
     takeCard(deckId){
       this.$store.dispatch('lobbyCommitMutation', {
@@ -101,10 +90,50 @@ export default {
     // },
     cardPreviewOpen(id){
       EventBus.$emit('toggleCardPreview', this.game.objects[id].url);
+    },
+    tabletopScroll(e){
+      if(this.tabletopCanvas.options.drag.enabled){
+        let target = document.querySelector(".tabletop");
+
+        e.preventDefault();
+        let delta = e.ds === undefined ? e.deltaY*(-0.001) : e.ds;
+        let scale = this.getTabletopScale();
+        scale += delta;
+        console.log(scale);
+        if(scale>0.1 && scale < 3){
+          let coords = this.getTabletopCoords();
+          target.style.transform = "scale("+scale+")";
+          target.style.marginLeft = (coords.x +delta*1500)+"px";
+          target.style.marginTop = (coords.y +delta*1000)+"px";
+        }
+      }
+    },
+    dragTabletop(event){
+      let scale = this.getTabletopScale();
+      var target = document.querySelector(".tabletop"),
+          coords = this.getTabletopCoords(),
+          x = coords.x + event.dx,
+          y = coords.y + event.dy;
+      target.style.marginLeft = x+"px";
+      target.style.marginTop = y+"px";
+    },
+    getTabletopScale(){
+      let transform = document.querySelector(".tabletop").style.transform;
+      if(transform === "") transform = "scale(1)";
+      return parseFloat(transform.match(/[\w\.\-]+/g)[1])
+    },
+    getTabletopCoords(){
+      let tabletop = document.querySelector(".tabletop");
+      return {
+        x: parseInt(tabletop.style.marginLeft.slice(0,-2) || 0),
+        y: parseInt(tabletop.style.marginTop.slice(0,-2) || 0),
+        rect: tabletop.getBoundingClientRect()
+      };
     }
   },
   mounted(){
     let self = this;
+
     interact('.draggable')
       .draggable({
         inertia: {
@@ -116,10 +145,7 @@ export default {
           elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
         },
         autoScroll: true,
-        onmove: this.dragMoveListener,
-        onend: function (event) {
-          // console.log('moved a distance of '+ (Math.sqrt(event.dx * event.dx +event.dy * event.dy)|0) + 'px');
-        }
+        onmove: this.dragMoveListener
       });
 
     interact('.deck').dropzone({
@@ -148,6 +174,20 @@ export default {
 
       }
     });
+
+
+
+    window.addEventListener("wheel", this.tabletopScroll);
+    this.tabletopCanvas = interact('html')
+      .draggable({
+        ignoreFrom: '.draggable',
+        autoScroll: false,
+        onmove: this.dragTabletop
+      })
+      .gesturable({
+        onmove: this.tabletopScroll
+      });
+
   }
 }
 </script>
@@ -155,7 +195,13 @@ export default {
 <style lang="scss" scoped>
 
 .tabletop{
-  height: 100vh;
+  width: 3000px;
+  height: 2000px;
+  box-shadow: 0 0 20px 8px rgba(0,0,0,.1);
+  background-color: #eee;
+  border-radius: 7px;
+  user-select: none;
+  transform-origin: center center center;
 }
 .draggable{
   position: absolute;

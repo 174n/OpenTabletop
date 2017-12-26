@@ -15,6 +15,7 @@ export default {
     const provider = new firebase.auth.GoogleAuthProvider();
     firebase.auth().signInWithRedirect(provider).then((result) => {
       state.user = result.user;
+      dispatch("userGetDecks");
     }).catch(err => EventBus.$emit('snackbarOpen', error))
   },
 
@@ -22,17 +23,19 @@ export default {
   logout({state}){
     firebase.auth().signOut().then(() => {
       state.user = null;
+      state.decks = [];
     }).catch(err => EventBus.$emit('snackbarOpen', error))
   },
 
 
-  firebaseInit({state}){
+  firebaseInit({state,dispatch}){
     state.firebaseLoading = true;
     firebase.initializeApp(config);
 
     firebase.auth().getRedirectResult().then(result => {
       if(result.user !== null){
         state.user = result.user;
+        dispatch("userGetDecks");
       }
     }).catch(error => {
       EventBus.$emit('snackbarOpen', error);
@@ -40,6 +43,7 @@ export default {
     firebase.auth().onAuthStateChanged(function(user) {
       state.firebaseLoading = false;
       state.user = user;
+      dispatch("userGetDecks");
     });
   },
 
@@ -89,6 +93,14 @@ export default {
           chat:[]
         }
       }).then(resolve(id));
+    }); 
+  },
+
+  newDeck(context, data){
+    let id = shortid.generate();
+    data.time = {".sv":"timestamp"};
+    return new Promise((resolve, reject) => {
+      firebase.database().ref('users/'+context.state.user.uid+'/decks/'+id).set(data).then(resolve(id));
     }); 
   },
 
@@ -153,7 +165,7 @@ export default {
           val: snapshot.val()
         });
 
-        if(snapshot.val().length>0 && snapshot.val().slice(-1)[0].title!==context.state.user.displayName) EventBus.$emit('snackbarOpen', "Chat: "+snapshot.val().slice(-1)[0].msg);
+        if(snapshot.val() !== null && snapshot.val().length>0 && snapshot.val().slice(-1)[0].title!==context.state.user.displayName) EventBus.$emit('snackbarOpen', "Chat: "+snapshot.val().slice(-1)[0].msg);
       });
       
     }
@@ -229,11 +241,28 @@ export default {
   },
 
 
-    lobbyUpdateChat(context){
-      let lobbyId = context.state.lobbyId;
-      firebase.database().ref('/lobbies/'+lobbyId+'/game/chat').set(context.state.game.chat);
-    },
+  lobbyUpdateChat(context){
+    let lobbyId = context.state.lobbyId;
+    firebase.database().ref('/lobbies/'+lobbyId+'/game/chat').set(context.state.game.chat);
+  },
 
+
+
+
+
+
+
+
+
+  //user decks
+  userGetDecks(context){
+    //return new Promise((resolve, reject) => {
+      let decksRef = firebase.database().ref('users/' + context.state.user.uid + '/decks');
+      decksRef.on('value', function(snapshot){
+        context.state.decks = snapshot.val();
+      });
+    //});
+  },
 
   /* State updates
   ====================================*/

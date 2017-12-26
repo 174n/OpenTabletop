@@ -4,6 +4,7 @@
 // each Vuex instance is just a single state tree.
 export default {
   user: null,
+  decks: [],
   firebaseLoading: false,
   lobbyId: "",
   sync: "advanced",
