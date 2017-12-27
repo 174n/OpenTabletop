@@ -9,9 +9,9 @@
         :class="{ 'inhand': object.hand === user.uid }"
         :data-id="i"
         :style="{
-          transform: 'translate('+object.x+'px, '+object.y+'px) rotate('+object.rotation+'deg)',
-          backgroundImage: 'url('+(!object.hand || object.hand === user.uid ? object.url : object.back)+')'
+          transform: 'translate('+object.x+'px, '+object.y+'px) rotate('+object.rotation+'deg)'
           }">
+        <img alt="card" :src="(!object.hand || object.hand === user.uid ? object.url : object.back)">
       </div>
       <!-- deck -->
       <div v-else-if="object.type === 'deck'"
@@ -21,11 +21,15 @@
         :data-id="i"
         :style="{
           transform: 'translate('+object.x+'px, '+object.y+'px)',
-          backgroundColor: object.color,
-          backgroundImage: 'url('+(object.cards[0] !== undefined ? object.cards[0].back : 'none')+')'
+          backgroundColor: object.color
           }">
-        <div class="title">{{object.text}}</div>
-        <div class="count">{{object.cards.length}}</div>
+          <div class="wrapper">
+            <div class="header" :style="{ fontSize: (object.text.length > 8 ? '0.9' : '1') + 'em' }">
+              {{object.text}}
+            </div>
+            <div class="count">{{object.cards.length}}</div>
+          </div>
+          <img alt="deck" :src="(object.cards[0] !== undefined ? object.cards[0].back : 'none')">
       </div>
       <!-- counter -->
 
@@ -212,12 +216,14 @@ export default {
 }
 
 .card{
-  width: 111px;
-  height: 155px;
   background-repeat: no-repeat;
   background-size: cover;
   z-index: 2;
   border-radius: 6px;
+  img{
+    width: 111px;
+    margin-bottom: -6px;
+  }
 }
 .inhand{
   border: 5px #8BFF90 solid;
@@ -226,20 +232,37 @@ export default {
 .deck{
   transition: width ease-in-out 0.2s,height ease-in-out 0.2s,margin ease-in-out 0.2s;
   width: 111px;
-  height: 155px;
   box-shadow: 3px 3px 0px 1px rgba(0, 0, 0, .7);
   user-select: none;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-direction: column;
+  display: inline-block;
   // padding: 10px 5px;
   border-radius: 6px;
   background-size: cover;
-  div{
+  overflow: hidden;
+  .header{
+    text-align: center;
+    width: 100%;
+    font-weight: bold;
+  }
+  .header,.count{
     border-radius: 6px 6px 0 0;
     background-color: rgba(255,255,255,.7);
     padding: 10px;
+  }
+
+  .wrapper{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    user-select: none;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+  }
+  img{
+    width: 111px;
+    margin-bottom: -6px;
   }
 }
 
@@ -249,10 +272,11 @@ export default {
 }
 
 .drop-target{
-  transition: width ease-in-out 0.2s,height ease-in-out 0.2s,margin ease-in-out 0.2s;
-  margin: -3px;
-  width: 117px;
-  height: 161px;
+  img{
+    transition: width ease-in-out 0.2s,height ease-in-out 0.2s,margin ease-in-out 0.2s;
+    // margin: -3px;
+    width: 117px;
+  }
 }
 .drop-relatedTarget{
   transition: opacity ease-in-out 0.2s;
