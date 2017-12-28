@@ -16,7 +16,7 @@ export default {
 
   /* Objects
   =======================================*/
-  takeCardFromDeck(state, [deckId,amount=1]){
+  takeCardFromDeck(state, [deckId,amount=1,hand=false]){
     /*let deckId = params[0];
     let amount = params[1] !== undefined ? params[1] : 1;*/
 
@@ -26,13 +26,13 @@ export default {
     card.forEach(v => {
       v.x = state.game.objects[deckId].x+30;
       v.y = state.game.objects[deckId].y+30;
+      v.hand = hand ? state.user.uid : false;
       v.new = true;
       state.game.objects.push(v);
       deck.cards.splice(-1);
     });
 
     deck.new = true;
-
   },
 
   takeCardFromDeckById(state, [deckId,id=0]){
@@ -180,9 +180,12 @@ export default {
     }
 
     else if(id === "firstLoad"){
-      Object.values(val.objects).forEach((v) => {
-        if(v.type==="deck" && v.cards===undefined) v.cards = [];
-      });
+      if(val !== null || val !== undefined){
+        if(val.objects === null || val.objects === undefined) val.objects = [];
+        Object.values(val.objects).forEach((v) => {
+          if(v.type==="deck" && v.cards===undefined) v.cards = [];
+        });
+      }
       state.game = val;
     }
 

@@ -30,6 +30,10 @@ export default {
             "func": this.takeCard
           },
           {
+            "title": "Take a card to hand",
+            "func": this.takeCardToHand
+          },
+          {
             "title": "Show cards",
             "func": this.deckListView
           },
@@ -90,11 +94,14 @@ export default {
         params: this.id
       });
     },
-    takeCard(){
+    takeCard(e,hand=false){
       this.$store.dispatch('lobbyCommitMutation', {
         mutation: 'takeCardFromDeck',
-        params: [this.id]
+        params: [this.id,1,hand]
       });
+    },
+    takeCardToHand(){
+      this.takeCard(null,true);
     },
     deckListView(){
       EventBus.$emit('deckViewToggle', this.id);

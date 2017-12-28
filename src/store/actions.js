@@ -90,7 +90,8 @@ export default {
             //   color: "blue"
             // }
           ],
-          chat:[]
+          chat:[],
+          created: true
         }
       }).then(resolve(id));
     }); 
