@@ -10,6 +10,7 @@ import VueTimeago from 'vue-timeago'
 
 import Firebase from 'firebase'
 import Vuex from 'vuex'
+import VueResource from 'vue-resource'
 import store from './store'
 
 import Routes from './routes'
@@ -21,6 +22,7 @@ const router = new VueRouter({
 
 Vue.use(Vuetify);
 Vue.use(VueRouter);
+Vue.use(VueResource);
 Vue.use(VueTimeago, {
   name: 'timeago',
   locale: 'en-US',

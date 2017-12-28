@@ -108,6 +108,25 @@ export default {
     });
   },
 
+  addNewDeckFromData(state, data){
+    state.game.objects.push({
+      type: "deck",
+      x: data.x,y: data.y,
+      color: "#ccc",
+      text: data.title,
+      cards: data.urls.map(url => {
+        return {
+          type: "card",
+          url,
+          back: data.back,
+          hand: false,
+          x: 0,y: 0, rotation: 0
+        }
+      }),
+      new: true
+    });
+  },
+
 
   addNewCounter(state, event){
     state.game.objects.push({

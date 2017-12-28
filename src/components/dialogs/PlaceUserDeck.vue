@@ -6,6 +6,7 @@
           <div class="headline">Put a deck on tabletop</div>
         </v-card-title>
         <v-card-text>
+          <imgur></imgur>
           <decks-list put="true"></decks-list>
         </v-card-text>
         <!-- <v-card-actions>
@@ -20,10 +21,12 @@
 <script>
 import { EventBus } from '../../helpers/event-bus.js';
 import DecksList from "../DecksList.vue";
+import Imgur from '../Imgur.vue';
 
 export default {
   components:{
-    "decks-list": DecksList
+    "decks-list": DecksList,
+    "imgur": Imgur
   },
   data () {
     return {
