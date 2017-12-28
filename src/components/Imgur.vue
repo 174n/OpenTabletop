@@ -1,6 +1,6 @@
 <template>
   <v-text-field
-    label="Imgur album id"
+    label="Imgur album url"
     single-line
     v-model="imgur_url"
     @keyup.enter.prevent="getImgurData"
