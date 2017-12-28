@@ -91,7 +91,7 @@ export default {
             // }
           ],
           chat:[],
-          created: true
+          created: {".sv":"timestamp"}
         }
       }).then(resolve(id));
     }); 

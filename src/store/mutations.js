@@ -178,7 +178,7 @@ export default {
     state.game.chat.push({
       title: data[0],
       msg: data[1],
-      time: Date.now()
+      time: {".sv":"timestamp"}
     });
   },
 
