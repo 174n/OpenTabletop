@@ -1,5 +1,6 @@
 <template>
   <div>
+    <card-preview></card-preview>
     <v-dialog v-model="open" lazy fullscreen transition="dialog-bottom-transition">
       <!-- <v-btn primary dark slot="activator">Open Dialog</v-btn> -->
       <v-card>
@@ -21,7 +22,7 @@
                 alt="card"
                 class="card"
                 :key="i"
-                @dblclick="cardPreviewOpen(i)"
+                @dblclick.stop="cardPreviewOpen(i)"
                 @contextmenu.prevent="showMenu(i,$event)">
             </template>
           </div>
@@ -35,9 +36,12 @@
 
 <script>
 import { EventBus } from '../../helpers/event-bus.js';
-
+import CardPreview from './CardPreview.vue';
 
 export default {
+  components:{
+    "card-preview": CardPreview
+  },
   data () {
     return {
       open: false,
@@ -56,6 +60,9 @@ export default {
       this.deckId = id;
       this.deck = this.game.objects[id];
     });
+    EventBus.$on('deckViewUpdate', () => {
+      this.deck = this.game.objects[this.deckId];
+    });
   },
   methods:{
     showMenu(id, event) {
@@ -68,7 +75,8 @@ export default {
     },
     shuffleDeck(){
       this.$store.commit('shuffleDeck', this.deckId);
-      this.open = false;
+      this.$forceUpdate();
+      // this.open = false;
     }
   }
 }

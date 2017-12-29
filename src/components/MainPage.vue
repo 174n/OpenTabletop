@@ -2,11 +2,11 @@
   <v-app>
     <v-toolbar class="red" dark fixed>
       <v-toolbar-title>OpenTabletop</v-toolbar-title>
-      <v-spacer></v-spacer>
+      <!-- <v-spacer></v-spacer>
       <v-btn icon @click="syncTypeChange">
         <v-icon>sync</v-icon>
       </v-btn>
-      <span>{{sync}}</span>
+      <span>{{sync}}</span> -->
       
     </v-toolbar>
     <main>

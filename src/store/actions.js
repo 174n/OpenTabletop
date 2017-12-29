@@ -48,7 +48,6 @@ export default {
   },
 
 
-
   newLobby(){
     let id = shortid.generate();
     return new Promise((resolve, reject) => {
@@ -273,10 +272,12 @@ export default {
   //user decks
   userGetDecks(context){
     //return new Promise((resolve, reject) => {
-      let decksRef = firebase.database().ref('users/' + context.state.user.uid + '/decks');
-      decksRef.on('value', function(snapshot){
-        context.state.decks = snapshot.val();
-      });
+      if(context.state.user !== null){
+        let decksRef = firebase.database().ref('users/' + context.state.user.uid + '/decks');
+        decksRef.on('value', function(snapshot){
+          context.state.decks = snapshot.val();
+        });
+      }
     //});
   },
 

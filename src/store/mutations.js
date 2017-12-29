@@ -223,6 +223,6 @@ export default {
   syncTypeChange(state){
     if (state.sync === "full") state.sync = "advanced"
     else state.sync = "full";
-  }
+  },
 
 }

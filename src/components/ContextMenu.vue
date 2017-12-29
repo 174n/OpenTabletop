@@ -6,7 +6,7 @@
       :position-y="y">
       <v-list>
         <template v-for="item in menu[type]">
-          <v-list-tile @click="item.func" :key="item.title">
+          <v-list-tile @click.prevent="item.func" :key="item.title">
             <v-list-tile-title>{{item.title}}</v-list-tile-title>
           </v-list-tile>
         </template>
@@ -80,6 +80,10 @@ export default {
         ],
         "cardList":[
           {
+            "title": "View card",
+            "func": this.viewCard
+          },
+          {
             "title": "Take card",
             "func": this.takeCardToObjects
           }
@@ -123,6 +127,10 @@ export default {
         mutation: 'takeCardFromDeckById',
         params: [this.id].concat(this.params)
       });
+      EventBus.$emit('deckViewUpdate');
+    },
+    viewCard(){
+      EventBus.$emit('toggleCardPreview', this.$store.state.game.objects[this.id].cards[this.params].url);
     },
     shuffleDeck(){
       this.$store.dispatch('lobbyCommitMutation', {

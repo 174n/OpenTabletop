@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="isOpen" lazy absolute width="223">
+  <v-dialog v-model="isOpen" lazy width="223">
     <img :src="url" alt="Card preview" class="cardPreview">
   </v-dialog>
 </template>

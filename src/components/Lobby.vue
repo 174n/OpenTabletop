@@ -6,7 +6,7 @@
 
       <chat></chat>
       <deck-list></deck-list>
-      <card-preview></card-preview>
+      <!-- <card-preview></card-preview> -->
       <speed-dial></speed-dial>
       <context-menu></context-menu>
       <place-user-deck></place-user-deck>
@@ -19,7 +19,7 @@ import Tabletop from './Tabletop.vue';
 
 import Chat from './Chat.vue';
 import DeckList from './dialogs/DeckList.vue';
-import CardPreview from './dialogs/CardPreview.vue';
+// import CardPreview from './dialogs/CardPreview.vue';
 import SpeedDial from './SpeedDial.vue';
 import ContextMenu from './ContextMenu.vue';
 import PlaceUserDeck from './dialogs/PlaceUserDeck.vue';
@@ -28,7 +28,7 @@ export default {
   components:{
     "deck-list": DeckList,
     "chat": Chat,
-    "card-preview": CardPreview,
+    // "card-preview": CardPreview,
     "speed-dial": SpeedDial,
     "context-menu": ContextMenu,
     "tabletop": Tabletop,
@@ -43,6 +43,14 @@ export default {
     //   // console.log(val);
     // },{deep: true});
 
+  },
+  mounted(){
+    setTimeout(()=>{
+      console.log();
+      if(!this.$store.state.firebaseLoading && this.$store.state.user === null){
+        this.$router.push({ path: '/' })
+      }
+    }, 1000);
   }
 }
 </script>
@@ -52,5 +60,8 @@ html,body{
   position: static;
   background: #fafafa;
   overflow: hidden;
+}
+.speed-dial{
+  z-index: 999;
 }
 </style>
