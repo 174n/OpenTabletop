@@ -2,7 +2,7 @@
   <div class="tabletop">
     <template v-for="(object, i) in game.objects">
       <!-- card -->
-      <div v-if="object.type === 'card'"
+      <div v-if="object !== undefined && object.type === 'card'"
         @contextmenu.prevent="showMenu('card',object.x,object.y,i)"
         @dblclick="cardPreviewOpen(i)"
         class="draggable card"
@@ -14,7 +14,7 @@
         <img alt="card" :src="(!object.hand || object.hand === user.uid ? object.url : object.back)">
       </div>
       <!-- deck -->
-      <div v-else-if="object.type === 'deck'"
+      <div v-else-if="object !== undefined && object.type === 'deck'"
         @contextmenu.prevent="showMenu('deck',object.x,object.y,i)"
         @dblclick="takeCard(i)"
         class="draggable deck"
@@ -36,7 +36,7 @@
       <v-avatar class="draggable counter"
         :class="[object.color]"
         @contextmenu.prevent="showMenu('counter',object.x,object.y,i)"
-        v-else-if="object.type === 'counter'"
+        v-else-if="object !== undefined && object.type === 'counter'"
         :data-id="i"
         :style="{
           transform: 'translate('+object.x+'px, '+object.y+'px)'
