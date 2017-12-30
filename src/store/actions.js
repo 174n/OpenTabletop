@@ -48,7 +48,7 @@ export default {
   },
 
 
-  newLobby(){
+  newLobby({state}){
     let id = shortid.generate();
     return new Promise((resolve, reject) => {
       firebase.database().ref('lobbies/'+id).set({
@@ -90,8 +90,10 @@ export default {
             // }
           ],
           chat:[],
-          created: {".sv":"timestamp"}
-        }
+          members:[]
+        },
+        created: {".sv":"timestamp"},
+        creator: state.user.email
       }).then(resolve(id));
     }); 
   },
@@ -147,11 +149,12 @@ export default {
 
       //game load once
       let loadOnce = () => {
-        lobbyRef.child('/game').once('value').then(function(snapshot){
+        lobbyRef.child('/').once('value').then(function(snapshot){
           context.commit('updateGame', {
             id: "firstLoad",
-            val: snapshot.val()
+            val: snapshot.val().game
           });
+          context.commit('lobbyAdminUpdate', snapshot.val().creator);
         });
       }
 
@@ -183,6 +186,14 @@ export default {
         if(snapshot.val() !== null && snapshot.val().length>0 && snapshot.val().slice(-1)[0].title!==context.state.user.displayName) EventBus.$emit('snackbarOpen', "Chat: "+snapshot.val().slice(-1)[0].msg);
       });
       
+      //members changed
+      lobbyRef.child('/game/members').on("value", function(snapshot){
+        context.commit('updateGame', {
+          id: "members",
+          val: snapshot.val()
+        });
+      });
+
     }
 
 
@@ -264,6 +275,15 @@ export default {
 
 
 
+  lobbyMemberLastOnline({state}, data){
+    let lobbyId = state.lobbyId;
+    firebase.database().ref('/lobbies/'+lobbyId+'/game/members/'+state.user.uid).set({
+      name: state.user.displayName,
+      email: state.user.email,
+      avatar: state.user.photoURL,
+      online: {".sv":"timestamp"}
+    });
+  },
 
 
 
@@ -280,6 +300,16 @@ export default {
       }
     //});
   },
+
+
+
+
+
+
+
+
+
+
 
   /* State updates
   ====================================*/

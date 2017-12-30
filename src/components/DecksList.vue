@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-list two-line v-if="!(decks !== undefined && decks !== null && decks.length>0)">
+    <v-list two-line v-if="decks !== undefined && decks !== null">
       <template v-for="(deck, index) in decks">
         <v-list-tile avatar>
           <v-list-tile-avatar>

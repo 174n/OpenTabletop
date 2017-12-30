@@ -16,6 +16,9 @@
     <v-btn fab dark small class="blue" v-tooltip:left="{ html: 'Open chat' }" @click.stop="openChat">
       <v-icon>chat</v-icon>
     </v-btn>
+    <v-btn fab dark small class="gray" v-if="user !== null && lobbyAdmin === user.email" v-tooltip:left="{ html: 'Lobby settings' }" @click.stop="lobbySettings">
+      <v-icon>settings</v-icon>
+    </v-btn>
   </v-speed-dial>
 </template>
 
@@ -52,11 +55,17 @@ export default {
     },
     openChat(){
       EventBus.$emit('toggleChat', true);
+    },
+    lobbySettings(){
+      EventBus.$emit('LobbySettings');
     }
   },
   computed: {
     user(){
       return this.$store.state.user
+    },
+    lobbyAdmin(){
+      return this.$store.state.lobbyAdmin
     }
   }
 }

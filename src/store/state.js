@@ -7,6 +7,7 @@ export default {
   decks: [],
   firebaseLoading: false,
   lobbyId: "",
+  lobbyAdmin: "",
   sync: "advanced",
   game: {
     objects:[

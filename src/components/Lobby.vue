@@ -10,6 +10,7 @@
       <speed-dial></speed-dial>
       <context-menu></context-menu>
       <place-user-deck></place-user-deck>
+      <lobby-settings></lobby-settings>
     </main>
   </v-app>
 </template>
@@ -23,6 +24,7 @@ import DeckList from './dialogs/DeckList.vue';
 import SpeedDial from './SpeedDial.vue';
 import ContextMenu from './ContextMenu.vue';
 import PlaceUserDeck from './dialogs/PlaceUserDeck.vue';
+import LobbySettings from './dialogs/LobbySettings.vue';
 
 export default {
   components:{
@@ -32,7 +34,13 @@ export default {
     "speed-dial": SpeedDial,
     "context-menu": ContextMenu,
     "tabletop": Tabletop,
-    "place-user-deck": PlaceUserDeck
+    "place-user-deck": PlaceUserDeck,
+    "lobby-settings": LobbySettings
+  },
+  data () {
+    return {
+      onlineInterval: null,
+    }
   },
   created(){
     this.$store.dispatch('lobbyGetData', this.$route.params.id);
@@ -42,16 +50,20 @@ export default {
     //   // this.$store.dispatch('lobbyPutData');
     //   // console.log(val);
     // },{deep: true});
-
+    this.onlineInterval = setInterval(() => {
+      this.$store.dispatch('lobbyMemberLastOnline');
+    }, 10*1000);
   },
   mounted(){
     setTimeout(()=>{
-      console.log();
       if(!this.$store.state.firebaseLoading && this.$store.state.user === null){
         this.$router.push({ path: '/' })
       }
     }, 1000);
-  }
+  },
+  beforeDestroy() {
+    clearInterval(this.onlineInterval);
+  },
 }
 </script>
 

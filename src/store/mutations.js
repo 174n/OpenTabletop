@@ -198,6 +198,10 @@ export default {
       state.game.chat = val;
     }
 
+    else if(id === "members"){
+      state.game.members = val;
+    }
+
     else if(id === "firstLoad"){
       if(val !== null || val !== undefined){
         if(val.objects === null || val.objects === undefined) val.objects = [];
@@ -218,6 +222,17 @@ export default {
   },
 
 
+
+  lobbyAdminUpdate(state, admin){
+    state.lobbyAdmin = admin;
+  },
+
+
+
+
+
+  /* Other
+  =======================================*/
 
 
   syncTypeChange(state){

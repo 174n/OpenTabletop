@@ -31,7 +31,7 @@
               <v-flex md6 offset-md3 sm12>
                 <new-lobby-card></new-lobby-card>
               </v-flex>
-              <v-flex md6 offset-md3 sm12>
+              <v-flex md6 offset-md3 sm12 class="decks_container">
                 <decks-card></decks-card>
               </v-flex>
             </template>
@@ -87,4 +87,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.decks_container{
+  width: 100%;
+}
 </style>
