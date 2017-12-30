@@ -1,0 +1,50 @@
+<template>
+  <v-text-field
+    label="Deck name"
+    single-line
+    v-model="deck_name"
+    @keyup.enter.prevent="createDeck"
+    :append-icon-cb="createDeck"
+    append-icon="send">
+  </v-text-field>
+</template>
+
+<script>
+import { EventBus } from '../helpers/event-bus.js';
+import config from "../config/imgur.json";
+
+export default {
+  data () {
+    return {
+      deck_name: "",
+    }
+  },
+  methods:{
+    imgurImageUrl(id){
+      return "https://i.imgur.com/"+id+".jpg"
+    },
+    createDeck(){
+      this.$store.dispatch('lobbyCommitMutation', {
+        mutation: 'addNewDeckFromData',
+        params: {
+          'urls':[],
+          'title': this.deck_name,
+          'x': 10,
+          'y': 10
+        }
+      });
+      this.deck_name = "";
+    }
+  },
+  computed: {
+    
+  },
+  created(){
+    
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+
+</style>

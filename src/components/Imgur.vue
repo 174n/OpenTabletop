@@ -38,11 +38,12 @@ export default {
           data.images.slice(1).forEach(i=>{
             params.urls.push(this.imgurImageUrl(i.id));
           });
-          if(params.urls.length > 0){
+          if(params.urls.length > 0 && params.title !== undefined && params.title !== null){
             this.$store.dispatch('lobbyCommitMutation', {
               mutation: 'addNewDeckFromData',
               params
             });
+            this.imgur_url = "";
           }
         }, response => {
           EventBus.$emit('snackbarOpen', "Wrong imgur id", "error");

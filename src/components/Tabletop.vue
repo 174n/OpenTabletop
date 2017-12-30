@@ -18,6 +18,7 @@
         @contextmenu.prevent="showMenu('deck',object.x,object.y,i)"
         @dblclick="takeCard(i)"
         class="draggable deck"
+        :class="{ 'empty_deck': object.cards.length <= 0 }"
         :data-id="i"
         :style="{
           transform: 'translate('+object.x+'px, '+object.y+'px)',
@@ -29,7 +30,7 @@
             </div>
             <div class="count">{{object.cards.length}}</div>
           </div>
-          <img alt="deck" :src="(object.cards[0] !== undefined ? object.cards[0].back : 'none')">
+          <img alt="deck" v-if="object.cards.length > 0" :src="object.cards[0].back">
       </div>
       <!-- counter -->
 
@@ -264,6 +265,9 @@ export default {
     width: 111px;
     margin-bottom: -6px;
   }
+}
+.empty_deck{
+  height: 160px;
 }
 
 .counter{
