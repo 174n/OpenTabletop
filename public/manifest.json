@@ -5,7 +5,7 @@
   "background_color": "#ffffff",
   "display": "fullscreen",
   "Scope": "/",
-  "start_url": "http://playopentabletop.firebaseapp.com",
+  "start_url": "https://playopentabletop.firebaseapp.com",
   "icons": [
     {
       "src": "images/icons/icon-72x72.png",
