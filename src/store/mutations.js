@@ -88,6 +88,21 @@ export default {
     card.new = true;
   },
 
+  pinCard(state, cardId){
+    let card = state.game.objects[cardId];
+    if(card.type === "card") card.pin = card.pin ? false : true;
+    card.new = true;
+  },
+
+  cardSizeChange(state, data){
+    let card = state.game.objects[data.id];
+    if(card.type === "card"){
+      card.size = data.custom_size === true ? data.size : 12;
+      card.real_size = data.real_size;
+    };
+    card.new = true;
+  },
+
   addNewDeck(state, data){
     let id = data.index;
     state.game.objects.push({
@@ -100,6 +115,8 @@ export default {
           type: "card",
           url,
           back: state.decks[id].back,
+          real_size: state.decks[id].real_size || false,
+          size: state.decks[id].size || 12,
           hand: false,
           x: 0,y: 0, rotation: 0
         }
@@ -120,6 +137,8 @@ export default {
           url,
           back: data.back,
           hand: false,
+          real_size: data.real_size || false,
+          size: data.size || 12,
           x: 0,y: 0, rotation: 0
         }
       }),
@@ -204,7 +223,7 @@ export default {
 
     else if(id === "firstLoad"){
       if(val !== null || val !== undefined){
-        if(val.objects === null || val.objects === undefined) val.objects = [];
+        if(val !== undefined && (val.objects === null || val.objects === undefined)) val.objects = [];
         Object.values(val.objects).forEach((v) => {
           if(v.type==="deck" && v.cards===undefined) v.cards = [];
         });
@@ -238,6 +257,10 @@ export default {
   syncTypeChange(state){
     if (state.sync === "full") state.sync = "advanced"
     else state.sync = "full";
+  },
+
+  deckOptionsChange(state, newData){
+    state.deckOptions = newData;
   },
 
 }

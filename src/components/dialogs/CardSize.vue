@@ -3,12 +3,9 @@
     <v-dialog v-model="open" lazy absolute width="500px">
       <v-card>
         <v-card-title>
-          <div class="headline">New deck</div>
+          <div class="headline">Card size</div>
         </v-card-title>
         <v-card-text>
-          <v-text-field v-model="data.deck_name" label="Deck name"></v-text-field>
-          <v-text-field v-model="data.card_back" label="Card back url"></v-text-field>
-          <v-text-field v-model="data.card_urls" label="Card urls" multi-line></v-text-field>
           <v-layout row wrap>
             <v-flex sm6 xs12>
               <v-switch label="Custom size in %" v-model="data.custom_size" color="blue"></v-switch>
@@ -23,7 +20,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" flat="flat" @click.native="newDeck">Create</v-btn>
+          <v-btn color="green darken-1" flat="flat" @click.native="changeSize">Change</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -38,38 +35,33 @@ export default {
     return {
       open: false,
       data:{
-        deck_name: undefined,
-        card_back: undefined,
-        card_urls: undefined,
+        id: false,
         custom_size: false,
         real_size: false,
         size: 12
       }
     }
   },
+  computed:{
+    objects(){
+      return this.$store.state.game.objects;
+    }
+  },
   created(){
-    EventBus.$on('newDeckToggle', () => {
+    EventBus.$on('cardSizeDialogToggle', (id) => {
       this.open = !this.open;
+      this.data={custom_size: false,real_size: false,size: 12};
+      this.data.id = id;
+      let object = this.objects[id];
+      this.data.custom_size = object.size === 12 || object.size === undefined ? false : true;
+      this.data.size = object.size || 12;
+      this.data.real_size = object.real_size || false;
     });
   },
   methods:{
-    newDeck(){
+    changeSize(){
       this.open = false;
-      this.$store.dispatch('newDeck',{
-        'name': this.data.deck_name,
-        'back': this.data.card_back,
-        'urls': this.data.card_urls ? this.data.card_urls.split('\n') : [],
-        'size': this.data.custom_size ? this.data.size : false,
-        'real_size': this.data.real_size
-      }).then(() => {
-        this.data.deck_name = undefined;
-        this.data.card_back = undefined;
-        this.data.card_urls = undefined;
-        this.data.custom_size = false;
-        this.data.real_size = false;
-        this.data.size = 12;
-        EventBus.$emit('snackbarOpen', "New deck added");
-      });
+      this.$store.commit('cardSizeChange', this.data);
     }
   }
 }

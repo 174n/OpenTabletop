@@ -5,13 +5,22 @@
       <div v-if="object !== undefined && object.type === 'card'"
         @contextmenu.prevent="showMenu('card',object.x,object.y,i)"
         @dblclick="cardPreviewOpen(i)"
-        class="draggable card"
-        :class="{ 'inhand': object.hand === user.uid }"
+        class="card"
+        :class="{
+          'inhand': object.hand === user.uid,
+          'pinned': !!object.pin,
+          'draggable': !object.pin
+        }"
         :data-id="i"
         :style="{
           transform: 'translate('+object.x+'px, '+object.y+'px) rotate('+object.rotation+'deg)'
           }">
-        <img alt="card" :src="(!object.hand || object.hand === user.uid ? object.url : object.back)">
+        <img
+          alt="card"
+          :src="(!object.hand || object.hand === user.uid ? object.url : object.back)"
+          :style="{
+            width: !object.real_size ? (object.size===undefined ? 111 : 925*object.size/100 )+'px' : 'initial'
+          }">
       </div>
       <!-- deck -->
       <div v-else-if="object !== undefined && object.type === 'deck'"
@@ -30,7 +39,13 @@
             </div>
             <div class="count">{{object.cards.length}}</div>
           </div>
-          <img alt="deck" v-if="object.cards.length > 0" :src="object.cards[0].back">
+          <img
+            alt="deck"
+            v-if="object.cards.length > 0"
+            :src="object.cards[0].back"
+            :style="{
+              width: !object.cards[0].real_size ? (object.cards[0].size===undefined ? 111 : 925*object.cards[0].size/100 )+'px' : 'initial'
+            }">
       </div>
       <!-- counter -->
 
@@ -72,7 +87,6 @@ export default {
   methods:{
     dragMoveListener(event){
       // this.$store.commit('moveObject', event);
-
       this.$store.dispatch('lobbyCommitMutation', {
         mutation: 'moveObject',
         params: {
@@ -83,7 +97,7 @@ export default {
     },
     showMenu(type,x,y,id) {
       let scale = this.getTabletopScale();
-      let offset = document.querySelector(".draggable[data-id='"+id+"']").getBoundingClientRect();
+      let offset = document.querySelector(".tabletop div[data-id='"+id+"']").getBoundingClientRect();
       // console.log(offset);
       EventBus.$emit('openContextMenu', type,offset.x,offset.y,id);
     },
@@ -145,6 +159,7 @@ export default {
 
     interact('.draggable')
       .draggable({
+        ignoreFrom: '.pinned',
         inertia: {
           resistance: 60
         },
@@ -159,7 +174,7 @@ export default {
 
     interact('.deck').dropzone({
       accept: '.card',
-      overlap: 0.6, //% of element
+      overlap: 0.1, //% of element
       ondragenter: function (event) {
         event.target.classList.add('drop-target');
         event.relatedTarget.classList.add('drop-relatedTarget');
@@ -215,14 +230,18 @@ export default {
   position: absolute;
   // cursor: move;
 }
+.pinned{
+  z-index: 1 !important;
+  cursor: move;
+}
 
 .card{
+  position: absolute;
   background-repeat: no-repeat;
   background-size: cover;
-  z-index: 2;
+  z-index: 3;
   border-radius: 6px;
   img{
-    width: 111px;
     margin-bottom: -6px;
   }
 }
@@ -232,7 +251,6 @@ export default {
 
 .deck{
   transition: width ease-in-out 0.2s,height ease-in-out 0.2s,margin ease-in-out 0.2s;
-  width: 111px;
   box-shadow: 3px 3px 0px 1px rgba(0, 0, 0, .7);
   user-select: none;
   display: inline-block;
@@ -240,6 +258,7 @@ export default {
   border-radius: 6px;
   background-size: cover;
   overflow: hidden;
+  z-index: 2;
   .header{
     text-align: center;
     width: 100%;
@@ -262,7 +281,6 @@ export default {
     flex-direction: column;
   }
   img{
-    width: 111px;
     margin-bottom: -6px;
   }
 }

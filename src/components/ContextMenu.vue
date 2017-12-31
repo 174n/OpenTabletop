@@ -56,6 +56,14 @@ export default {
             "func": this.handMoveCard
           },
           {
+            "title": "Pin / Unpin",
+            "func": this.pinCard
+          },
+          {
+            "title": "Change size",
+            "func": this.changeCardSize
+          },
+          {
             "title": "Remove card",
             "func": this.removeObject
           }
@@ -121,6 +129,15 @@ export default {
         mutation: 'handMoveCard',
         params: this.id
       });
+    },
+    pinCard(){
+      this.$store.dispatch('lobbyCommitMutation', {
+        mutation: 'pinCard',
+        params: this.id
+      });
+    },
+    changeCardSize(){
+      EventBus.$emit('cardSizeDialogToggle', this.id);
     },
     takeCardToObjects(){
       this.$store.dispatch('lobbyCommitMutation', {

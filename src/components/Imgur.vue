@@ -1,12 +1,25 @@
 <template>
-  <v-text-field
-    label="Imgur album url"
-    single-line
-    v-model="imgur_url"
-    @keyup.enter.prevent="getImgurData"
-    :append-icon-cb="getImgurData"
-    append-icon="send">
-  </v-text-field>
+  <div>
+    <v-text-field
+      label="Imgur album url"
+      single-line
+      v-model="imgur_url"
+      @keyup.enter.prevent="getImgurData"
+      :append-icon-cb="getImgurData"
+      append-icon="send">
+    </v-text-field>
+    <v-layout row wrap>
+      <v-flex sm6 xs12>
+        <v-switch label="Custom size in %" v-model="data.custom_size" color="blue"></v-switch>
+      </v-flex>
+      <v-flex sm6 xs12>
+        <v-switch label="Real size" v-model="data.real_size" color="blue"></v-switch>
+      </v-flex>
+    </v-layout>
+    <template v-if="data.custom_size">
+      <v-slider label="Size" v-model="data.size" thumb-label step="0"></v-slider>
+    </template>
+  </div>
 </template>
 
 <script>
@@ -17,6 +30,11 @@ export default {
   data () {
     return {
       imgur_url: "",
+      data:{
+        custom_size: false,
+        real_size: false,
+        size: 12
+      }
     }
   },
   methods:{
@@ -33,7 +51,9 @@ export default {
             'title': data.title,
             'x': 10,
             'y': 10,
-            'back': this.imgurImageUrl(data.images[0].id)
+            'back': this.imgurImageUrl(data.images[0].id),
+            'real_size': this.data.real_size || false,
+            'size': this.data.custom_size ? this.data.size : 12,
           };
           data.images.slice(1).forEach(i=>{
             params.urls.push(this.imgurImageUrl(i.id));
@@ -44,6 +64,11 @@ export default {
               params
             });
             this.imgur_url = "";
+            this.data = {
+              custom_size: false,
+              real_size: false,
+              size: 12
+            }
           }
         }, response => {
           EventBus.$emit('snackbarOpen', "Wrong imgur id", "error");

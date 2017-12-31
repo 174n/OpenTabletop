@@ -9,6 +9,7 @@ export default {
   lobbyId: "",
   lobbyAdmin: "",
   sync: "advanced",
+  deckOptions: {},
   game: {
     objects:[
       /*{

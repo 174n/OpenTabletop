@@ -67,7 +67,6 @@ export default {
   methods:{
     putADeck(){
       this.open = false;
-      console.log(1);
     }
   }
 }

@@ -11,6 +11,7 @@
       <context-menu></context-menu>
       <place-user-deck></place-user-deck>
       <lobby-settings></lobby-settings>
+      <card-size></card-size>
     </main>
   </v-app>
 </template>
@@ -25,6 +26,7 @@ import SpeedDial from './SpeedDial.vue';
 import ContextMenu from './ContextMenu.vue';
 import PlaceUserDeck from './dialogs/PlaceUserDeck.vue';
 import LobbySettings from './dialogs/LobbySettings.vue';
+import CardSize from './dialogs/CardSize.vue';
 
 export default {
   components:{
@@ -35,7 +37,8 @@ export default {
     "context-menu": ContextMenu,
     "tabletop": Tabletop,
     "place-user-deck": PlaceUserDeck,
-    "lobby-settings": LobbySettings
+    "lobby-settings": LobbySettings,
+    "card-size": CardSize,
   },
   data () {
     return {
