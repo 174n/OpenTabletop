@@ -90,7 +90,13 @@ export default {
             // }
           ],
           chat:[],
-          members:[]
+          members:[],
+          background:{
+            tabletop_url: "",
+            tabletop_color: "#eee",
+            background_url: "",
+            background_color: "#fafafa",
+          }
         },
         created: {".sv":"timestamp"},
         creator: state.user.email
@@ -192,6 +198,18 @@ export default {
           id: "members",
           val: snapshot.val()
         });
+      });
+
+      //background changed
+      lobbyRef.child('/game/background').on("value", function(snapshot){
+        context.commit('updateGame', {
+          id: "background",
+          val: snapshot.val()
+        });
+      });
+      //imported
+      lobbyRef.child('/game/imported').on("value", function(snapshot){
+        loadOnce();
       });
 
     }

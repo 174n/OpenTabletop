@@ -1,5 +1,10 @@
 <template>
-  <div class="tabletop">
+  <div
+    class="tabletop"
+    :style="{
+      background: game.background !== undefined && game.background.tabletop_color || '#eee',
+      backgroundImage: game.background !== undefined && ( 'url('+game.background.tabletop_url+')' ) || 'none'
+    }">
     <template v-for="(object, i) in game.objects">
       <!-- card -->
       <div v-if="object !== undefined && object.type === 'card'"
@@ -31,7 +36,8 @@
         :data-id="i"
         :style="{
           transform: 'translate('+object.x+'px, '+object.y+'px)',
-          backgroundColor: object.color
+          backgroundColor: object.color,
+          width: object.cards.length <= 0 ? '111px' : 'initial'
           }">
           <div class="wrapper">
             <div class="header" :style="{ fontSize: (object.text.length > 8 ? '0.9' : '1') + 'em' }">
@@ -221,10 +227,10 @@ export default {
   width: 3000px;
   height: 2000px;
   box-shadow: 0 0 20px 8px rgba(0,0,0,.1);
-  background-color: #eee;
   border-radius: 7px;
   user-select: none;
   transform-origin: center center center;
+  background-size: cover !important;
 }
 .draggable{
   position: absolute;

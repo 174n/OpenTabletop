@@ -40,6 +40,11 @@ export default {
     "lobby-settings": LobbySettings,
     "card-size": CardSize,
   },
+  computed: {
+    background(){
+      return this.$store.state.game.background
+    }
+  },
   data () {
     return {
       onlineInterval: null,
@@ -75,8 +80,12 @@ html,body{
   position: static;
   background: #fafafa;
   overflow: hidden;
+  background-size: cover !important;
 }
 .speed-dial{
   z-index: 999;
+}
+.application--light{
+  background-color: inherit;
 }
 </style>
