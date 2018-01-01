@@ -35,6 +35,20 @@ export default {
     randomInteger(min, max){
       return Math.round(min + Math.random() * (max - min));
     },
+    diceRoller(dice){
+      if(/^[0-9]{1,}d[0-9]{1,}$/.test(dice)){
+        let options = dice.split('d');
+        if(parseInt(options[0]) >= 1 && parseInt(options[1]) >= 2){
+          let out = 0;
+          for(var i = 1; i <= parseInt(options[0]); i++) {
+            out += this.randomInteger(1,parseInt(options[1]));
+          }
+          return '['+dice+'] Result: '+out;
+        }
+        else return false;
+      }
+      else return false;
+    },
     addNewDeck(event){
       /*this.$store.dispatch('lobbyCommitMutation', {
         mutation: 'addNewDeck',
@@ -49,7 +63,7 @@ export default {
       });
     },
     rollDice(){
-      this.$store.commit('chatAddMsg', ["Dice roll: "+this.user.displayName,"[1d6] Result: "+this.randomInteger(1, 6)]);
+      this.$store.commit('chatAddMsg', ["Dice roll: "+this.user.displayName,this.diceRoller(this.dice)]);
       this.$store.dispatch('lobbyUpdateChat');
       // this.openChat();
     },
@@ -66,6 +80,9 @@ export default {
     },
     lobbyAdmin(){
       return this.$store.state.lobbyAdmin
+    },
+    dice(){
+      return this.$store.state.dice
     }
   }
 }

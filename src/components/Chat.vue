@@ -9,6 +9,15 @@
         :append-icon-cb="chatMsg"
         append-icon="send">
       </v-text-field>
+      <v-text-field
+        label="Dice settings"
+        v-model="dice"
+        :rules="diceRules"
+        required
+        @keyup.enter.prevent="diceSet"
+        :append-icon-cb="diceSet"
+        append-icon="send"
+      ></v-text-field>
     </div>
     
     <v-divider></v-divider>
@@ -35,7 +44,11 @@ export default {
   data () {
     return {
       sidebar: false,
-      chatMsgValue: ""
+      chatMsgValue: "",
+      dice: "1d6",
+      diceRules: [
+        (v) => /^[0-9]{1,}d[0-9]{1,}$/.test(v) || 'Dice code must be valid'
+      ]
     }
   },
   methods:{
@@ -44,6 +57,15 @@ export default {
       this.$store.commit('chatAddMsg', [this.user.displayName,this.chatMsgValue]);
       this.$store.dispatch('lobbyUpdateChat');
       this.chatMsgValue = "";
+    },
+    diceSet(){
+      if(/^[0-9]{1,}d[0-9]{1,}$/.test(this.dice)){
+        this.$store.commit("diceChange", this.dice);
+        EventBus.$emit('snackbarOpen', "Dice settings changed");
+      }
+      else{
+        EventBus.$emit('snackbarOpen', "Wrong dice settings", "error");
+      }
     }
   },
   computed: {
