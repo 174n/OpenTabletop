@@ -169,8 +169,10 @@ export default {
           objects: lobby.objects,
           imported: {".sv":"timestamp"}
         }
+      }).then(()=>{
+        EventBus.$emit('snackbarOpen', "Successfully imported!");
+        this.imported_lobby = null;
       });
-      EventBus.$emit('snackbarOpen', "Successfully imported!");
     }
 
     // getMemberInfo(email){
