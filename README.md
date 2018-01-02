@@ -5,6 +5,9 @@
 
 Browser-based online project in which you can play any card games with your friends
 
+## Updated version
+[Here](https://github.com/Rundik/OpenTabletop/tree/firebase) is version made with firebase as backend and Vue.js as frontend
+
 ## Instalation
 First, you’ll need Node.js [latest version](https://nodejs.org/en/) with npm.
 
