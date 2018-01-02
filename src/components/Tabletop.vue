@@ -35,7 +35,7 @@
         :class="{ 'empty_deck': object.cards.length <= 0 }"
         :data-id="i"
         :style="{
-          transform: 'translate('+object.x+'px, '+object.y+'px)',
+          transform: 'translate('+object.x+'px, '+object.y+'px) rotate('+(object.rotation || 0)+'deg)',
           backgroundColor: object.color,
           width: object.cards.length <= 0 ? '111px' : 'initial'
           }">
@@ -52,6 +52,7 @@
             :style="{
               width: !object.cards[0].real_size ? (object.cards[0].size===undefined ? 111 : 925*object.cards[0].size/100 )+'px' : 'initial'
             }">
+            <!-- {{cardSize(object.cards[0].back)}} -->
       </div>
       <!-- counter -->
 
@@ -89,6 +90,20 @@ export default {
     return {
       tabletopCanvas: undefined
     }
+  },
+  asyncMethods:{
+    cardSize(url){
+      return new Promise((resolve, reject) => {
+        let img = document.createElement('img');
+        img.src = url;
+        img.onload = function(){
+          resolve(this.naturalWidth,this.naturalHeight);
+        }
+      }).then((width,height) => {
+        console.log(width,height);
+        return {width,height};
+      });
+    },
   },
   methods:{
     dragMoveListener(event){

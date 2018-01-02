@@ -11,6 +11,8 @@ import VueTimeago from 'vue-timeago'
 import Firebase from 'firebase'
 import Vuex from 'vuex'
 import VueResource from 'vue-resource'
+import AsyncMethods from 'vue-async-methods'
+
 import store from './store'
 
 import Routes from './routes'
@@ -29,6 +31,9 @@ Vue.use(VueTimeago, {
   locales: {
     'en-US': require('vue-timeago/locales/en-US.json')
   }
+});
+Vue.use(AsyncMethods, {
+  createComputed: true
 });
 
 
