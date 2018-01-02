@@ -118,7 +118,9 @@ export default {
     //   this.$store.commit('rotateCard', cardId);
     // },
     cardPreviewOpen(id){
-      EventBus.$emit('toggleCardPreview', this.game.objects[id].url);
+      if(!this.game.objects[id].hand || this.game.objects[id].hand === this.user.uid){
+        EventBus.$emit('toggleCardPreview', this.game.objects[id].url);
+      }
     },
     tabletopScroll(e){
       if(this.tabletopCanvas.options.drag.enabled){

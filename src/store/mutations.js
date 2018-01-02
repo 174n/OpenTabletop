@@ -272,4 +272,8 @@ export default {
     state.deckOptions = newData;
   },
 
+  diceChange(state, dice){
+    state.dice = dice;
+  },
+
 }

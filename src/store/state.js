@@ -10,6 +10,7 @@ export default {
   lobbyAdmin: "",
   sync: "advanced",
   deckOptions: {},
+  dice: "1d6",
   game: {
     objects:[
       /*{
