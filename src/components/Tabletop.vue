@@ -10,6 +10,7 @@
       <div v-if="object !== undefined && object.type === 'card'"
         @contextmenu.prevent="showMenu('card',object.x,object.y,i)"
         @dblclick="cardPreviewOpen(i)"
+        @auxclick="cardMiddleClick($event,i)"
         class="card"
         :class="{
           'inhand': object.hand === user.uid,
@@ -121,6 +122,14 @@ export default {
       let offset = document.querySelector(".tabletop div[data-id='"+id+"']").getBoundingClientRect();
       // console.log(offset);
       EventBus.$emit('openContextMenu', type,offset.x,offset.y,id);
+    },
+    cardMiddleClick(e,id){
+      if(e.button===1){
+        this.$store.dispatch('lobbyCommitMutation', {
+          mutation: 'rotateCard',
+          params: id
+        });
+      }
     },
     takeCard(deckId){
       this.$store.dispatch('lobbyCommitMutation', {
