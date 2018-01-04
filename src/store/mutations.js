@@ -78,7 +78,10 @@ export default {
 
   rotateCard(state, cardId){
     let card = state.game.objects[cardId];
-    if(card.type === "card") card.rotation = card.rotation === 0 ? 90 : 0;
+    if(card.type === "card") card.rotation = 
+      (state.game.fullRotation || false) ?
+      (card.rotation < 360 ? card.rotation + 90 : 0):
+      (card.rotation === 0 ? 90 : 0);
     card.new = true;
   },
 

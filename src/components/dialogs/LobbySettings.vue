@@ -141,7 +141,7 @@ export default {
       let file = 'data:application/json;charset=utf-8,'+ encodeURIComponent(JSON.stringify(this.game));
       this.download_link = file;
     },
-    readSingleFile(evt) {
+    importLobby(evt) {
       //Retrieve the first (and only!) File from the FileList object
       let f = evt.target.files[0];
       let self = this;
@@ -155,9 +155,6 @@ export default {
         EventBus.$emit('snackbarOpen', "Failed to load file", "error");
       }
     },
-    importLobby(e){
-      this.readSingleFile(e);
-    },
     replaceLobby(){
       let lobby = this.imported_lobby;
       this.$store.dispatch('lobbySetState', {
@@ -167,6 +164,7 @@ export default {
           chat: lobby.chat,
           members: lobby.members,
           objects: lobby.objects,
+          fullRotation: lobby.fullRotation || false,
           imported: {".sv":"timestamp"}
         }
       }).then(()=>{

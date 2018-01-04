@@ -48,7 +48,7 @@ export default {
       dice: "1d6",
       diceRules: [
         (v) => /^[0-9]{1,}d[0-9]{1,}$/.test(v) || 'Dice code must be valid'
-      ]
+      ],
     }
   },
   methods:{
@@ -76,7 +76,7 @@ export default {
     },
     user(){
       return this.$store.state.user
-    }
+    },
   },
   created(){
     EventBus.$on('toggleChat', val => {

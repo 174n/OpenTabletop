@@ -13,7 +13,7 @@
     <v-btn fab dark small class="red" v-tooltip:left="{ html: 'Roll a dice' }" @click.stop="rollDice">
       <v-icon>casino</v-icon>
     </v-btn>
-    <v-btn fab dark small class="blue" v-tooltip:left="{ html: 'Open chat' }" @click.stop="openChat">
+    <v-btn fab dark small class="blue" v-tooltip:left="{ html: 'Chat & Settings' }" @click.stop="openChat">
       <v-icon>chat</v-icon>
     </v-btn>
     <v-btn fab dark small class="gray" v-if="user !== null && lobbyAdmin === user.email" v-tooltip:left="{ html: 'Lobby settings' }" @click.stop="lobbySettings">
