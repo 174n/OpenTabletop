@@ -13,6 +13,9 @@
     <v-btn fab dark small class="red" v-tooltip:left="{ html: 'Roll a dice' }" @click.stop="rollDice">
       <v-icon>casino</v-icon>
     </v-btn>
+    <v-btn fab dark small class="orange" v-tooltip:left="{ html: 'Rules' }" v-if="rules || false" @click.stop="openRules">
+      <v-icon>description</v-icon>
+    </v-btn>
     <v-btn fab dark small class="blue" v-tooltip:left="{ html: 'Chat & Settings' }" @click.stop="openChat">
       <v-icon>chat</v-icon>
     </v-btn>
@@ -72,11 +75,17 @@ export default {
     },
     lobbySettings(){
       EventBus.$emit('LobbySettings');
+    },
+    openRules(){
+      EventBus.$emit('toggleRules', this.rules);
     }
   },
   computed: {
     user(){
       return this.$store.state.user
+    },
+    rules(){
+      return this.$store.state.game.rules
     },
     lobbyAdmin(){
       return this.$store.state.lobbyAdmin

@@ -323,7 +323,7 @@ export default {
 .counter{
   user-select: none;
   cursor: move;
-  z-index: 10 !important;
+  z-index: 4 !important;
 }
 
 .drop-target{

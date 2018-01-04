@@ -165,6 +165,7 @@ export default {
           members: lobby.members,
           objects: lobby.objects,
           fullRotation: lobby.fullRotation || false,
+          rules: lobby.rules || false,
           imported: {".sv":"timestamp"}
         }
       }).then(()=>{
