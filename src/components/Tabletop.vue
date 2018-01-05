@@ -256,6 +256,7 @@ export default {
   border-radius: 7px;
   user-select: none;
   transform-origin: center center center;
+  background-position: center center !important;
   background-size: cover !important;
 }
 .draggable{
