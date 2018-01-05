@@ -4,6 +4,7 @@ npm-debug.log
 yarn-error.log
 src/config
 *.sublime-workspace
+public/tools
 
 # Editor directories and files
 .idea
