@@ -13,7 +13,7 @@
     <v-btn fab dark small class="red" v-tooltip:left="{ html: 'Roll a dice' }" @click.stop="rollDice">
       <v-icon>casino</v-icon>
     </v-btn>
-    <v-btn fab dark small class="orange" v-tooltip:left="{ html: 'Rules' }" v-if="rules || false" @click.stop="openRules">
+    <v-btn fab dark small class="orange" v-tooltip:left="{ html: 'Rules' }" v-if="rules || false" :href="rules" target="_blank">
       <v-icon>description</v-icon>
     </v-btn>
     <v-btn fab dark small class="blue" v-tooltip:left="{ html: 'Chat & Settings' }" @click.stop="openChat">

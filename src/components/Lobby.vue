@@ -12,7 +12,7 @@
       <place-user-deck></place-user-deck>
       <lobby-settings></lobby-settings>
       <card-size></card-size>
-      <rules-view></rules-view>
+      <!-- <rules-view></rules-view> -->
     </main>
   </v-app>
 </template>
@@ -28,7 +28,7 @@ import ContextMenu from './ContextMenu.vue';
 import PlaceUserDeck from './dialogs/PlaceUserDeck.vue';
 import LobbySettings from './dialogs/LobbySettings.vue';
 import CardSize from './dialogs/CardSize.vue';
-import RulesView from './dialogs/RulesView.vue';
+// import RulesView from './dialogs/RulesView.vue';
 
 export default {
   components:{
@@ -41,7 +41,7 @@ export default {
     "place-user-deck": PlaceUserDeck,
     "lobby-settings": LobbySettings,
     "card-size": CardSize,
-    "rules-view": RulesView,
+    // "rules-view": RulesView,
   },
   computed: {
     background(){
