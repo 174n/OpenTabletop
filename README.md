@@ -56,7 +56,7 @@ Here is the demo website: [DEMO](https://playopentabletop.firebaseapp.com/)
   * [Games library](https://playopentabletop.firebaseapp.com/tools/gamesLibrary.html)
   
 
-## Build Setup
+## Development
 
 ``` bash
 # install dependencies
