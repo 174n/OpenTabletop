@@ -49,7 +49,7 @@ Here is the demo website: [DEMO](https://playopentabletop.firebaseapp.com/)
   
 </details>
 
-## Card getting tools
+## Useful tools
 
   * [Imgur images getter](https://playopentabletop.firebaseapp.com/tools/imgurParser.html)
   * [MTG card urls getter](https://playopentabletop.firebaseapp.com/tools/mtgParser.html)
