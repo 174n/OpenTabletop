@@ -19,7 +19,7 @@
         }"
         :data-id="i"
         :style="{
-          transform: 'translate('+object.x+'px, '+object.y+'px) rotate('+object.rotation+'deg)'
+          transform: 'translate('+object.x+'px, '+object.y+'px) rotate('+(!!object.hand && object.hand !== user.uid ? -1 : 1)*object.rotation+'deg)'
           }">
         <img
           alt="card"
