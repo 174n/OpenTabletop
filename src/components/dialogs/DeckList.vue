@@ -5,7 +5,7 @@
       <!-- <v-btn primary dark slot="activator">Open Dialog</v-btn> -->
       <v-card>
         <v-toolbar dark class="red">
-          <v-toolbar-title v-if="deckId">Deck "{{deck.text}}"</v-toolbar-title>
+          <v-toolbar-title>Deck "{{deck.text}}"</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
             <v-btn dark flat @click.native="shuffleDeck">Shuffle deck</v-btn>
@@ -15,7 +15,7 @@
         <v-card-text>
           
 
-          <div class="container" v-if="deckId">
+          <div class="container">
             <draggable v-model="deck.cards" :options="{group:'cards'}" @update="deckUpdate">
               <transition-group>
                 <template v-for="(card,i) in deck.cards">
@@ -103,7 +103,7 @@ export default {
 
 <style lang="scss" scoped>
 .card{
-  width: 111px;
+  width: 150px;
   margin: 10px;
 }
 
