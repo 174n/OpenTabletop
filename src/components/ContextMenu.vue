@@ -60,6 +60,10 @@ export default {
             "func": this.pinCard
           },
           {
+            "title": "Flip card",
+            "func": this.flipCard
+          },
+          {
             "title": "Change size",
             "func": this.changeCardSize
           },
@@ -133,6 +137,12 @@ export default {
     pinCard(){
       this.$store.dispatch('lobbyCommitMutation', {
         mutation: 'pinCard',
+        params: this.id
+      });
+    },
+    flipCard(){
+      this.$store.dispatch('lobbyCommitMutation', {
+        mutation: 'flipCard',
         params: this.id
       });
     },

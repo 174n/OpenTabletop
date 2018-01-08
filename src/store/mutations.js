@@ -80,7 +80,7 @@ export default {
     let card = state.game.objects[cardId];
     if(card.type === "card") card.rotation = 
       (state.game.fullRotation || false) ?
-      (card.rotation < 360 ? card.rotation + 90 : 0):
+      (card.rotation < 360 ? card.rotation + 90 : 90):
       (card.rotation === 0 ? 90 : 0);
     card.new = true;
   },
@@ -88,6 +88,11 @@ export default {
   handMoveCard(state, cardId){
     let card = state.game.objects[cardId];
     if(card.type === "card") card.hand = !card.hand ? state.user.uid : false;
+    card.new = true;
+  },
+  flipCard(state, cardId){
+    let card = state.game.objects[cardId];
+    if(card.type === "card") card.hand = !card.hand ? "fliped" : false;
     card.new = true;
   },
 

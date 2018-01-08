@@ -142,9 +142,9 @@ export default {
     //   this.$store.commit('rotateCard', cardId);
     // },
     cardPreviewOpen(id){
-      if(!this.game.objects[id].hand || this.game.objects[id].hand === this.user.uid){
-        EventBus.$emit('toggleCardPreview', this.game.objects[id].url);
-      }
+      let url = !this.game.objects[id].hand || this.game.objects[id].hand === this.user.uid ?
+      this.game.objects[id].url : this.game.objects[id].back;
+      EventBus.$emit('toggleCardPreview', url);
     },
     tabletopScroll(e){
       if(this.tabletopCanvas.options.drag.enabled){
