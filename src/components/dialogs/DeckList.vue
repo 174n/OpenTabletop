@@ -5,7 +5,7 @@
       <!-- <v-btn primary dark slot="activator">Open Dialog</v-btn> -->
       <v-card>
         <v-toolbar dark class="red">
-          <v-toolbar-title>Deck "{{deck.text}}"</v-toolbar-title>
+          <v-toolbar-title v-if="deckId">Deck "{{deck.text}}"</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
             <v-btn dark flat @click.native="shuffleDeck">Shuffle deck</v-btn>
@@ -15,16 +15,20 @@
         <v-card-text>
           
 
-          <div class="container">
-            <template v-for="(card,i) in deck.cards">
-              <img
-                :src="card.url"
-                alt="card"
-                class="card"
-                :key="i"
-                @dblclick.stop="cardPreviewOpen(i)"
-                @contextmenu.prevent="showMenu(i,$event)">
-            </template>
+          <div class="container" v-if="deckId">
+            <draggable v-model="deck.cards" :options="{group:'cards'}" @update="deckUpdate">
+              <transition-group>
+                <template v-for="(card,i) in deck.cards">
+                  <img
+                    :src="card.url"
+                    alt="card"
+                    class="card"
+                    :key="i"
+                    @dblclick.stop="cardPreviewOpen(i)"
+                    @contextmenu.prevent="showMenu(i,$event)">
+                </template>
+              </transition-group>
+            </draggable>
           </div>
 
         </v-card-text>
@@ -37,16 +41,18 @@
 <script>
 import { EventBus } from '../../helpers/event-bus.js';
 import CardPreview from './CardPreview.vue';
+import draggable from 'vuedraggable'
 
 export default {
   components:{
-    "card-preview": CardPreview
+    "card-preview": CardPreview,
+    draggable
   },
   data () {
     return {
       open: false,
       deck: [],
-      deckId: 0
+      deckId: false,
     }
   },
   computed: {
@@ -55,7 +61,7 @@ export default {
     },
     user(){
       return this.$store.state.user
-    }
+    },
   },
   created(){
     EventBus.$on('deckViewToggle', id => {
@@ -68,6 +74,7 @@ export default {
     });
     EventBus.$on('deckViewUpdate', () => {
       this.deck = this.game.objects[this.deckId];
+      this.$forceUpdate();
     });
   },
   methods:{
@@ -81,8 +88,14 @@ export default {
     },
     shuffleDeck(){
       this.$store.commit('shuffleDeck', this.deckId);
-      this.$forceUpdate();
+      EventBus.$emit('deckViewUpdate');
       // this.open = false;
+    },
+    deckUpdate(e){
+      this.$store.dispatch('lobbyCommitMutation', {
+        mutation: 'updateDeck',
+        params: this.deckId
+      });
     }
   }
 }

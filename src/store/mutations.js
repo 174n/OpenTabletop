@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import shuffle from "shuffle-array";
+import { EventBus } from '../helpers/event-bus.js';
 // mutations are operations that actually mutates the state.
 // each mutation handler gets the entire state tree as the
 // first argument, followed by additional payload arguments.
@@ -185,6 +186,10 @@ export default {
     deck.new = true;
   },
 
+  updateDeck(state, deckId){
+    state.game.objects[deckId].new = true;
+  },
+
   reverseDeck(state, deckId){
     let deck = state.game.objects[deckId];
     let cards = deck.cards;
@@ -264,6 +269,7 @@ export default {
     else{
       if(val.type==="deck" && val.cards===undefined) val.cards = [];
       Vue.set(state.game.objects, id, val);
+      EventBus.$emit('deckViewUpdate');
     }
 
 
