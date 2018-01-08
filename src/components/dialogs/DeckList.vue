@@ -5,7 +5,7 @@
       <!-- <v-btn primary dark slot="activator">Open Dialog</v-btn> -->
       <v-card>
         <v-toolbar dark class="red">
-          <v-toolbar-title>Deck "{{deck.text}}"</v-toolbar-title>
+          <v-toolbar-title v-if="deckId || deckId === 0">Deck "{{deck.text}}"</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
             <v-btn dark flat @click.native="shuffleDeck">Shuffle deck</v-btn>
@@ -15,7 +15,7 @@
         <v-card-text>
           
 
-          <div class="container">
+          <div class="container" v-if="deckId || deckId === 0">
             <draggable v-model="deck.cards" :options="{group:'cards'}" @update="deckUpdate">
               <transition-group>
                 <template v-for="(card,i) in deck.cards">
@@ -71,6 +71,7 @@ export default {
       let name = this.user.displayName;
       this.$store.commit('chatAddMsg', [name+" viewed a deck",name+": "+this.game.objects[id].text]);
       this.$store.dispatch('lobbyUpdateChat');
+      console.log(this.deckId);
     });
     EventBus.$on('deckViewUpdate', () => {
       this.deck = this.game.objects[this.deckId];
