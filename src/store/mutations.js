@@ -192,6 +192,12 @@ export default {
     deck.new = true;
   },
 
+  flipDeck(state, deckId){
+    let deck = state.game.objects[deckId];
+    deck.fliped = !deck.fliped ? true : false;
+    deck.new = true;
+  },
+
   counterChangeNumber(state, [id,num=1]){
     let counter = state.game.objects[id]
     counter.count+=num;

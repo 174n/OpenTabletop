@@ -42,6 +42,10 @@ export default {
             "func": this.reverseDeck
           },
           {
+            "title": "Flip deck",
+            "func": this.flipDeck
+          },
+          {
             "title": "Shuffle deck",
             "func": this.shuffleDeck
           },
@@ -60,12 +64,12 @@ export default {
             "func": this.handMoveCard
           },
           {
-            "title": "Pin / Unpin",
-            "func": this.pinCard
-          },
-          {
             "title": "Flip card",
             "func": this.flipCard
+          },
+          {
+            "title": "Pin / Unpin",
+            "func": this.pinCard
           },
           {
             "title": "Change size",
@@ -172,6 +176,12 @@ export default {
     reverseDeck(){
       this.$store.dispatch('lobbyCommitMutation', {
         mutation: 'reverseDeck',
+        params: this.id
+      });
+    },
+    flipDeck(){
+      this.$store.dispatch('lobbyCommitMutation', {
+        mutation: 'flipDeck',
         params: this.id
       });
     },

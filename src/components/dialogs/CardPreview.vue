@@ -1,20 +1,20 @@
 <template>
   <transition name="fade">
-    <div class="cardDialog" v-if="isOpen" @click="close">
+    <div class="cardDialog" v-if="isOpen" @click.stop="close">
       <div class="wrapper">
         <img
           :src="url"
           alt="Card preview"
           class="cardPreview"
-          @click="rotate"
+          @click.stop="rotate"
           :style="{
             transform: 'rotate('+rotation+'deg)',
             width: zoom+'px'
           }">
       </div>
       <div class="zoom">
-        <div class="minus" @click="onZoom(false)"><v-icon dark>zoom_out</v-icon></div>
-        <div class="plus" @click="onZoom(true)"><v-icon dark>zoom_in</v-icon></div>
+        <div class="minus" @click.stop="onZoom(false)"><v-icon dark>zoom_out</v-icon></div>
+        <div class="plus" @click.stop="onZoom(true)"><v-icon dark>zoom_in</v-icon></div>
       </div>
     </div>
   </transition>
@@ -35,8 +35,8 @@ export default {
   created(){
     EventBus.$on('toggleCardPreview', url => {
       this.url = url;
-      this.rotation = 0;
-      this.zoom = 223;
+      // this.rotation = 0;
+      // this.zoom = 223;
       this.isOpen = !this.isOpen;
     });
   },

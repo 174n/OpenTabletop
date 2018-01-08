@@ -49,7 +49,7 @@
           <img
             alt="deck"
             v-if="object.cards.length > 0"
-            :src="object.cards[0].back"
+            :src="object.fliped ? object.cards[0].url : object.cards[0].back"
             :style="{
               width: !object.cards[0].real_size ? (object.cards[0].size===undefined ? 111 : 925*object.cards[0].size/100 )+'px' : 'initial'
             }">

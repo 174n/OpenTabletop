@@ -66,7 +66,7 @@
             <v-tabs-content id="import_export_tab">
               <v-card flat>
                 <v-card-text>
-                  <v-btn block primary dark @click.native="exportLobby">Export lobby in file</v-btn>
+                  <v-btn block primary dark @click="exportLobby">Export lobby in file</v-btn>
                   <div v-if="download_link!==''">
                     <a :href="download_link" download="export.json" @click="download_link=''">Download</a>
                   </div>
@@ -74,7 +74,7 @@
                     <v-btn block primary>Import lobby from file<input type="file" @change="importLobby"></v-btn>
                   </div>
                   <div v-if="imported_lobby !== null">
-                    <v-btn block error @click.native="replaceLobby">Replace all lobby data</v-btn>
+                    <v-btn block error @click="replaceLobby">Replace all lobby data</v-btn>
                   </div>
                 </v-card-text>
               </v-card>
