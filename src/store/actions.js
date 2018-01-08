@@ -188,8 +188,13 @@ export default {
           id: "chat",
           val: snapshot.val()
         });
-
-        if(snapshot.val() !== null && snapshot.val().length>0 && snapshot.val().slice(-1)[0].title!==context.state.user.displayName) EventBus.$emit('snackbarOpen', "Chat: "+snapshot.val().slice(-1)[0].msg);
+        
+        if(
+            snapshot.val() !== null &&
+            snapshot.val().length>0 &&
+            snapshot.val().slice(-1)[0].title==="Dice roll: "+context.state.user.displayName
+          )
+            EventBus.$emit('snackbarOpen', "<small>Chat: </small>"+snapshot.val().slice(-1)[0].msg);
       });
       
       //members changed

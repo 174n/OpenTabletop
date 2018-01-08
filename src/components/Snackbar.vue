@@ -4,7 +4,7 @@
     :color="color"
     v-model="snackbar"
   >
-    {{ text }}
+    <span v-html="text"></span>
     <v-btn dark flat @click.native="snackbar = false">Close</v-btn>
   </v-snackbar>
 </template>

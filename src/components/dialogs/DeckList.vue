@@ -52,6 +52,9 @@ export default {
   computed: {
     game(){
       return this.$store.state.game
+    },
+    user(){
+      return this.$store.state.user
     }
   },
   created(){
@@ -59,6 +62,9 @@ export default {
       this.open = !this.open;
       this.deckId = id;
       this.deck = this.game.objects[id];
+      let name = this.user.displayName;
+      this.$store.commit('chatAddMsg', [name+" viewed a deck",name+": "+this.game.objects[id].text]);
+      this.$store.dispatch('lobbyUpdateChat');
     });
     EventBus.$on('deckViewUpdate', () => {
       this.deck = this.game.objects[this.deckId];

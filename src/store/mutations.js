@@ -185,6 +185,13 @@ export default {
     deck.new = true;
   },
 
+  reverseDeck(state, deckId){
+    let deck = state.game.objects[deckId];
+    let cards = deck.cards;
+    cards = cards.reverse();
+    deck.new = true;
+  },
+
   counterChangeNumber(state, [id,num=1]){
     let counter = state.game.objects[id]
     counter.count+=num;

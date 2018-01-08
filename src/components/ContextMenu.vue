@@ -38,6 +38,10 @@ export default {
             "func": this.deckListView
           },
           {
+            "title": "Reverse deck",
+            "func": this.reverseDeck
+          },
+          {
             "title": "Shuffle deck",
             "func": this.shuffleDeck
           },
@@ -162,6 +166,12 @@ export default {
     shuffleDeck(){
       this.$store.dispatch('lobbyCommitMutation', {
         mutation: 'shuffleDeck',
+        params: this.id
+      });
+    },
+    reverseDeck(){
+      this.$store.dispatch('lobbyCommitMutation', {
+        mutation: 'reverseDeck',
         params: this.id
       });
     },
