@@ -3,6 +3,13 @@
     "public": "public",
     "ignore": [
       "dist/build.js.map"
-    ]
+    ],
+    "headers": [{
+      "source" : "**/*.json",
+      "headers" : [{
+        "key" : "Access-Control-Allow-Origin",
+        "value" : "*"
+      }]
+    }]
   }
 }
