@@ -5,6 +5,7 @@ yarn-error.log
 src/config
 *.sublime-workspace
 public/tools
+public/dist
 
 # Editor directories and files
 .idea
