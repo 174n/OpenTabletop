@@ -8,7 +8,6 @@ import './stylus/main.styl'
 import VueRouter from 'vue-router'
 import VueTimeago from 'vue-timeago'
 
-import Firebase from 'firebase'
 import Vuex from 'vuex'
 import VueResource from 'vue-resource'
 import AsyncMethods from 'vue-async-methods'

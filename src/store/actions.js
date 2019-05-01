@@ -1,4 +1,6 @@
-import firebase from "firebase";
+import firebase from "firebase/app";
+import "firebase/auth";
+import "firebase/database";
 import config from "../config/firebase.json";
 import shortid from 'shortid';
 import { EventBus } from '../helpers/event-bus.js';
@@ -16,7 +18,7 @@ export default {
     firebase.auth().signInWithRedirect(provider).then((result) => {
       state.user = result.user;
       dispatch("userGetDecks");
-    }).catch(err => EventBus.$emit('snackbarOpen', error))
+    }).catch(err => EventBus.$emit('snackbarOpen', err))
   },
 
 
@@ -24,7 +26,7 @@ export default {
     firebase.auth().signOut().then(() => {
       state.user = null;
       state.decks = [];
-    }).catch(err => EventBus.$emit('snackbarOpen', error))
+    }).catch(err => EventBus.$emit('snackbarOpen', err))
   },
 
 
@@ -37,8 +39,8 @@ export default {
         state.user = result.user;
         dispatch("userGetDecks");
       }
-    }).catch(error => {
-      EventBus.$emit('snackbarOpen', error);
+    }).catch(err => {
+      EventBus.$emit('snackbarOpen', err);
     });
     firebase.auth().onAuthStateChanged(function(user) {
       state.firebaseLoading = false;
