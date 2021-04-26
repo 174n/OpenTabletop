@@ -1,46 +1,35 @@
-import Vue from 'vue'
-import App from './App.vue'
+import Vue from "vue";
+import App from "./App.vue";
 
-import Vuetify from 'vuetify'
-import './stylus/main.styl'
+import VueRouter from "vue-router";
+import VueTimeago from "vue-timeago";
 
+import VueResource from "vue-resource";
+import AsyncMethods from "vue-async-methods";
 
-import VueRouter from 'vue-router'
-import VueTimeago from 'vue-timeago'
+import store from "./store";
 
-import Vuex from 'vuex'
-import VueResource from 'vue-resource'
-import AsyncMethods from 'vue-async-methods'
-
-import store from './store'
-
-import Routes from './routes'
+import Routes from "./routes";
+import vuetify from "./plugins/vuetify";
 
 const router = new VueRouter({
-    routes: Routes
+  routes: Routes,
 });
 
-
-Vue.use(Vuetify);
 Vue.use(VueRouter);
 Vue.use(VueResource);
 Vue.use(VueTimeago, {
-  name: 'timeago',
-  locale: 'en-US',
-  locales: {
-    'en-US': require('vue-timeago/locales/en-US.json')
-  }
+  name: "timeago",
+  locale: "en-US",
 });
 Vue.use(AsyncMethods, {
-  createComputed: true
+  createComputed: true,
 });
 
-
-
-
 new Vue({
-  el: '#app',
+  el: "#app",
   router: router,
   store,
-  render: h => h(App)
-})
+  vuetify,
+  render: (h) => h(App),
+});

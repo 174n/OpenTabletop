@@ -2,339 +2,356 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
 import config from "../config/firebase.json";
-import shortid from 'shortid';
-import { EventBus } from '../helpers/event-bus.js';
-
-// actions are functions that cause side effects and can involve
-// asynchronous operations.
-
-//this.$store.dispatch('');
+import shortid from "shortid";
+import { EventBus } from "../helpers/event-bus.js";
 
 export default {
-
-
-  signInWithGoogle({state}){
+  signInWithGoogle({ state, dispatch }) {
     const provider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().signInWithRedirect(provider).then((result) => {
-      state.user = result.user;
-      dispatch("userGetDecks");
-    }).catch(err => EventBus.$emit('snackbarOpen', err))
+    firebase
+      .auth()
+      .signInWithRedirect(provider)
+      .then((result) => {
+        state.user = result.user;
+        dispatch("userGetDecks");
+      })
+      .catch((err) => EventBus.$emit("snackbarOpen", err));
   },
 
-
-  logout({state}){
-    firebase.auth().signOut().then(() => {
-      state.user = null;
-      state.decks = [];
-    }).catch(err => EventBus.$emit('snackbarOpen', err))
+  logout({ state }) {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        state.user = null;
+        state.decks = [];
+      })
+      .catch((err) => EventBus.$emit("snackbarOpen", err));
   },
 
-
-  firebaseInit({state,dispatch}){
+  firebaseInit({ state, dispatch }) {
     state.firebaseLoading = true;
     firebase.initializeApp(config);
 
-    firebase.auth().getRedirectResult().then(result => {
-      if(result.user !== null){
-        state.user = result.user;
-        dispatch("userGetDecks");
-      }
-    }).catch(err => {
-      EventBus.$emit('snackbarOpen', err);
-    });
-    firebase.auth().onAuthStateChanged(function(user) {
+    firebase
+      .auth()
+      .getRedirectResult()
+      .then((result) => {
+        if (result.user !== null) {
+          state.user = result.user;
+          dispatch("userGetDecks");
+        }
+      })
+      .catch((err) => {
+        EventBus.$emit("snackbarOpen", err);
+      });
+    firebase.auth().onAuthStateChanged(function (user) {
       state.firebaseLoading = false;
       state.user = user;
       dispatch("userGetDecks");
     });
   },
 
-
-  newLobby({state}){
+  newLobby({ state }) {
     let id = shortid.generate();
-    return new Promise((resolve, reject) => {
-      firebase.database().ref('lobbies/'+id).set({
-        game: {
-          objects:[
-            // {
-            //   type: "card",
-            //   url: "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=417720&type=card",
-            //   x: 0,y: 0, rotation: 0
-            // },
-            // {
-            //   type: "card",
-            //   url: "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=423802&type=card",
-            //   x: 150,y: 0, rotation: 90
-            // },
-            // {
-            //   type: "card",
-            //   url: "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=417690&type=card",
-            //   x: 0,y: 150, rotation: 0
-            // },
-            // {
-            //   type: "deck",
-            //   x: 200,y: 200,
-            //   color: "#ccc",
-            //   text: "Deck 1",
-            //   cards:[
-            //     {
-            //       type: "card",
-            //       url: "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=417720&type=card",
-            //       x: 0,y: 0, rotation: 0
-            //     }
-            //   ]
-            // },
-            // {
-            //   type: "counter",
-            //   x: 400,y: 300,
-            //   count: 0,
-            //   color: "blue"
-            // }
-          ],
-          chat:[],
-          members:[],
-          background:{
-            tabletop_url: "",
-            tabletop_color: "#eee",
-            background_url: "",
-            background_color: "#fafafa",
-          }
-        },
-        created: {".sv":"timestamp"},
-        creator: state.user.email
-      }).then(resolve(id));
-    }); 
+    return new Promise((resolve) => {
+      firebase
+        .database()
+        .ref("lobbies/" + id)
+        .set({
+          game: {
+            objects: [
+              // {
+              //   type: "card",
+              //   url: "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=417720&type=card",
+              //   x: 0,y: 0, rotation: 0
+              // },
+              // {
+              //   type: "card",
+              //   url: "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=423802&type=card",
+              //   x: 150,y: 0, rotation: 90
+              // },
+              // {
+              //   type: "card",
+              //   url: "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=417690&type=card",
+              //   x: 0,y: 150, rotation: 0
+              // },
+              // {
+              //   type: "deck",
+              //   x: 200,y: 200,
+              //   color: "#ccc",
+              //   text: "Deck 1",
+              //   cards:[
+              //     {
+              //       type: "card",
+              //       url: "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=417720&type=card",
+              //       x: 0,y: 0, rotation: 0
+              //     }
+              //   ]
+              // },
+              // {
+              //   type: "counter",
+              //   x: 400,y: 300,
+              //   count: 0,
+              //   color: "blue"
+              // }
+            ],
+            chat: [],
+            members: [],
+            background: {
+              tabletop_url: "",
+              tabletop_color: "#eee",
+              background_url: "",
+              background_color: "#fafafa",
+            },
+          },
+          created: { ".sv": "timestamp" },
+          creator: state.user.email,
+        })
+        .then(resolve(id));
+    });
   },
 
-  newDeck(context, data){
+  newDeck(context, data) {
     let id = shortid.generate();
-    data.time = {".sv":"timestamp"};
-    return new Promise((resolve, reject) => {
-      firebase.database().ref('users/'+context.state.user.uid+'/decks/'+id).set(data).then(resolve(id));
-    }); 
+    data.time = { ".sv": "timestamp" };
+    return new Promise((resolve) => {
+      firebase
+        .database()
+        .ref("users/" + context.state.user.uid + "/decks/" + id)
+        .set(data)
+        .then(resolve(id));
+    });
   },
 
-  editDeck(context, input){
+  editDeck(context, input) {
     let id = input.id;
     let data = input.data;
-    data.time = {".sv":"timestamp"};
-    return new Promise((resolve, reject) => {
-      firebase.database().ref('users/'+context.state.user.uid+'/decks/'+id).set(data).then(resolve(id));
-    }); 
+    data.time = { ".sv": "timestamp" };
+    return new Promise((resolve) => {
+      firebase
+        .database()
+        .ref("users/" + context.state.user.uid + "/decks/" + id)
+        .set(data)
+        .then(resolve(id));
+    });
   },
 
-  removeDeck(context, id){
-    return new Promise((resolve, reject) => {
-      firebase.database().ref('users/'+context.state.user.uid+'/decks/'+id).remove().then(resolve(id));
-    }); 
+  removeDeck(context, id) {
+    return new Promise((resolve) => {
+      firebase
+        .database()
+        .ref("users/" + context.state.user.uid + "/decks/" + id)
+        .remove()
+        .then(resolve(id));
+    });
   },
-
-
-
 
   /* Data manangment
   ==================================*/
 
-  lobbyGetData(context, id){
+  lobbyGetData(context, id) {
     context.state.lobbyId = id;
 
-    let lobbyRef = firebase.database().ref('lobbies/' + id);
+    let lobbyRef = firebase.database().ref("lobbies/" + id);
 
-
-    if(context.state.sync==="full"){
-
-      lobbyRef.on('value', function(snapshot){
+    if (context.state.sync === "full") {
+      lobbyRef.on("value", function (snapshot) {
         console.log(snapshot.val());
         let val = snapshot.val().game;
-        if(val.chat === undefined || val.chat === null) val = Object.assign(val,{"chat":[]});
+        if (val.chat === undefined || val.chat === null)
+          val = Object.assign(val, { chat: [] });
         // console.log(snapshot);
         //TODO: individual listeners
-        context.commit('updateGame',{val});
+        context.commit("updateGame", { val });
       });
-    }
-
-    else if(context.state.sync==="advanced"){
-
+    } else if (context.state.sync === "advanced") {
       //game load once
       let loadOnce = () => {
-        lobbyRef.child('/').once('value').then(function(snapshot){
-          context.commit('updateGame', {
-            id: "firstLoad",
-            val: snapshot.val().game
+        lobbyRef
+          .child("/")
+          .once("value")
+          .then(function (snapshot) {
+            context.commit("updateGame", {
+              id: "firstLoad",
+              val: snapshot.val().game,
+            });
+            context.commit("lobbyAdminUpdate", snapshot.val().creator);
           });
-          context.commit('lobbyAdminUpdate', snapshot.val().creator);
-        });
-      }
+      };
 
       loadOnce();
 
       //objects changed
-      lobbyRef.child('/game/objects').on("child_changed", function(snapshot){
-        context.commit('updateGame', {
+      lobbyRef.child("/game/objects").on("child_changed", function (snapshot) {
+        context.commit("updateGame", {
           id: snapshot.ref.key,
-          val: snapshot.val()
+          val: snapshot.val(),
         });
       });
       //objects added
-      lobbyRef.child('/game/objects').on("child_moved", function(snapshot){
+      lobbyRef.child("/game/objects").on("child_moved", function () {
         loadOnce();
       });
       //objects removed
-      lobbyRef.child('/game/objects').on("child_removed", function(snapshot){
+      lobbyRef.child("/game/objects").on("child_removed", function () {
         loadOnce();
       });
 
       //chat
-      lobbyRef.child('/game/chat').on('value', function(snapshot){
-        context.commit('updateGame', {
+      lobbyRef.child("/game/chat").on("value", function (snapshot) {
+        context.commit("updateGame", {
           id: "chat",
-          val: snapshot.val()
+          val: snapshot.val(),
         });
-        
-        if(
-            snapshot.val() !== null &&
-            snapshot.val().length>0 &&
-            snapshot.val().slice(-1)[0].title==="Dice roll: "+context.state.user.displayName
-          )
-            EventBus.$emit('snackbarOpen', "<small>Chat: </small>"+snapshot.val().slice(-1)[0].msg);
+
+        if (
+          snapshot.val() !== null &&
+          snapshot.val().length > 0 &&
+          snapshot.val().slice(-1)[0].title ===
+            "Dice roll: " + context.state.user.displayName
+        )
+          EventBus.$emit(
+            "snackbarOpen",
+            "<small>Chat: </small>" + snapshot.val().slice(-1)[0].msg
+          );
       });
-      
+
       //members changed
-      lobbyRef.child('/game/members').on("value", function(snapshot){
-        context.commit('updateGame', {
+      lobbyRef.child("/game/members").on("value", function (snapshot) {
+        context.commit("updateGame", {
           id: "members",
-          val: snapshot.val()
+          val: snapshot.val(),
         });
       });
 
       //background changed
-      lobbyRef.child('/game/background').on("value", function(snapshot){
-        context.commit('updateGame', {
+      lobbyRef.child("/game/background").on("value", function (snapshot) {
+        context.commit("updateGame", {
           id: "background",
-          val: snapshot.val()
+          val: snapshot.val(),
         });
       });
       //imported
-      lobbyRef.child('/game/imported').on("value", function(snapshot){
+      lobbyRef.child("/game/imported").on("value", function () {
         loadOnce();
       });
-
     }
-
-
   },
 
-  lobbyPutData(context){
+  lobbyPutData(context) {
     let lobbyId = context.state.lobbyId;
-    firebase.database().ref('/lobbies/'+lobbyId+'/game/').set(context.state.game);
+    firebase
+      .database()
+      .ref("/lobbies/" + lobbyId + "/game/")
+      .set(context.state.game);
   },
 
-  lobbyUpdateState(context, state){
+  lobbyUpdateState(context, state) {
     let lobbyId = context.state.lobbyId;
-    firebase.database().ref('/lobbies/'+lobbyId+'/game/'+state.path).update(state.data);
+    firebase
+      .database()
+      .ref("/lobbies/" + lobbyId + "/game/" + state.path)
+      .update(state.data);
   },
 
-  lobbySetState(context, state){
+  lobbySetState(context, state) {
     let lobbyId = context.state.lobbyId;
-    firebase.database().ref('/lobbies/'+lobbyId+'/game/'+state.path).set(state.data);
+    firebase
+      .database()
+      .ref("/lobbies/" + lobbyId + "/game/" + state.path)
+      .set(state.data);
   },
 
-  lobbyMoveObject(context, [from,to]){
+  lobbyMoveObject(context, [from, to]) {
     let lobbyId = context.state.lobbyId;
-    let oldRef = firebase.database().ref('/lobbies/'+lobbyId+'/game/'+from);
-    let newRef = firebase.database().ref('/lobbies/'+lobbyId+'/game/'+to);
+    let oldRef = firebase
+      .database()
+      .ref("/lobbies/" + lobbyId + "/game/" + from);
+    let newRef = firebase.database().ref("/lobbies/" + lobbyId + "/game/" + to);
 
-    oldRef.once('value', function(snap){
-      newRef.set( snap.value(), function(error){
-        if(!error){ oldRef.remove(); }
-        else EventBus.$emit('snackbarOpen', error);
+    oldRef.once("value", function (snap) {
+      newRef.set(snap.value(), function (error) {
+        if (!error) {
+          oldRef.remove();
+        } else EventBus.$emit("snackbarOpen", error);
       });
     });
   },
 
-  lobbyRemoveObject(context, path){
+  lobbyRemoveObject(context, path) {
     let lobbyId = context.state.lobbyId;
-    firebase.database().ref('/lobbies/'+lobbyId+'/game/'+path).remove();
+    firebase
+      .database()
+      .ref("/lobbies/" + lobbyId + "/game/" + path)
+      .remove();
   },
 
-  lobbyPushObject(context, [path,data]){
+  lobbyPushObject(context, [path, data]) {
     let lobbyId = context.state.lobbyId;
-    firebase.database().ref('/lobbies/'+lobbyId+'/game/'+path).push(data);
+    firebase
+      .database()
+      .ref("/lobbies/" + lobbyId + "/game/" + path)
+      .push(data);
   },
 
-
-
-
-  lobbyUpdateNewObjects(context){
+  lobbyUpdateNewObjects(context) {
     let objects = context.state.game.objects;
-    objects.forEach((v,i) => {
-
-      if(v.new === true){
+    objects.forEach((v, i) => {
+      if (v.new === true) {
         delete v.new;
         context.dispatch("lobbyUpdateState", {
-          path: "objects/"+i,
-          data: v
+          path: "objects/" + i,
+          data: v,
         });
         // console.log(v.type, i);
-      }
-      else if(v.type === "updateAll"){
+      } else if (v.type === "updateAll") {
         objects.splice(i, 1);
         context.dispatch("lobbyPutData");
       }
-
     });
   },
 
-  lobbyCommitMutation({commit, dispatch}, {mutation, params}){
+  lobbyCommitMutation({ commit, dispatch }, { mutation, params }) {
     // console.log(mutation, params);
     commit(mutation, params);
     dispatch("lobbyUpdateNewObjects");
   },
 
-
-  lobbyUpdateChat(context){
+  lobbyUpdateChat(context) {
     let lobbyId = context.state.lobbyId;
-    firebase.database().ref('/lobbies/'+lobbyId+'/game/chat').set(context.state.game.chat);
+    firebase
+      .database()
+      .ref("/lobbies/" + lobbyId + "/game/chat")
+      .set(context.state.game.chat);
   },
 
-
-
-
-  lobbyMemberLastOnline({state}, data){
+  lobbyMemberLastOnline({ state }) {
     let lobbyId = state.lobbyId;
-    firebase.database().ref('/lobbies/'+lobbyId+'/game/members/'+state.user.uid).set({
-      name: state.user.displayName,
-      email: state.user.email,
-      avatar: state.user.photoURL,
-      online: {".sv":"timestamp"}
-    });
+    firebase
+      .database()
+      .ref("/lobbies/" + lobbyId + "/game/members/" + state.user.uid)
+      .set({
+        name: state.user.displayName,
+        email: state.user.email,
+        avatar: state.user.photoURL,
+        online: { ".sv": "timestamp" },
+      });
   },
-
-
-
-
 
   //user decks
-  userGetDecks(context){
+  userGetDecks(context) {
     //return new Promise((resolve, reject) => {
-      if(context.state.user !== null){
-        let decksRef = firebase.database().ref('users/' + context.state.user.uid + '/decks');
-        decksRef.on('value', function(snapshot){
-          context.state.decks = snapshot.val();
-        });
-      }
+    if (context.state.user !== null) {
+      let decksRef = firebase
+        .database()
+        .ref("users/" + context.state.user.uid + "/decks");
+      decksRef.on("value", function (snapshot) {
+        context.state.decks = snapshot.val();
+      });
+    }
     //});
   },
-
-
-
-
-
-
-
-
-
-
 
   /* State updates
   ====================================*/
@@ -351,14 +368,13 @@ export default {
   //   });
   // },
 
-
   // // Objects
 
   // takeCardFromDeck(context, [deckId,amount=1]){
 
   //   let deck = context.state.game.objects[deckId].cards;
   //   let card = deck.slice(amount*(-1));
-    
+
   //   card.forEach(v => {
   //     v.x = context.state.game.objects[deckId].x+30;
   //     v.y = context.state.game.objects[deckId].y+30;
@@ -372,7 +388,7 @@ export default {
   //   //   data: deck
   //   // });
   //   context.dispatch("lobbyPutData");
-    
+
   // },
 
   // takeCardFromDeckById(state, [deckId,id=0]){
@@ -383,7 +399,7 @@ export default {
   //   card.y = state.game.objects[deckId].y+30;
   //   state.game.objects.push(card);
   //   deck.splice(id,1);
-    
+
   //   // context.dispatch("lobbyPushObject", ["objects/",card]);
 
   //   // context.dispatch("lobbySetState", {
@@ -413,21 +429,6 @@ export default {
 
   // },
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
   // removeObject(state, objectId){
   //   let objects = state.game.objects;
   //   if(objects[objectId] !== undefined){
@@ -449,7 +450,6 @@ export default {
   //     cards:[]
   //   });
   // },
-
 
   // addNewCounter(state, event){
   //   state.game.objects.push({
@@ -473,7 +473,6 @@ export default {
   //   state.game.objects[id].color=randomColor();
   // },
 
-
   // // Chat
 
   // chatAddMsg(state, data){
@@ -483,18 +482,4 @@ export default {
   //     time: Date.now()
   //   });
   // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-}
+};

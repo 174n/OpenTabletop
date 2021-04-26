@@ -18,43 +18,43 @@
 </template>
 
 <script>
-import Tabletop from './Tabletop.vue';
+import Tabletop from "./Tabletop.vue";
 
-import Chat from './Chat.vue';
-import DeckList from './dialogs/DeckList.vue';
+import Chat from "./Chat.vue";
+import DeckList from "./dialogs/DeckList.vue";
 // import CardPreview from './dialogs/CardPreview.vue';
-import SpeedDial from './SpeedDial.vue';
-import ContextMenu from './ContextMenu.vue';
-import PlaceUserDeck from './dialogs/PlaceUserDeck.vue';
-import LobbySettings from './dialogs/LobbySettings.vue';
-import CardSize from './dialogs/CardSize.vue';
+import SpeedDial from "./SpeedDial.vue";
+import ContextMenu from "./ContextMenu.vue";
+import PlaceUserDeck from "./dialogs/PlaceUserDeck.vue";
+import LobbySettings from "./dialogs/LobbySettings.vue";
+import CardSize from "./dialogs/CardSize.vue";
 // import RulesView from './dialogs/RulesView.vue';
 
 export default {
-  components:{
+  components: {
     "deck-list": DeckList,
-    "chat": Chat,
+    chat: Chat,
     // "card-preview": CardPreview,
     "speed-dial": SpeedDial,
     "context-menu": ContextMenu,
-    "tabletop": Tabletop,
+    tabletop: Tabletop,
     "place-user-deck": PlaceUserDeck,
     "lobby-settings": LobbySettings,
     "card-size": CardSize,
     // "rules-view": RulesView,
   },
   computed: {
-    background(){
-      return this.$store.state.game.background
-    }
+    background() {
+      return this.$store.state.game.background;
+    },
   },
-  data () {
+  data() {
     return {
       onlineInterval: null,
-    }
+    };
   },
-  created(){
-    this.$store.dispatch('lobbyGetData', this.$route.params.id);
+  created() {
+    this.$store.dispatch("lobbyGetData", this.$route.params.id);
     // this.$store.watch((state) => {
     //   return state.game;
     // }, (val) => {
@@ -62,33 +62,37 @@ export default {
     //   // console.log(val);
     // },{deep: true});
     this.onlineInterval = setInterval(() => {
-      this.$store.dispatch('lobbyMemberLastOnline');
-    }, 10*1000);
+      this.$store.dispatch("lobbyMemberLastOnline");
+    }, 10 * 1000);
   },
-  mounted(){
-    setTimeout(()=>{
-      if(!this.$store.state.firebaseLoading && this.$store.state.user === null){
-        this.$router.push({ path: '/' })
+  mounted() {
+    setTimeout(() => {
+      if (
+        !this.$store.state.firebaseLoading &&
+        this.$store.state.user === null
+      ) {
+        this.$router.push({ path: "/" });
       }
     }, 1000);
   },
   beforeDestroy() {
     clearInterval(this.onlineInterval);
   },
-}
+};
 </script>
 
 <style lang="scss">
-html,body{
+html,
+body {
   position: static;
   background: #fafafa;
   overflow: hidden;
   background-size: cover !important;
 }
-.speed-dial{
+.speed-dial {
   z-index: 4;
 }
-.application--light{
+.application--light {
   background-color: inherit;
 }
 </style>

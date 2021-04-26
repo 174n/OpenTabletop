@@ -11,26 +11,25 @@
     <!-- </v-card-text> -->
 
     <v-card-actions>
-      <v-btn flat @click.stop="newDeckDialog">Create deck</v-btn>
+      <v-btn text @click.stop="newDeckDialog">Create deck</v-btn>
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
-import { EventBus } from '../../helpers/event-bus.js';
+import { EventBus } from "../../helpers/event-bus.js";
 import DecksList from "../DecksList.vue";
 
 export default {
-  components:{
-    "decks-list": DecksList
+  components: {
+    "decks-list": DecksList,
   },
-  methods:{
-    newDeckDialog(){
-      EventBus.$emit('newDeckToggle');
-    }
-  }
-}
+  methods: {
+    newDeckDialog() {
+      EventBus.$emit("newDeckToggle");
+    },
+  },
+};
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

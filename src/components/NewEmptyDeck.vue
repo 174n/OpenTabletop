@@ -5,46 +5,38 @@
     v-model="deck_name"
     @keyup.enter.prevent="createDeck"
     :append-icon-cb="createDeck"
-    append-icon="send">
+    append-icon="send"
+  >
   </v-text-field>
 </template>
 
 <script>
-import { EventBus } from '../helpers/event-bus.js';
-import config from "../config/imgur.json";
-
 export default {
-  data () {
+  data() {
     return {
       deck_name: "",
-    }
+    };
   },
-  methods:{
-    imgurImageUrl(id){
-      return "https://i.imgur.com/"+id+".jpg"
+  methods: {
+    imgurImageUrl(id) {
+      return "https://i.imgur.com/" + id + ".jpg";
     },
-    createDeck(){
-      this.$store.dispatch('lobbyCommitMutation', {
-        mutation: 'addNewDeckFromData',
+    createDeck() {
+      this.$store.dispatch("lobbyCommitMutation", {
+        mutation: "addNewDeckFromData",
         params: {
-          'urls':[],
-          'title': this.deck_name,
-          'x': 10,
-          'y': 10
-        }
+          urls: [],
+          title: this.deck_name,
+          x: 10,
+          y: 10,
+        },
       });
       this.deck_name = "";
-    }
+    },
   },
-  computed: {
-    
-  },
-  created(){
-    
-  }
-}
+  computed: {},
+  created() {},
+};
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

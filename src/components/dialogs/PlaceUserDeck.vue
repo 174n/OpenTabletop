@@ -1,5 +1,5 @@
 <template>
-  <v-layout row justify-center style="position: relative;">
+  <v-layout row justify-center style="position: relative">
     <v-dialog v-model="open" width="500px">
       <v-card>
         <v-card-title>
@@ -16,7 +16,9 @@
             <v-tabs-items>
               <v-tabs-content id="decks_tab">
                 <v-card flat>
-                  <v-card-text><decks-list put="true"></decks-list></v-card-text>
+                  <v-card-text
+                    ><decks-list put="true"></decks-list
+                  ></v-card-text>
                 </v-card>
               </v-tabs-content>
               <v-tabs-content id="imgur_tab">
@@ -31,11 +33,10 @@
               </v-tabs-content>
             </v-tabs-items>
           </v-tabs>
-          
         </v-card-text>
         <!-- <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" flat="flat" @click.native="putADeck">Put</v-btn>
+          <v-btn color="green darken-1" text @click.native="putADeck">Put</v-btn>
         </v-card-actions> -->
       </v-card>
     </v-dialog>
@@ -43,34 +44,33 @@
 </template>
 
 <script>
-import { EventBus } from '../../helpers/event-bus.js';
+import { EventBus } from "../../helpers/event-bus.js";
 import DecksList from "../DecksList.vue";
-import Imgur from '../Imgur.vue';
-import NewEmptyDeck from '../NewEmptyDeck.vue';
+import Imgur from "../Imgur.vue";
+import NewEmptyDeck from "../NewEmptyDeck.vue";
 
 export default {
-  components:{
+  components: {
     "decks-list": DecksList,
-    "imgur": Imgur,
-    "new-empty-deck": NewEmptyDeck
+    imgur: Imgur,
+    "new-empty-deck": NewEmptyDeck,
   },
-  data () {
+  data() {
     return {
-      open: false
-    }
+      open: false,
+    };
   },
-  created(){
-    EventBus.$on('placeUserDeckToggle', () => {
+  created() {
+    EventBus.$on("placeUserDeckToggle", () => {
       this.open = !this.open;
     });
   },
-  methods:{
-    putADeck(){
+  methods: {
+    putADeck() {
       this.open = false;
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

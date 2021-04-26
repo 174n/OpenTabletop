@@ -1,223 +1,234 @@
 <template>
-    <v-menu v-model="show"
-      :position-absolutely="true"
-      close-on-click
-      :position-x="x"
-      :position-y="y">
-      <v-list>
-        <template v-for="item in menu[type]">
-          <v-list-tile @click.prevent="item.func" :key="item.title">
-            <v-list-tile-title>{{item.title}}</v-list-tile-title>
-          </v-list-tile>
-        </template>
-      </v-list>
-    </v-menu>
+  <v-menu
+    v-model="show"
+    :position-absolutely="true"
+    close-on-click
+    :position-x="x"
+    :position-y="y"
+  >
+    <v-list>
+      <template v-for="item in menu[type]">
+        <v-list-item @click.prevent="item.func" :key="item.title">
+          <v-list-item-title>{{ item.title }}</v-list-item-title>
+        </v-list-item>
+      </template>
+    </v-list>
+  </v-menu>
 </template>
 
 <script>
-import { EventBus } from '../helpers/event-bus.js';
+import { EventBus } from "../helpers/event-bus.js";
 
 export default {
-  data () {
+  data() {
     return {
       show: false,
-      x: 0, y: 0, id: 0,
+      x: 0,
+      y: 0,
+      id: 0,
       type: "deck",
-      menu:{
-        "deck":[
+      menu: {
+        deck: [
           {
-            "title": "Take a card",
-            "func": this.takeCard
+            title: "Take a card",
+            func: this.takeCard,
           },
           {
-            "title": "Take a card to hand",
-            "func": this.takeCardToHand
+            title: "Take a card to hand",
+            func: this.takeCardToHand,
           },
           {
-            "title": "Show cards",
-            "func": this.deckListView
+            title: "Show cards",
+            func: this.deckListView,
           },
           {
-            "title": "Reverse deck",
-            "func": this.reverseDeck
+            title: "Reverse deck",
+            func: this.reverseDeck,
           },
           {
-            "title": "Flip deck",
-            "func": this.flipDeck
+            title: "Flip deck",
+            func: this.flipDeck,
           },
           {
-            "title": "Shuffle deck",
-            "func": this.shuffleDeck
+            title: "Shuffle deck",
+            func: this.shuffleDeck,
           },
           {
-            "title": "Remove deck",
-            "func": this.removeObject
-          }
+            title: "Remove deck",
+            func: this.removeObject,
+          },
         ],
-        "card":[
+        card: [
           {
-            "title": "Rotate card",
-            "func": this.rotateCard
+            title: "Rotate card",
+            func: this.rotateCard,
           },
           {
-            "title": "Move to/from hand",
-            "func": this.handMoveCard
+            title: "Move to/from hand",
+            func: this.handMoveCard,
           },
           {
-            "title": "Flip card",
-            "func": this.flipCard
+            title: "Flip card",
+            func: this.flipCard,
           },
           {
-            "title": "Pin / Unpin",
-            "func": this.pinCard
+            title: "Pin / Unpin",
+            func: this.pinCard,
           },
           {
-            "title": "Change size",
-            "func": this.changeCardSize
+            title: "Change size",
+            func: this.changeCardSize,
           },
           {
-            "title": "Remove card",
-            "func": this.removeObject
-          }
+            title: "Remove card",
+            func: this.removeObject,
+          },
         ],
-        "counter":[
+        counter: [
           {
-            "title": "Counter +1",
-            "func": this.counterInc
+            title: "Counter +1",
+            func: this.counterInc,
           },
           {
-            "title": "Counter -1",
-            "func": this.counterDecr
+            title: "Counter -1",
+            func: this.counterDecr,
           },
           {
-            "title": "Change color",
-            "func": this.counterChangeColor
+            title: "Change color",
+            func: this.counterChangeColor,
           },
           {
-            "title": "Remove counter",
-            "func": this.removeObject
-          }
+            title: "Remove counter",
+            func: this.removeObject,
+          },
         ],
-        "cardList":[
+        cardList: [
           {
-            "title": "View card",
-            "func": this.viewCard
+            title: "View card",
+            func: this.viewCard,
           },
           {
-            "title": "Take card",
-            "func": this.takeCardToObjects
-          }
-        ]
-      }
-    }
+            title: "Take card",
+            func: this.takeCardToObjects,
+          },
+        ],
+      },
+    };
   },
-  methods:{
-    removeObject(){
-      this.$store.dispatch('lobbyCommitMutation', {
-        mutation: 'removeObject',
-        params: this.id
+  methods: {
+    removeObject() {
+      this.$store.dispatch("lobbyCommitMutation", {
+        mutation: "removeObject",
+        params: this.id,
       });
     },
-    takeCard(e,hand=false){
-      this.$store.dispatch('lobbyCommitMutation', {
-        mutation: 'takeCardFromDeck',
-        params: [this.id,1,hand]
+    takeCard(e, hand = false) {
+      this.$store.dispatch("lobbyCommitMutation", {
+        mutation: "takeCardFromDeck",
+        params: [this.id, 1, hand],
       });
     },
-    takeCardToHand(){
-      this.takeCard(null,true);
+    takeCardToHand() {
+      this.takeCard(null, true);
     },
-    deckListView(){
-      EventBus.$emit('deckViewToggle', this.id);
+    deckListView() {
+      EventBus.$emit("deckViewToggle", this.id);
     },
-    rotateCard(){
-      this.$store.dispatch('lobbyCommitMutation', {
-        mutation: 'rotateCard',
-        params: this.id
+    rotateCard() {
+      this.$store.dispatch("lobbyCommitMutation", {
+        mutation: "rotateCard",
+        params: this.id,
       });
     },
-    handMoveCard(){
-      this.$store.dispatch('lobbyCommitMutation', {
-        mutation: 'handMoveCard',
-        params: this.id
+    handMoveCard() {
+      this.$store.dispatch("lobbyCommitMutation", {
+        mutation: "handMoveCard",
+        params: this.id,
       });
     },
-    pinCard(){
-      this.$store.dispatch('lobbyCommitMutation', {
-        mutation: 'pinCard',
-        params: this.id
+    pinCard() {
+      this.$store.dispatch("lobbyCommitMutation", {
+        mutation: "pinCard",
+        params: this.id,
       });
     },
-    flipCard(){
-      this.$store.dispatch('lobbyCommitMutation', {
-        mutation: 'flipCard',
-        params: this.id
+    flipCard() {
+      this.$store.dispatch("lobbyCommitMutation", {
+        mutation: "flipCard",
+        params: this.id,
       });
     },
-    changeCardSize(){
-      EventBus.$emit('cardSizeDialogToggle', this.id);
+    changeCardSize() {
+      EventBus.$emit("cardSizeDialogToggle", this.id);
     },
-    takeCardToObjects(){
-      this.$store.dispatch('lobbyCommitMutation', {
-        mutation: 'takeCardFromDeckById',
-        params: [this.id].concat(this.params)
+    takeCardToObjects() {
+      this.$store.dispatch("lobbyCommitMutation", {
+        mutation: "takeCardFromDeckById",
+        params: [this.id].concat(this.params),
       });
-      EventBus.$emit('deckViewUpdate');
+      EventBus.$emit("deckViewUpdate");
     },
-    viewCard(){
-      EventBus.$emit('toggleCardPreview', this.$store.state.game.objects[this.id].cards[this.params].url);
+    viewCard() {
+      EventBus.$emit(
+        "toggleCardPreview",
+        this.$store.state.game.objects[this.id].cards[this.params].url
+      );
     },
-    shuffleDeck(){
-      this.$store.dispatch('lobbyCommitMutation', {
-        mutation: 'shuffleDeck',
-        params: this.id
-      });
-    },
-    reverseDeck(){
-      this.$store.dispatch('lobbyCommitMutation', {
-        mutation: 'reverseDeck',
-        params: this.id
+    shuffleDeck() {
+      this.$store.dispatch("lobbyCommitMutation", {
+        mutation: "shuffleDeck",
+        params: this.id,
       });
     },
-    flipDeck(){
-      this.$store.dispatch('lobbyCommitMutation', {
-        mutation: 'flipDeck',
-        params: this.id
+    reverseDeck() {
+      this.$store.dispatch("lobbyCommitMutation", {
+        mutation: "reverseDeck",
+        params: this.id,
       });
     },
-    counterInc(){
-      this.$store.dispatch('lobbyCommitMutation', {
-        mutation: 'counterChangeNumber',
-        params: [this.id]
+    flipDeck() {
+      this.$store.dispatch("lobbyCommitMutation", {
+        mutation: "flipDeck",
+        params: this.id,
       });
     },
-    counterDecr(){
-      this.$store.dispatch('lobbyCommitMutation', {
-        mutation: 'counterChangeNumber',
-        params: [this.id,-1]
+    counterInc() {
+      this.$store.dispatch("lobbyCommitMutation", {
+        mutation: "counterChangeNumber",
+        params: [this.id],
       });
     },
-    counterChangeColor(){
-      this.$store.dispatch('lobbyCommitMutation', {
-        mutation: 'counterChangeColor',
-        params: this.id
+    counterDecr() {
+      this.$store.dispatch("lobbyCommitMutation", {
+        mutation: "counterChangeNumber",
+        params: [this.id, -1],
       });
-    }
+    },
+    counterChangeColor() {
+      this.$store.dispatch("lobbyCommitMutation", {
+        mutation: "counterChangeColor",
+        params: this.id,
+      });
+    },
   },
-  created(){
-    EventBus.$on('openContextMenu', (type,x,y,id,params=[]) => {
-      if(type==="card" || type==="deck" || type==="counter" || type==="cardList"){
+  created() {
+    EventBus.$on("openContextMenu", (type, x, y, id, params = []) => {
+      if (
+        type === "card" ||
+        type === "deck" ||
+        type === "counter" ||
+        type === "cardList"
+      ) {
         this.type = type;
-        this.x = x+5;
-        this.y = y+5;
+        this.x = x + 5;
+        this.y = y + 5;
         this.id = id;
         this.params = params;
         this.show = true;
       }
     });
-  }
-}
+  },
+};
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

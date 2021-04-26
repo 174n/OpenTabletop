@@ -7,4 +7,4 @@ export default [
       console.log(mutation);
     })
   }*/
-]
+];

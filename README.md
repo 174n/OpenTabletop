@@ -2,7 +2,6 @@
 ![DEPENDENCIES](https://david-dm.org/Rundik/OpenTabletop.svg)
 [![GitHub issues](https://img.shields.io/github/issues/Rundik/OpenTabletop.svg?style=flat-square)](https://github.com/Rundik/OpenTabletop/issues)
 [![GitHub stars](https://img.shields.io/github/stars/Rundik/OpenTabletop.svg?style=flat-square)](https://github.com/Rundik/OpenTabletop/stargazers)
-[![HitCount](http://hits.dwyl.io/Rundik/OpenTabletop.svg)](http://hits.dwyl.io/Rundik/OpenTabletop)
 
 Browser-based online project based on Vue.js and Firebase in which you can play any board games with your friends
 

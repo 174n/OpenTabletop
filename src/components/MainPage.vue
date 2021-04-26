@@ -7,13 +7,15 @@
         <v-icon>sync</v-icon>
       </v-btn>
       <span>{{sync}}</span> -->
-      
     </v-toolbar>
     <main>
       <div>
         <v-container fluid v-if="firebaseLoading">
           <v-layout row wrap justify-space-around>
-              <v-progress-circular indeterminate v-bind:size="50"></v-progress-circular>
+            <v-progress-circular
+              indeterminate
+              v-bind:size="50"
+            ></v-progress-circular>
           </v-layout>
         </v-container>
 
@@ -55,39 +57,39 @@ import NewDeck from "./dialogs/NewDeck.vue";
 import DeckEditor from "./dialogs/DeckEditor.vue";
 
 export default {
-  components:{
+  components: {
     "new-lobby-card": NewLobbyCard,
     "decks-card": DecksCard,
     "auth-card": AuthCard,
     "user-info-card": UserInfoCard,
     "new-lobby": NewLobby,
     "new-deck": NewDeck,
-    "deck-editor": DeckEditor
+    "deck-editor": DeckEditor,
   },
-  computed:{
-    user(){
+  computed: {
+    user() {
       return this.$store.state.user;
     },
-    sync(){
+    sync() {
       return this.$store.state.sync;
     },
-    firebaseLoading(){
-      return this.$store.state.firebaseLoading
+    firebaseLoading() {
+      return this.$store.state.firebaseLoading;
     },
-    userIsset(){
-      return this.user===null || this.user === undefined;
-    }
+    userIsset() {
+      return this.user === null || this.user === undefined;
+    },
   },
-  methods:{
-    syncTypeChange(){
-      this.$store.commit('syncTypeChange');
-    }
-  }
-}
+  methods: {
+    syncTypeChange() {
+      this.$store.commit("syncTypeChange");
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-.decks_container{
+.decks_container {
   width: 100%;
 }
 </style>

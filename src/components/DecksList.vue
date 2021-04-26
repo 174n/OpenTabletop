@@ -2,60 +2,58 @@
   <div>
     <v-list two-line v-if="decks !== undefined && decks !== null">
       <template v-for="(deck, index) in decks">
-        <v-list-tile avatar>
-          <v-list-tile-avatar>
-            <img :src="deck.back">
-          </v-list-tile-avatar>
-          <v-list-tile-content>
-            <v-list-tile-title>{{deck.name}}</v-list-tile-title>
-            <v-list-tile-sub-title>
-              <timeago :since="deck.time" :auto-update="30"></timeago>
-            </v-list-tile-sub-title>
-          </v-list-tile-content>
-          <v-list-tile-action>
-            <v-btn flat v-if="put" @click.native="putADeck(index)">Put</v-btn>
-            <v-btn flat v-else @click.stop="deckEditorDialog(index)">Edit</v-btn>
-          </v-list-tile-action>
-        </v-list-tile>
-        <v-divider v-if="index + 1 < decks.length"></v-divider>
+        <v-list-item :key="index">
+          <v-list-item-avatar>
+            <img :src="deck.back" />
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title>{{ deck.name }}</v-list-item-title>
+            <v-list-item-subtitle>
+              <timeago :datetime="deck.time" :auto-update="30"></timeago>
+            </v-list-item-subtitle>
+          </v-list-item-content>
+          <v-list-item-action>
+            <v-btn text v-if="put" @click.native="putADeck(index)">Put</v-btn>
+            <v-btn text v-else @click.stop="deckEditorDialog(index)">
+              Edit
+            </v-btn>
+          </v-list-item-action>
+        </v-list-item>
+        <v-divider :key="index" v-if="index + 1 < decks.length"></v-divider>
       </template>
     </v-list>
-    <v-card flat v-else>
-      <v-card-text>
-        No decks found
-      </v-card-text>
+    <v-card text v-else>
+      <v-card-text> No decks found </v-card-text>
     </v-card>
   </div>
 </template>
 
 <script>
-import { EventBus } from '../helpers/event-bus.js';
+import { EventBus } from "../helpers/event-bus.js";
 
 export default {
-  computed:{
-    decks(){
+  computed: {
+    decks() {
       return this.$store.state.decks;
-    }
-  },
-  props:["put"],
-  methods:{
-    deckEditorDialog(index){
-      EventBus.$emit('deckEditorToggle', index);
     },
-    putADeck(index){
-      this.$store.dispatch('lobbyCommitMutation', {
-        mutation: 'addNewDeck',
+  },
+  props: ["put"],
+  methods: {
+    deckEditorDialog(index) {
+      EventBus.$emit("deckEditorToggle", index);
+    },
+    putADeck(index) {
+      this.$store.dispatch("lobbyCommitMutation", {
+        mutation: "addNewDeck",
         params: {
           index,
           x: 10,
-          y: 10
-        }
+          y: 10,
+        },
       });
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

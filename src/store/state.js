@@ -1,5 +1,3 @@
-
-
 // root state object.
 // each Vuex instance is just a single state tree.
 export default {
@@ -12,7 +10,7 @@ export default {
   deckOptions: {},
   dice: "1d6",
   game: {
-    objects:[
+    objects: [
       /*{
         type: "card",
         url: "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=417720&type=card",
@@ -88,6 +86,6 @@ export default {
         color: "blue"
       }*/
     ],
-    chat:[]
-  }
-}
+    chat: [],
+  },
+};

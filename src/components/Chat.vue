@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer v-model="sidebar" :mobile-break-point="4000">
+  <v-navigation-drawer v-model="sidebar" :mobile-breakpoint="4000">
     <div class="sendMsgBox">
       <v-text-field
         label="Message"
@@ -7,7 +7,8 @@
         v-model="chatMsgValue"
         @keyup.enter.prevent="chatMsg"
         :append-icon-cb="chatMsg"
-        append-icon="send">
+        append-icon="send"
+      >
       </v-text-field>
       <v-text-field
         label="Dice settings"
@@ -19,76 +20,78 @@
         append-icon="send"
       ></v-text-field>
     </div>
-    
+
     <v-divider></v-divider>
     <v-list three-line>
-      <v-list-tile avatar v-for="(msg, i) in game.chat.slice().reverse()" :key="i">
-        <v-list-tile-content>
-          <v-list-tile-title>{{msg.title}}</v-list-tile-title>
-          <v-list-tile-sub-title>{{msg.msg}}</v-list-tile-sub-title>
-        </v-list-tile-content>
-        <v-list-tile-action>
-          <v-list-tile-action-text>
-            <timeago :since="msg.time" :auto-update="30"></timeago>
-          </v-list-tile-action-text>
-        </v-list-tile-action>
-      </v-list-tile>
+      <v-list-item v-for="(msg, i) in game.chat.slice().reverse()" :key="i">
+        <v-list-item-content>
+          <v-list-item-title>{{ msg.title }}</v-list-item-title>
+          <v-list-item-subtitle>{{ msg.msg }}</v-list-item-subtitle>
+        </v-list-item-content>
+        <v-list-item-action>
+          <v-list-item-action-text>
+            <timeago :datetime="msg.time" :auto-update="30"></timeago>
+          </v-list-item-action-text>
+        </v-list-item-action>
+      </v-list-item>
     </v-list>
   </v-navigation-drawer>
 </template>
 
 <script>
-import { EventBus } from '../helpers/event-bus.js';
+import { EventBus } from "../helpers/event-bus.js";
 
 export default {
-  data () {
+  data() {
     return {
       sidebar: false,
       chatMsgValue: "",
       dice: "1d6",
       diceRules: [
-        (v) => /^[0-9]{1,}d[0-9]{1,}$/.test(v) || 'Dice code must be valid'
+        (v) => /^[0-9]{1,}d[0-9]{1,}$/.test(v) || "Dice code must be valid",
       ],
-    }
+    };
   },
-  methods:{
-    chatMsg(e){
-      if(e !== undefined) e.target.blur();
-      this.$store.commit('chatAddMsg', [this.user.displayName,this.chatMsgValue]);
-      this.$store.dispatch('lobbyUpdateChat');
+  methods: {
+    chatMsg(e) {
+      if (e !== undefined) e.target.blur();
+      this.$store.commit("chatAddMsg", [
+        this.user.displayName,
+        this.chatMsgValue,
+      ]);
+      this.$store.dispatch("lobbyUpdateChat");
       this.chatMsgValue = "";
     },
-    diceSet(){
-      if(/^[0-9]{1,}d[0-9]{1,}$/.test(this.dice)){
+    diceSet() {
+      if (/^[0-9]{1,}d[0-9]{1,}$/.test(this.dice)) {
         this.$store.commit("diceChange", this.dice);
-        EventBus.$emit('snackbarOpen', "Dice settings changed");
+        EventBus.$emit("snackbarOpen", "Dice settings changed");
+      } else {
+        EventBus.$emit("snackbarOpen", "Wrong dice settings", "error");
       }
-      else{
-        EventBus.$emit('snackbarOpen', "Wrong dice settings", "error");
-      }
-    }
+    },
   },
   computed: {
-    game(){
+    game() {
       let game = this.$store.state.game;
-      if(game.chat === undefined || game.chat === null) game.chat = []
-      return game
+      if (game.chat === undefined || game.chat === null) game.chat = [];
+      return game;
     },
-    user(){
-      return this.$store.state.user
+    user() {
+      return this.$store.state.user;
     },
   },
-  created(){
-    EventBus.$on('toggleChat', val => {
-      if(val === undefined) this.sidebar = !this.sidebar
-        else this.sidebar = val;
+  created() {
+    EventBus.$on("toggleChat", (val) => {
+      if (val === undefined) this.sidebar = !this.sidebar;
+      else this.sidebar = val;
     });
-  }
-}
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-.sendMsgBox{
+.sendMsgBox {
   padding: 0 15px;
 }
 </style>
