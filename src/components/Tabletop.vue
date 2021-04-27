@@ -1,5 +1,5 @@
 <template>
-  <div class="tabletop" :style="tabletopStyle">
+  <div class="tabletop" ref="tabletop" :style="tabletopStyle">
     <template v-for="(object, i) in game.objects">
       <!-- card -->
       <div
@@ -123,14 +123,26 @@ export default {
             backgroundImage: this.game.background
               ? `url(${this.game.background.tabletop_url})`
               : "none",
-            transform: "scale(1)",
+            width: this.width + "px",
+            height: this.height + "px",
+            transform: `scale(${this.scale})`,
+            marginLeft: this.left + "px",
+            marginTop: this.top + "px",
+            transformOrigin: `${this.originX}px ${this.originY}px`,
           }
         : {};
     },
   },
   data() {
     return {
-      tabletopCanvas: undefined,
+      tabletopCanvas: null,
+      width: 3000,
+      height: 2000,
+      scale: 1,
+      top: 0,
+      left: 0,
+      originX: 0,
+      originY: 0,
     };
   },
   asyncMethods: {
@@ -154,7 +166,7 @@ export default {
         mutation: "moveObject",
         params: {
           event,
-          scale: this.getTabletopScale(),
+          scale: this.scale,
         },
       });
     },
@@ -192,47 +204,19 @@ export default {
       EventBus.$emit("toggleCardPreview", url);
     },
     tabletopScroll(e) {
-      if (this.tabletopCanvas.options.drag.enabled) {
-        let target = document.querySelector(".tabletop");
-
-        e.preventDefault();
-        let delta = e.ds === undefined ? e.deltaY * -0.001 : e.ds;
-        let scale = this.getTabletopScale();
-        scale += delta;
-        // console.log(scale);
-        if (scale > 0.1 && scale < 3) {
-          let coords = this.getTabletopCoords();
-          target.style.transform = "scale(" + scale + ")";
-          target.style.marginLeft = coords.x + delta * 1500 + "px";
-          target.style.marginTop = coords.y + delta * 1000 + "px";
-        }
+      const wheel = e.deltaY < 0 ? 1 : -1;
+      if ((wheel < 0 && this.scale > 0.3) || (wheel > 0 && this.scale < 5)) {
+        this.originX = e.pageX;
+        this.originY = e.pageY;
+        this.scale += wheel * 0.1;
       }
     },
-    dragTabletop(event) {
-      var target = document.querySelector(".tabletop"),
-        coords = this.getTabletopCoords(),
-        x = coords.x + event.dx,
-        y = coords.y + event.dy;
-      target.style.marginLeft = x + "px";
-      target.style.marginTop = y + "px";
-    },
-    getTabletopScale() {
-      let transform = document.querySelector(".tabletop").style.transform;
-      if (transform === "") transform = "scale(1)";
-      return parseFloat(transform.match(/[\w.-]+/g)[1]);
-    },
-    getTabletopCoords() {
-      let tabletop = document.querySelector(".tabletop");
-      return {
-        x: parseInt(tabletop.style.marginLeft.slice(0, -2) || 0),
-        y: parseInt(tabletop.style.marginTop.slice(0, -2) || 0),
-        rect: tabletop.getBoundingClientRect(),
-      };
+    dragTabletop(e) {
+      this.left += e.dx;
+      this.top += e.dy;
     },
   },
   mounted() {
-    let self = this;
-
     interact(".draggable").draggable({
       ignoreFrom: ".pinned",
       inertia: {
@@ -250,15 +234,15 @@ export default {
     interact(".deck").dropzone({
       accept: ".card",
       overlap: 0.1, //% of element
-      ondragenter: function (event) {
+      ondragenter: (event) => {
         event.target.classList.add("drop-target");
         event.relatedTarget.classList.add("drop-relatedTarget");
       },
-      ondragleave: function (event) {
+      ondragleave: (event) => {
         event.relatedTarget.classList.remove("drop-relatedTarget");
         event.target.classList.remove("drop-target");
       },
-      ondrop: function (event) {
+      ondrop: (event) => {
         event.relatedTarget.classList.remove("drop-relatedTarget");
         event.target.classList.remove("drop-target");
 
@@ -266,16 +250,15 @@ export default {
         let deck = event.target.getAttribute("data-id");
         // self.$store.commit('moveCardToDeck', [card,deck]);
 
-        self.$store.dispatch("lobbyCommitMutation", {
+        this.$store.dispatch("lobbyCommitMutation", {
           mutation: "moveCardToDeck",
           params: [card, deck],
         });
       },
     });
 
-    document
-      .querySelector(".tabletop")
-      .addEventListener("wheel", this.tabletopScroll);
+    document.body.addEventListener("wheel", this.tabletopScroll);
+
     this.tabletopCanvas = interact(".tabletop")
       .draggable({
         ignoreFrom: ".draggable",
@@ -286,13 +269,17 @@ export default {
         onmove: this.tabletopScroll,
       });
   },
+  beforeUnmount() {
+    interact(".tabletop").unset();
+    interact(".deck").unset();
+    interact(".draggable").unset();
+    document.body.removeEventListener("wheel", this.tabletopScroll);
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 .tabletop {
-  width: 3000px;
-  height: 2000px;
   box-shadow: 0 0 20px 8px rgba(0, 0, 0, 0.1);
   border-radius: 7px;
   user-select: none;
