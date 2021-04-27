@@ -4,7 +4,7 @@
     single-line
     v-model="deck_name"
     @keyup.enter.prevent="createDeck"
-    :append-icon-cb="createDeck"
+    @click:append="createDeck"
     append-icon="send"
   >
   </v-text-field>

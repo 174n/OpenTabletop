@@ -1,7 +1,11 @@
 <template>
   <v-snackbar :timeout="3000" :color="color" v-model="snackbar">
     <span v-html="text"></span>
-    <v-btn dark text @click.native="snackbar = false">Close</v-btn>
+    <template v-slot:action="{ attrs }">
+      <v-btn dark text v-bind="attrs" @click.native="snackbar = false"
+        >Close</v-btn
+      >
+    </template>
   </v-snackbar>
 </template>
 
@@ -26,4 +30,8 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.v-snack {
+  font-family: "Roboto", sans-serif;
+}
+</style>

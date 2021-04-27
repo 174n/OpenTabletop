@@ -2,6 +2,7 @@
   <v-app>
     <main>
       <!-- {{$route.params.id}} -->
+      <div class="background" :style="backgroundStyle"></div>
       <tabletop></tabletop>
 
       <chat></chat>
@@ -46,6 +47,16 @@ export default {
   computed: {
     background() {
       return this.$store.state.game.background;
+    },
+    backgroundStyle() {
+      return this.background
+        ? {
+            backgroundImage: this.background.background_url
+              ? `url(${this.background.background_url})`
+              : "none",
+            backgroundColor: `url(${this.background.background_color})`,
+          }
+        : {};
     },
   },
   data() {
@@ -94,5 +105,13 @@ body {
 }
 .application--light {
   background-color: inherit;
+}
+.background {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  background-size: cover;
 }
 </style>

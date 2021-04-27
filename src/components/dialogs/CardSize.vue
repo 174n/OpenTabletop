@@ -27,7 +27,7 @@
               label="Size"
               v-model="data.size"
               thumb-label
-              step="0"
+              step="0.1"
             ></v-slider>
           </template>
         </v-card-text>

@@ -13,6 +13,7 @@
     "core-js": "^3.6.5",
     "firebase": "^8.4.2",
     "interactjs": "^1.10.11",
+    "pan-zoom": "^3.5.2",
     "shortid": "^2.2.16",
     "shuffle-array": "^1.0.1",
     "vue": "^2.6.11",

@@ -1,16 +1,5 @@
 <template>
-  <div
-    class="tabletop"
-    :style="{
-      background:
-        (game.background !== undefined && game.background.tabletop_color) ||
-        '#eee',
-      backgroundImage:
-        (game.background !== undefined &&
-          'url(' + game.background.tabletop_url + ')') ||
-        'none',
-    }"
-  >
+  <div class="tabletop" :style="tabletopStyle">
     <template v-for="(object, i) in game.objects">
       <!-- card -->
       <div
@@ -18,7 +7,7 @@
         v-if="object !== undefined && object.type === 'card'"
         @contextmenu.prevent="showMenu('card', object.x, object.y, i)"
         @dblclick="cardPreviewOpen(i)"
-        @auxclick="cardMiddleClick($event, i)"
+        @click.middle.prevent="cardMiddleClick($event, i)"
         class="card"
         :class="{
           inhand: object.hand === user.uid,
@@ -126,6 +115,17 @@ export default {
     },
     user() {
       return this.$store.state.user;
+    },
+    tabletopStyle() {
+      return this.game.background
+        ? {
+            backgroundColor: this.game.background.tabletop_color || "#eee",
+            backgroundImage: this.game.background
+              ? `url(${this.game.background.tabletop_url})`
+              : "none",
+            transform: "scale(1)",
+          }
+        : {};
     },
   },
   data() {

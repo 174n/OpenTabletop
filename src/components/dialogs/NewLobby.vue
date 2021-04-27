@@ -1,6 +1,6 @@
 <template>
   <v-layout row justify-center style="position: relative">
-    <v-dialog v-model="open" absolute>
+    <v-dialog v-model="open" absolute width="500px">
       <v-card>
         <v-card-title>
           <div class="headline">New lobby</div>

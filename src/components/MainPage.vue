@@ -1,15 +1,15 @@
 <template>
   <v-app>
-    <v-toolbar class="red" dark fixed>
-      <v-toolbar-title>OpenTabletop</v-toolbar-title>
+    <v-app-bar class="red" dark fixed>
+      <v-app-bar-title>OpenTabletop</v-app-bar-title>
       <!-- <v-spacer></v-spacer>
       <v-btn icon @click="syncTypeChange">
         <v-icon>sync</v-icon>
       </v-btn>
       <span>{{sync}}</span> -->
-    </v-toolbar>
-    <main>
-      <div>
+    </v-app-bar>
+    <main class="pt-md-10">
+      <div class="pt-md-10">
         <v-container fluid v-if="firebaseLoading">
           <v-layout row wrap justify-space-around>
             <v-progress-circular

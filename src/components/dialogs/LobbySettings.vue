@@ -5,110 +5,135 @@
         <div class="headline">Lobby settings</div>
       </v-card-title>
       <v-card-text>
-        <v-tabs centered scrollable grow>
-          <v-tabs-items class="white" dark>
-            <v-tabs-slider class="blue"></v-tabs-slider>
-            <v-tabs-item href="#members_tab">Members</v-tabs-item>
-            <v-tabs-item href="#background_tab">Background</v-tabs-item>
-            <v-tabs-item href="#import_export_tab">Import / Export</v-tabs-item>
-          </v-tabs-items>
-          <v-tabs-items>
-            <v-tabs-content id="members_tab">
-              <v-card text>
-                <v-card-text>
-                  <v-list two-line>
-                    <v-subheader>Users online</v-subheader>
-                    <template v-for="(member, index) in game.members">
-                      <v-list-item avatar :key="index">
-                        <v-list-item-avatar>
-                          <img :src="member.avatar" />
-                        </v-list-item-avatar>
-                        <v-list-item-content>
-                          <v-list-item-title
-                            >{{ member.name }}
-                            <small>{{ member.email }}</small></v-list-item-title
-                          >
-                          <v-list-item-subtitle>
-                            <timeago
-                              :datetime="member.online"
-                              :auto-update="5"
-                            ></timeago>
-                          </v-list-item-subtitle>
-                        </v-list-item-content>
-                      </v-list-item>
-                    </template>
-                  </v-list>
-                </v-card-text>
-              </v-card>
-            </v-tabs-content>
-            <v-tabs-content id="background_tab">
-              <v-card text>
-                <v-card-text>
-                  <v-layout row wrap>
-                    <v-flex sm8 xs12>
+        <v-tabs centered scrollable grow v-model="tab">
+          <v-tabs-slider color="blue"></v-tabs-slider>
+          <v-tab>Members</v-tab>
+          <v-tab>Background</v-tab>
+          <v-tab>Import / Export</v-tab>
+        </v-tabs>
+        <v-tabs-items v-model="tab">
+          <v-tab-item>
+            <v-card text>
+              <v-card-text>
+                <v-list two-line>
+                  <v-subheader>Users online</v-subheader>
+                  <template v-for="(member, index) in game.members">
+                    <v-list-item :key="index">
+                      <v-list-item-avatar>
+                        <img :src="member.avatar" />
+                      </v-list-item-avatar>
+                      <v-list-item-content>
+                        <v-list-item-title>
+                          {{ member.name }}
+                          <small>{{ member.email }}</small>
+                        </v-list-item-title>
+                        <v-list-item-subtitle>
+                          <timeago
+                            :datetime="member.online"
+                            :auto-update="5"
+                          ></timeago>
+                        </v-list-item-subtitle>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </template>
+                </v-list>
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
+          <v-tab-item>
+            <v-card text>
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col cols="8">
                       <v-text-field
                         v-model="background.tabletop_url"
                         label="Tabletop background URL"
                       ></v-text-field>
-                    </v-flex>
-                    <v-flex sm3 xs12 offset-sm1>
+                    </v-col>
+                    <v-col cols="4">
                       <v-text-field
                         v-model="background.tabletop_color"
                         label="Color"
                       ></v-text-field>
-                    </v-flex>
-                  </v-layout>
-                  <v-layout row wrap>
-                    <v-flex sm8 xs12>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col cols="8">
                       <v-text-field
                         v-model="background.background_url"
                         label="Main background URL"
                       ></v-text-field>
-                    </v-flex>
-                    <v-flex sm3 xs12 offset-sm1>
+                    </v-col>
+                    <v-col cols="4">
                       <v-text-field
                         v-model="background.background_color"
                         label="Color"
                       ></v-text-field>
-                    </v-flex>
-                  </v-layout>
-                  <v-btn block primary @click.native="lobbyBackgroundChange"
-                    >Save background</v-btn
-                  >
-                </v-card-text>
-              </v-card>
-            </v-tabs-content>
-            <v-tabs-content id="import_export_tab">
-              <v-card text>
-                <v-card-text>
-                  <v-btn block primary dark @click="exportLobby"
-                    >Export lobby in file</v-btn
-                  >
-                  <div v-if="download_link !== ''">
-                    <a
-                      :href="download_link"
-                      download="export.json"
-                      @click="download_link = ''"
-                      >Download</a
-                    >
-                  </div>
-                  <div class="file">
-                    <v-btn block primary
-                      >Import lobby from file<input
-                        type="file"
-                        @change="importLobby"
-                    /></v-btn>
-                  </div>
-                  <div v-if="imported_lobby !== null">
-                    <v-btn block error @click="replaceLobby"
-                      >Replace all lobby data</v-btn
-                    >
-                  </div>
-                </v-card-text>
-              </v-card>
-            </v-tabs-content>
-          </v-tabs-items>
-        </v-tabs>
+                    </v-col>
+                  </v-row>
+                </v-container>
+                <v-btn
+                  block
+                  primary
+                  depressed
+                  @click.native="lobbyBackgroundChange"
+                >
+                  Save background
+                </v-btn>
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
+          <v-tab-item>
+            <v-card text>
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col cols="12">
+                      <div>
+                        <v-btn
+                          block
+                          primary
+                          dark
+                          depressed
+                          @click="exportLobby"
+                        >
+                          Export lobby in file
+                        </v-btn>
+                        <div v-if="download_link !== ''">
+                          <a
+                            :href="download_link"
+                            download="export.json"
+                            @click="download_link = ''"
+                            >Download</a
+                          >
+                        </div>
+                      </div>
+                      <div class="pt-md-4">
+                        <div class="file">
+                          <v-btn block primary depressed>
+                            Import lobby from file
+                            <input type="file" @change="importLobby" />
+                          </v-btn>
+                        </div>
+                      </div>
+                      <div class="pt-md-4" v-if="imported_lobby !== null">
+                        <v-btn
+                          block
+                          color="error"
+                          depressed
+                          @click="replaceLobby"
+                        >
+                          Replace all lobby data
+                        </v-btn>
+                      </div>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
+        </v-tabs-items>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
@@ -125,6 +150,7 @@ export default {
   data() {
     return {
       open: false,
+      tab: null,
       members: [],
       background: {
         tabletop_url: "",

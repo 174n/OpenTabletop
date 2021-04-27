@@ -22,9 +22,7 @@
         <v-divider :key="index" v-if="index + 1 < decks.length"></v-divider>
       </template>
     </v-list>
-    <v-card text v-else>
-      <v-card-text> No decks found </v-card-text>
-    </v-card>
+    <v-card-text v-else>No decks found</v-card-text>
   </div>
 </template>
 

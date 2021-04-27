@@ -1,12 +1,18 @@
 <template>
-  <v-navigation-drawer v-model="sidebar" :mobile-breakpoint="4000">
+  <v-navigation-drawer
+    v-model="sidebar"
+    absolute
+    temporary
+    :mobile-breakpoint="4000"
+    width="320px"
+  >
     <div class="sendMsgBox">
       <v-text-field
         label="Message"
         single-line
         v-model="chatMsgValue"
         @keyup.enter.prevent="chatMsg"
-        :append-icon-cb="chatMsg"
+        @click:append="chatMsg"
         append-icon="send"
       >
       </v-text-field>
@@ -16,7 +22,7 @@
         :rules="diceRules"
         required
         @keyup.enter.prevent="diceSet"
-        :append-icon-cb="diceSet"
+        @click:append="diceSet"
         append-icon="send"
       ></v-text-field>
     </div>

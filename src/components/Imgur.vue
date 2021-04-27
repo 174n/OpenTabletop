@@ -5,7 +5,7 @@
       single-line
       v-model="imgur_url"
       @keyup.enter.prevent="getImgurData"
-      :append-icon-cb="getImgurData"
+      @click:append="getImgurData"
       append-icon="send"
     >
     </v-text-field>
@@ -30,7 +30,7 @@
         label="Size"
         v-model="data.size"
         thumb-label
-        step="0"
+        step="0.1"
       ></v-slider>
     </template>
   </div>

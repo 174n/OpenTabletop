@@ -265,13 +265,6 @@ export default {
       state.game.members = val;
     } else if (id === "background") {
       state.game.background = val;
-      if (val !== undefined) {
-        document.body.style.background = val.background_color;
-        document.body.style.backgroundImage =
-          (val.background_url.length > 0 &&
-            "url(" + val.background_url + ")") ||
-          "none";
-      }
     } else if (id === "firstLoad") {
       if (val !== null || val !== undefined) {
         if (

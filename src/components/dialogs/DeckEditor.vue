@@ -10,11 +10,7 @@
           v-model="data.card_back"
           label="Card back url"
         ></v-text-field>
-        <v-text-field
-          v-model="data.card_urls"
-          label="Card urls"
-          multi-line
-        ></v-text-field>
+        <v-textarea v-model="data.card_urls" label="Card urls"></v-textarea>
         <v-layout row wrap>
           <v-flex sm6 xs12>
             <v-switch
@@ -36,7 +32,7 @@
             label="Size"
             v-model="data.size"
             thumb-label
-            step="0"
+            step="0.1"
           ></v-slider>
         </template>
       </v-card-text>

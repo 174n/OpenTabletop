@@ -16,3 +16,9 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.v-application {
+  background: transparent !important;
+}
+</style>

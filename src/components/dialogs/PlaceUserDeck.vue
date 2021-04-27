@@ -6,33 +6,29 @@
           <div class="headline">Put a deck on tabletop</div>
         </v-card-title>
         <v-card-text>
-          <v-tabs centered scrollable grow>
-            <v-tabs-bar class="white" dark>
-              <v-tabs-slider class="blue"></v-tabs-slider>
-              <v-tabs-item href="#decks_tab">Your decks</v-tabs-item>
-              <v-tabs-item href="#imgur_tab">From Imgur</v-tabs-item>
-              <v-tabs-item href="#empty_deck_tab">Empty deck</v-tabs-item>
-            </v-tabs-bar>
-            <v-tabs-items>
-              <v-tabs-content id="decks_tab">
-                <v-card flat>
-                  <v-card-text
-                    ><decks-list put="true"></decks-list
-                  ></v-card-text>
-                </v-card>
-              </v-tabs-content>
-              <v-tabs-content id="imgur_tab">
-                <v-card flat>
-                  <v-card-text><imgur></imgur></v-card-text>
-                </v-card>
-              </v-tabs-content>
-              <v-tabs-content id="empty_deck_tab">
-                <v-card flat>
-                  <v-card-text><new-empty-deck></new-empty-deck></v-card-text>
-                </v-card>
-              </v-tabs-content>
-            </v-tabs-items>
+          <v-tabs centered scrollable grow v-model="tab">
+            <v-tabs-slider color="blue"></v-tabs-slider>
+            <v-tab>Your decks</v-tab>
+            <v-tab>From Imgur</v-tab>
+            <v-tab>Empty deck</v-tab>
           </v-tabs>
+          <v-tabs-items v-model="tab">
+            <v-tab-item>
+              <v-card flat>
+                <v-card-text><decks-list put="true"></decks-list></v-card-text>
+              </v-card>
+            </v-tab-item>
+            <v-tab-item>
+              <v-card flat>
+                <v-card-text><imgur></imgur></v-card-text>
+              </v-card>
+            </v-tab-item>
+            <v-tab-item>
+              <v-card flat>
+                <v-card-text><new-empty-deck></new-empty-deck></v-card-text>
+              </v-card>
+            </v-tab-item>
+          </v-tabs-items>
         </v-card-text>
         <!-- <v-card-actions>
           <v-spacer></v-spacer>
@@ -58,6 +54,7 @@ export default {
   data() {
     return {
       open: false,
+      tab: null,
     };
   },
   created() {
