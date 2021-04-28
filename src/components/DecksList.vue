@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-list two-line v-if="decks !== undefined && decks !== null">
+    <v-list two-line v-if="!decks">
       <template v-for="(deck, index) in decks">
         <v-list-item :key="index">
           <v-list-item-avatar>
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { EventBus } from "../helpers/event-bus.js";
+import emitter from "../helpers/event-bus.js";
 
 export default {
   computed: {
@@ -38,17 +38,10 @@ export default {
   props: ["put"],
   methods: {
     deckEditorDialog(index) {
-      EventBus.$emit("deckEditorToggle", index);
+      emitter.emit("deckEditorToggle", index);
     },
     putADeck(index) {
-      this.$store.dispatch("lobbyCommitMutation", {
-        mutation: "addNewDeck",
-        params: {
-          index,
-          x: 10,
-          y: 10,
-        },
-      });
+      this.$store.dispatch("addNewDeck", { index, x: 10, y: 10 });
     },
   },
 };

@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { EventBus } from "../../helpers/event-bus.js";
+import emitter from "../../helpers/event-bus.js";
 import DecksList from "../DecksList.vue";
 
 export default {
@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     newDeckDialog() {
-      EventBus.$emit("newDeckToggle");
+      emitter.emit("newDeckToggle");
     },
   },
 };

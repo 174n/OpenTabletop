@@ -22,14 +22,11 @@ export default {
       return "https://i.imgur.com/" + id + ".jpg";
     },
     createDeck() {
-      this.$store.dispatch("lobbyCommitMutation", {
-        mutation: "addNewDeckFromData",
-        params: {
-          urls: [],
-          title: this.deck_name,
-          x: 10,
-          y: 10,
-        },
+      this.$store.commit("addNewDeckFromData", {
+        urls: [],
+        title: this.deck_name,
+        x: 10,
+        y: 10,
       });
       this.deck_name = "";
     },

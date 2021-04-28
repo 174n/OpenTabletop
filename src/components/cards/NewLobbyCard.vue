@@ -1,26 +1,21 @@
 <template>
-  <v-card class="blue-grey darken-2 white--text">
-    <v-card-title primary-title>
-      <div>
-        <div class="headline">Create a new lobby</div>
-        <span class="grey--text"
-          >Click the button below to create a new lobby</span
-        >
-      </div>
-    </v-card-title>
+  <v-card dark color="blue-grey">
+    <v-card-title primary-title> Create a blank lobby </v-card-title>
+    <v-card-subtitle>
+      Click the button below to create a blank lobby
+    </v-card-subtitle>
     <v-card-actions>
-      <v-btn text dark @click.stop="newLobbyDialog">Create lobby</v-btn>
+      <v-btn text dark @click.stop="newLobby">Create lobby</v-btn>
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
-import { EventBus } from "../../helpers/event-bus.js";
-
 export default {
   methods: {
-    newLobbyDialog() {
-      EventBus.$emit("newLobbyToggle");
+    newLobby() {
+      this.$store.dispatch("newLobby");
+      this.$router.push("lobby/" + this.$store.state.lobby.id);
     },
   },
 };

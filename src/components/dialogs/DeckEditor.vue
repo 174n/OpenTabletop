@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { EventBus } from "../../helpers/event-bus.js";
+import emitter from "../../helpers/event-bus.js";
 
 export default {
   data() {
@@ -71,7 +71,7 @@ export default {
     },
   },
   created() {
-    EventBus.$on("deckEditorToggle", (id) => {
+    emitter.on("deckEditorToggle", (id) => {
       this.open = !this.open;
       this.id = id;
       this.data.deck_name = this.decks[id].name;
@@ -103,7 +103,7 @@ export default {
           this.data.custom_size = false;
           this.data.real_size = false;
           this.data.size = 12;
-          EventBus.$emit("snackbarOpen", "Deck edited");
+          emitter.emit("snackbarOpen", "Deck edited");
         });
     },
     removeDeck() {
@@ -115,7 +115,7 @@ export default {
         this.data.custom_size = false;
         this.data.real_size = false;
         this.data.size = 12;
-        EventBus.$emit("snackbarOpen", "Deck deleted");
+        emitter.emit("snackbarOpen", "Deck deleted");
       });
     },
   },

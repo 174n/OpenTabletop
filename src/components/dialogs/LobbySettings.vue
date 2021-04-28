@@ -144,7 +144,7 @@
 </template>
 
 <script>
-import { EventBus } from "../../helpers/event-bus.js";
+import emitter from "../../helpers/event-bus.js";
 
 export default {
   data() {
@@ -164,14 +164,14 @@ export default {
   },
   computed: {
     game() {
-      return this.$store.state.game;
+      return this.$store.state.lobby.game;
     },
     user() {
       return this.$store.state.user;
     },
   },
   created() {
-    EventBus.$on("LobbySettings", () => {
+    emitter.on("LobbySettings", () => {
       this.open = !this.open;
       this.background = {
         tabletop_url: this.game.background.tabletop_url,
@@ -183,11 +183,7 @@ export default {
   },
   methods: {
     lobbyBackgroundChange() {
-      this.$store.dispatch("lobbySetState", {
-        path: "background",
-        data: this.background,
-      });
-      console.log(this.background);
+      this.$store.commit("lobbySetBackground", this.background);
     },
     exportLobby() {
       let file =
@@ -206,26 +202,23 @@ export default {
         };
         r.readAsText(f);
       } else {
-        EventBus.$emit("snackbarOpen", "Failed to load file", "error");
+        emitter.emit("snackbarOpen", "Failed to load file", "error");
       }
     },
     replaceLobby() {
       let lobby = this.imported_lobby;
       this.$store
-        .dispatch("lobbySetState", {
-          path: "",
-          data: {
-            background: lobby.background,
-            chat: lobby.chat,
-            members: lobby.members,
-            objects: lobby.objects,
-            fullRotation: lobby.fullRotation || false,
-            rules: lobby.rules || false,
-            imported: { ".sv": "timestamp" },
-          },
+        .dispatch("lobbySetGame", {
+          background: lobby.background,
+          chat: lobby.chat,
+          members: lobby.members,
+          objects: lobby.objects,
+          fullRotation: lobby.fullRotation || false,
+          rules: lobby.rules || false,
+          imported: Date.now(),
         })
         .then(() => {
-          EventBus.$emit("snackbarOpen", "Successfully imported!");
+          emitter.emit("snackbarOpen", "Successfully imported!");
           this.imported_lobby = null;
         });
     },
@@ -235,7 +228,7 @@ export default {
     //     let data = response.body.entry;
     //     console.log(data.gphoto$nickname.$t,data.gphoto$thumbnail.$t);
     //   }, response => {
-    //     EventBus.$emit('snackbarOpen', "Error after loading users info", "error");
+    //     emitter.emit('snackbarOpen', "Error after loading users info", "error");
     //   });
     // }
   },

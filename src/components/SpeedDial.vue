@@ -100,7 +100,7 @@
           dark
           small
           class="gray"
-          v-if="user !== null && lobbyAdmin === user.email"
+          v-if="user !== null && lobbyAdmin === user.nickname"
           @click.stop="lobbySettings"
           v-bind="attrs"
           v-on="on"
@@ -113,7 +113,7 @@
   </v-speed-dial>
 </template>
 <script>
-import { EventBus } from "../helpers/event-bus.js";
+import emitter from "../helpers/event-bus.js";
 
 export default {
   data() {
@@ -142,30 +142,29 @@ export default {
         mutation: 'addNewDeck',
         params: event
       });*/
-      EventBus.$emit("placeUserDeckToggle", event);
+      emitter.emit("placeUserDeckToggle", event);
     },
     addNewCounter(event) {
-      this.$store.dispatch("lobbyCommitMutation", {
-        mutation: "addNewCounter",
-        params: event,
+      this.$store.commit("addNewCounter", {
+        x: event.clientX,
+        y: event.clientY,
       });
     },
     rollDice() {
-      this.$store.commit("chatAddMsg", [
-        "Dice roll: " + this.user.displayName,
-        this.diceRoller(this.dice),
-      ]);
-      this.$store.dispatch("lobbyUpdateChat");
-      // this.openChat();
+      this.$store.commit("chatAddMsg", {
+        nickname: "Dice roll: " + this.user.nickname,
+        msg: this.diceRoller(this.dice),
+      });
+      this.openChat();
     },
     openChat() {
-      EventBus.$emit("toggleChat", true);
+      emitter.emit("toggleChat", true);
     },
     lobbySettings() {
-      EventBus.$emit("LobbySettings");
+      emitter.emit("LobbySettings");
     },
     openRules() {
-      EventBus.$emit("toggleRules", this.rules);
+      emitter.emit("toggleRules", this.rules);
     },
   },
   computed: {
@@ -173,10 +172,10 @@ export default {
       return this.$store.state.user;
     },
     rules() {
-      return this.$store.state.game.rules;
+      return this.$store.state.lobby.game.rules;
     },
     lobbyAdmin() {
-      return this.$store.state.lobbyAdmin;
+      return this.$store.state.lobby.admin;
     },
     dice() {
       return this.$store.state.dice;

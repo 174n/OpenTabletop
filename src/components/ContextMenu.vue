@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { EventBus } from "../helpers/event-bus.js";
+import emitter from "../helpers/event-bus.js";
 
 export default {
   data() {
@@ -117,108 +117,67 @@ export default {
   },
   methods: {
     removeObject() {
-      this.$store.dispatch("lobbyCommitMutation", {
-        mutation: "removeObject",
-        params: this.id,
-      });
+      this.$store.commit("removeObject", this.id);
     },
     takeCard(e, hand = false) {
-      this.$store.dispatch("lobbyCommitMutation", {
-        mutation: "takeCardFromDeck",
-        params: [this.id, 1, hand],
-      });
+      this.$store.commit("takeCardFromDeck", [this.id, 1, hand]);
     },
     takeCardToHand() {
       this.takeCard(null, true);
     },
     deckListView() {
-      EventBus.$emit("deckViewToggle", this.id);
+      emitter.emit("deckViewToggle", this.id);
     },
     rotateCard() {
-      this.$store.dispatch("lobbyCommitMutation", {
-        mutation: "rotateCard",
-        params: this.id,
-      });
+      this.$store.commit("rotateCard", this.id);
     },
     handMoveCard() {
-      this.$store.dispatch("lobbyCommitMutation", {
-        mutation: "handMoveCard",
-        params: this.id,
-      });
+      this.$store.commit("handMoveCard", this.id);
     },
     pinCard() {
-      this.$store.dispatch("lobbyCommitMutation", {
-        mutation: "pinCard",
-        params: this.id,
-      });
+      this.$store.commit("pinCard", this.id);
     },
     flipCard() {
-      this.$store.dispatch("lobbyCommitMutation", {
-        mutation: "flipCard",
-        params: this.id,
-      });
+      this.$store.commit("flipCard", this.id);
     },
     changeCardSize() {
-      EventBus.$emit("cardSizeDialogToggle", this.id);
+      emitter.emit("cardSizeDialogToggle", this.id);
     },
     takeCardToObjects() {
-      this.$store.dispatch("lobbyCommitMutation", {
-        mutation: "takeCardFromDeckById",
-        params: [this.id].concat(this.params),
+      this.$store.commit("takeCardFromDeckById", {
+        deckId: this.params,
+        id: this.id,
       });
-      EventBus.$emit("deckViewUpdate");
+      emitter.emit("deckViewUpdate");
     },
     viewCard() {
-      EventBus.$emit(
+      emitter.emit(
         "toggleCardPreview",
-        this.$store.state.game.objects[this.id].cards[this.params].url
+        this.$store.state.lobby.game.objects[this.id].cards[this.params].url
       );
     },
     shuffleDeck() {
-      this.$store.dispatch("lobbyCommitMutation", {
-        mutation: "shuffleDeck",
-        params: this.id,
-      });
+      this.$store.commit("shuffleDeck", this.id);
     },
     reverseDeck() {
-      this.$store.dispatch("lobbyCommitMutation", {
-        mutation: "reverseDeck",
-        params: this.id,
-      });
+      this.$store.commit("reverseDeck", this.id);
     },
     flipDeck() {
-      this.$store.dispatch("lobbyCommitMutation", {
-        mutation: "flipDeck",
-        params: this.id,
-      });
+      this.$store.commit("flipDeck", this.id);
     },
     counterInc() {
-      this.$store.dispatch("lobbyCommitMutation", {
-        mutation: "counterChangeNumber",
-        params: [this.id],
-      });
+      this.$store.commit("counterChangeNumber", [this.id]);
     },
     counterDecr() {
-      this.$store.dispatch("lobbyCommitMutation", {
-        mutation: "counterChangeNumber",
-        params: [this.id, -1],
-      });
+      this.$store.commit("counterChangeNumber", [this.id, -1]);
     },
     counterChangeColor() {
-      this.$store.dispatch("lobbyCommitMutation", {
-        mutation: "counterChangeColor",
-        params: this.id,
-      });
+      this.$store.commit("counterChangeColor", this.id);
     },
   },
   created() {
-    EventBus.$on("openContextMenu", (type, x, y, id, params = []) => {
-      if (
-        type === "card" ||
-        type === "deck" ||
-        type === "counter" ||
-        type === "cardList"
-      ) {
+    emitter.on("openContextMenu", ({ type, x, y, id, params }) => {
+      if (type?.match(/^card|deck|counter|cardList$/g)) {
         this.type = type;
         this.x = x + 5;
         this.y = y + 5;

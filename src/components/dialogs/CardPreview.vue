@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { EventBus } from "../../helpers/event-bus.js";
+import emitter from "../../helpers/event-bus.js";
 
 export default {
   data() {
@@ -38,7 +38,7 @@ export default {
     };
   },
   created() {
-    EventBus.$on("toggleCardPreview", (url) => {
+    emitter.on("toggleCardPreview", (url) => {
       this.url = url;
       // this.rotation = 0;
       // this.zoom = 223;

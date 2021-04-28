@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import { EventBus } from "../../helpers/event-bus.js";
+import emitter from "../../helpers/event-bus.js";
 
 export default {
   data() {
@@ -69,7 +69,7 @@ export default {
     };
   },
   created() {
-    EventBus.$on("newDeckToggle", () => {
+    emitter.on("newDeckToggle", () => {
       this.open = !this.open;
     });
   },
@@ -91,7 +91,7 @@ export default {
           this.data.custom_size = false;
           this.data.real_size = false;
           this.data.size = 12;
-          EventBus.$emit("snackbarOpen", "New deck added");
+          emitter.emit("snackbarOpen", "New deck added");
         });
     },
   },

@@ -10,7 +10,7 @@
         @click.middle.prevent="cardMiddleClick($event, i)"
         class="card"
         :class="{
-          inhand: object.hand === user.uid,
+          inhand: object.hand === user.nickname,
           pinned: !!object.pin,
           draggable: !object.pin,
         }"
@@ -22,7 +22,7 @@
             'px, ' +
             object.y +
             'px) rotate(' +
-            (!!object.hand && object.hand !== user.uid ? -1 : 1) *
+            (!!object.hand && object.hand !== user.nickname ? -1 : 1) *
               object.rotation +
             'deg)',
         }"
@@ -30,7 +30,9 @@
         <img
           alt="card"
           :src="
-            !object.hand || object.hand === user.uid ? object.url : object.back
+            !object.hand || object.hand === user.nickname
+              ? object.url
+              : object.back
           "
           :style="{
             width: !object.real_size
@@ -43,7 +45,7 @@
       <!-- deck -->
       <div
         :key="i"
-        v-else-if="object !== undefined && object.type === 'deck'"
+        v-else-if="object && object.type === 'deck'"
         @contextmenu.prevent="showMenu('deck', object.x, object.y, i)"
         @dblclick="takeCard(i)"
         class="draggable deck"
@@ -106,12 +108,12 @@
 
 <script>
 import interact from "interactjs";
-import { EventBus } from "../helpers/event-bus.js";
+import emitter from "../helpers/event-bus.js";
 
 export default {
   computed: {
     game() {
-      return this.$store.state.game;
+      return this.$store.state.lobby.game;
     },
     user() {
       return this.$store.state.user;
@@ -160,48 +162,40 @@ export default {
     },
   },
   methods: {
-    dragMoveListener(event) {
-      // this.$store.commit('moveObject', event);
-      this.$store.dispatch("lobbyCommitMutation", {
-        mutation: "moveObject",
-        params: {
-          event,
-          scale: this.scale,
-        },
+    dragMoveListener(e) {
+      this.$store.commit("moveObject", {
+        id: e.target.getAttribute("data-id"),
+        dx: e.dx / this.scale,
+        dy: e.dy / this.scale,
       });
+      emitter.emit("gameChanged");
     },
     showMenu(type, x, y, id) {
       let offset = document
         .querySelector(".tabletop div[data-id='" + id + "']")
         .getBoundingClientRect();
-      // console.log(offset);
-      EventBus.$emit("openContextMenu", type, offset.x, offset.y, id);
+      emitter.emit("openContextMenu", {
+        id,
+        type,
+        x: offset.x,
+        y: offset.y,
+      });
     },
     cardMiddleClick(e, id) {
       if (e.button === 1) {
-        this.$store.dispatch("lobbyCommitMutation", {
-          mutation: "rotateCard",
-          params: id,
-        });
+        this.$store.commit("rotateCard", id);
       }
     },
     takeCard(deckId) {
-      this.$store.dispatch("lobbyCommitMutation", {
-        mutation: "takeCardFromDeckById",
-        params: [deckId],
-      });
-      // this.$store.commit('takeCardFromDeck', [deckId]);
+      this.$store.commit("takeCardFromDeckById", { deckId });
     },
-    // rotateCard(cardId){
-    //   this.$store.commit('rotateCard', cardId);
-    // },
     cardPreviewOpen(id) {
       let url =
         !this.game.objects[id].hand ||
-        this.game.objects[id].hand === this.user.uid
+        this.game.objects[id].hand === this.user.nickname
           ? this.game.objects[id].url
           : this.game.objects[id].back;
-      EventBus.$emit("toggleCardPreview", url);
+      emitter.emit("toggleCardPreview", url);
     },
     tabletopScroll(e) {
       const wheel = e.deltaY < 0 ? 1 : -1;
@@ -248,12 +242,8 @@ export default {
 
         let card = event.relatedTarget.getAttribute("data-id");
         let deck = event.target.getAttribute("data-id");
-        // self.$store.commit('moveCardToDeck', [card,deck]);
 
-        this.$store.dispatch("lobbyCommitMutation", {
-          mutation: "moveCardToDeck",
-          params: [card, deck],
-        });
+        this.$store.commit("moveCardToDeck", [card, deck]);
       },
     });
 

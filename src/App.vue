@@ -12,7 +12,7 @@ export default {
     snackbar: Snackbar,
   },
   created() {
-    this.$store.dispatch("firebaseInit");
+    this.$store.commit("initUser");
   },
 };
 </script>

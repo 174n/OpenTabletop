@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <main>
+    <main v-if="readyToPlay">
       <!-- {{$route.params.id}} -->
       <div class="background" :style="backgroundStyle"></div>
       <tabletop></tabletop>
@@ -30,6 +30,8 @@ import PlaceUserDeck from "./dialogs/PlaceUserDeck.vue";
 import LobbySettings from "./dialogs/LobbySettings.vue";
 import CardSize from "./dialogs/CardSize.vue";
 // import RulesView from './dialogs/RulesView.vue';
+import { observe, unobserve, generate } from "fast-json-patch";
+import emitter from "../helpers/event-bus.js";
 
 export default {
   components: {
@@ -46,7 +48,7 @@ export default {
   },
   computed: {
     background() {
-      return this.$store.state.game.background;
+      return this.$store.state.lobby?.game?.background;
     },
     backgroundStyle() {
       return this.background
@@ -58,36 +60,36 @@ export default {
           }
         : {};
     },
+    lobby() {
+      return this.$store.state.lobby;
+    },
+    readyToPlay() {
+      return this.lobby && this.$store.state.user;
+    },
   },
   data() {
     return {
-      onlineInterval: null,
+      observer: null,
     };
   },
-  created() {
-    this.$store.dispatch("lobbyGetData", this.$route.params.id);
-    // this.$store.watch((state) => {
-    //   return state.game;
-    // }, (val) => {
-    //   // this.$store.dispatch('lobbyPutData');
-    //   // console.log(val);
-    // },{deep: true});
-    this.onlineInterval = setInterval(() => {
-      this.$store.dispatch("lobbyMemberLastOnline");
-    }, 10 * 1000);
+  methods: {
+    sendPatch(patches) {
+      this.$store.dispatch("sendPatch", patches);
+    },
   },
   mounted() {
-    setTimeout(() => {
-      if (
-        !this.$store.state.firebaseLoading &&
-        this.$store.state.user === null
-      ) {
-        this.$router.push({ path: "/" });
-      }
-    }, 1000);
+    if (!this.readyToPlay) {
+      this.$store.commit("setRedirect", this.$router.history.current.path);
+      this.$router.push("/");
+    }
+    this.$store.dispatch("connectToALobby", this.lobby.id);
+    this.observer = observe(this.lobby?.game, this.sendPatch);
+    emitter.on("gameChanged", () => {
+      this.$store.dispatch("sendPatch", generate(this.observer));
+    });
   },
-  beforeDestroy() {
-    clearInterval(this.onlineInterval);
+  beforeUnmount() {
+    unobserve(this.lobby?.game, this.observer);
   },
 };
 </script>

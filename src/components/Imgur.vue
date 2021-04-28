@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { EventBus } from "../helpers/event-bus.js";
+import emitter from "../helpers/event-bus.js";
 import config from "../config/imgur.json";
 
 export default {
@@ -82,10 +82,7 @@ export default {
                 params.title !== undefined &&
                 params.title !== null
               ) {
-                this.$store.dispatch("lobbyCommitMutation", {
-                  mutation: "addNewDeckFromData",
-                  params,
-                });
+                this.$store.dispatch("addNewDeckFromData", params);
                 this.imgur_url = "";
                 this.data = {
                   custom_size: false,
@@ -95,11 +92,11 @@ export default {
               }
             },
             () => {
-              EventBus.$emit("snackbarOpen", "Wrong imgur id", "error");
+              emitter.emit("snackbarOpen", "Wrong imgur id", "error");
             }
           );
       } else {
-        EventBus.$emit("snackbarOpen", "Wrong imgur url", "error");
+        emitter.emit("snackbarOpen", "Wrong imgur url", "error");
       }
     },
   },

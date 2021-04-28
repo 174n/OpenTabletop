@@ -2,15 +2,10 @@
   <v-app>
     <v-app-bar class="red" dark fixed>
       <v-app-bar-title>OpenTabletop</v-app-bar-title>
-      <!-- <v-spacer></v-spacer>
-      <v-btn icon @click="syncTypeChange">
-        <v-icon>sync</v-icon>
-      </v-btn>
-      <span>{{sync}}</span> -->
     </v-app-bar>
     <main class="pt-md-10">
       <div class="pt-md-10">
-        <v-container fluid v-if="firebaseLoading">
+        <v-container fluid v-if="loading">
           <v-layout row wrap justify-space-around>
             <v-progress-circular
               indeterminate
@@ -33,56 +28,48 @@
               <v-flex md6 offset-md3 sm12>
                 <new-lobby-card></new-lobby-card>
               </v-flex>
-              <v-flex md6 offset-md3 sm12 class="decks_container">
+              <!-- <v-flex md6 offset-md3 sm12 class="decks_container">
                 <decks-card></decks-card>
-              </v-flex>
+              </v-flex> -->
             </template>
           </v-layout>
         </v-container>
       </div>
     </main>
-    <new-lobby></new-lobby>
-    <new-deck></new-deck>
-    <deck-editor></deck-editor>
+    <!-- <new-lobby></new-lobby> -->
+    <!-- <new-deck></new-deck> -->
+    <!-- <deck-editor></deck-editor> -->
   </v-app>
 </template>
 
 <script>
 import NewLobbyCard from "./cards/NewLobbyCard.vue";
-import DecksCard from "./cards/DecksCard.vue";
+// import DecksCard from "./cards/DecksCard.vue";
 import AuthCard from "./cards/AuthCard.vue";
 import UserInfoCard from "./cards/UserInfoCard.vue";
-import NewLobby from "./dialogs/NewLobby.vue";
-import NewDeck from "./dialogs/NewDeck.vue";
-import DeckEditor from "./dialogs/DeckEditor.vue";
+// import NewLobby from "./dialogs/NewLobby.vue";
+// import NewDeck from "./dialogs/NewDeck.vue";
+// import DeckEditor from "./dialogs/DeckEditor.vue";
 
 export default {
   components: {
     "new-lobby-card": NewLobbyCard,
-    "decks-card": DecksCard,
+    // "decks-card": DecksCard,
     "auth-card": AuthCard,
     "user-info-card": UserInfoCard,
-    "new-lobby": NewLobby,
-    "new-deck": NewDeck,
-    "deck-editor": DeckEditor,
+    // "new-lobby": NewLobby,
+    // "new-deck": NewDeck,
+    // "deck-editor": DeckEditor,
   },
   computed: {
     user() {
       return this.$store.state.user;
     },
-    sync() {
-      return this.$store.state.sync;
-    },
-    firebaseLoading() {
-      return this.$store.state.firebaseLoading;
+    loading() {
+      return false;
     },
     userIsset() {
-      return this.user === null || this.user === undefined;
-    },
-  },
-  methods: {
-    syncTypeChange() {
-      this.$store.commit("syncTypeChange");
+      return !this.user;
     },
   },
 };

@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { EventBus } from "../../helpers/event-bus.js";
+import emitter from "../../helpers/event-bus.js";
 
 export default {
   data() {
@@ -59,11 +59,11 @@ export default {
   },
   computed: {
     objects() {
-      return this.$store.state.game.objects;
+      return this.$store.state.lobby.game.objects;
     },
   },
   created() {
-    EventBus.$on("cardSizeDialogToggle", (id) => {
+    emitter.on("cardSizeDialogToggle", (id) => {
       this.open = !this.open;
       this.data = { custom_size: false, real_size: false, size: 12 };
       this.data.id = id;

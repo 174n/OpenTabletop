@@ -1,16 +1,22 @@
 <template>
   <v-card>
-    <v-card-title primary-title>
-      <div>
-        <div class="headline">Authorization</div>
-        <span class="grey--text"
-          >You need to authorize with your google account to be able to create
-          or join lobby</span
-        >
-      </div>
-    </v-card-title>
+    <v-card-title primary-title> Authorization </v-card-title>
+    <v-card-subtitle> Choose your nickname </v-card-subtitle>
+    <v-card-text>
+      <v-text-field
+        v-model="nickname"
+        :rules="rules"
+        counter="25"
+        maxlength="25"
+        label="Nickname"
+        @keyup.enter.prevent="auth"
+        autocomplete="off"
+      ></v-text-field>
+    </v-card-text>
     <v-card-actions>
-      <v-btn class="blue--text" text @click="auth">Auth with Google</v-btn>
+      <v-btn color="blue" right text @click="auth">
+        Start using OpenTabletop
+      </v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -18,11 +24,22 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      nickname: "",
+      rules: [(v) => v.length <= 25 || "Max 25 characters"],
+    };
+  },
+  computed: {
+    redirect() {
+      return this.$store.state.redirect;
+    },
   },
   methods: {
     auth() {
-      this.$store.dispatch("signInWithGoogle");
+      this.$store.commit("setNickname", this.nickname);
+      if (this.redirect) {
+        this.$router.push(this.redirect);
+      }
     },
   },
 };

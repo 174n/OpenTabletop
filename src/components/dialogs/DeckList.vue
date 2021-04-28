@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { EventBus } from "../../helpers/event-bus.js";
+import emitter from "../../helpers/event-bus.js";
 import CardPreview from "./CardPreview.vue";
 import draggable from "vuedraggable";
 
@@ -60,52 +60,52 @@ export default {
   },
   computed: {
     game() {
-      return this.$store.state.game;
+      return this.$store.state.lobby.game;
     },
     user() {
       return this.$store.state.user;
     },
   },
   created() {
-    EventBus.$on("deckViewToggle", (id) => {
+    emitter.on("deckViewToggle", (id) => {
       this.open = !this.open;
       this.deckId = id;
       this.deck = this.game.objects[id];
-      let name = this.user.displayName;
+      let name = this.user.nickname;
       this.$store.commit("chatAddMsg", [
         name + " viewed a deck",
         name + ": " + this.game.objects[id].text,
       ]);
-      this.$store.dispatch("lobbyUpdateChat");
       console.log(this.deckId);
     });
-    EventBus.$on("deckViewUpdate", () => {
+    emitter.on("deckViewUpdate", () => {
       this.deck = this.game.objects[this.deckId];
       this.$forceUpdate();
     });
   },
   methods: {
     showMenu(id, event) {
-      let x = event.screenX - 20;
-      let y = event.screenY - 20;
-      EventBus.$emit("openContextMenu", "cardList", x, y, this.deckId, id);
+      emitter.emit("openContextMenu", {
+        type: "cardList",
+        id,
+        x: event.pageX - 20,
+        y: event.pageY - 20,
+        params: this.deckId,
+      });
     },
     cardPreviewOpen(id) {
-      EventBus.$emit(
+      emitter.emit(
         "toggleCardPreview",
         this.game.objects[this.deckId].cards[id].url
       );
     },
     shuffleDeck() {
       this.$store.commit("shuffleDeck", this.deckId);
-      EventBus.$emit("deckViewUpdate");
+      emitter.emit("deckViewUpdate");
       // this.open = false;
     },
     deckUpdate() {
-      this.$store.dispatch("lobbyCommitMutation", {
-        mutation: "updateDeck",
-        params: this.deckId,
-      });
+      this.$store.commit("updateDeck", this.deckId);
     },
   },
 };

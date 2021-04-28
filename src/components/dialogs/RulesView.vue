@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { EventBus } from "../../helpers/event-bus.js";
+import emitter from "../../helpers/event-bus.js";
 import pdf from "vue-pdf";
 
 export default {
@@ -58,7 +58,7 @@ export default {
     };
   },
   created() {
-    EventBus.$on("toggleRules", (url) => {
+    emitter.on("toggleRules", (url) => {
       this.isOpen = !this.isOpen;
       this.pages = [];
       this.rules = false;
@@ -71,7 +71,7 @@ export default {
       this.loading = status * 100;
     },
     error() {
-      EventBus.$emit("snackbarOpen", "Error while loading game rules", "error");
+      emitter.emit("snackbarOpen", "Error while loading game rules", "error");
     },
   },
 };

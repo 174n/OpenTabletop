@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { EventBus } from "../../helpers/event-bus.js";
+import emitter from "../../helpers/event-bus.js";
 
 export default {
   data() {
@@ -35,7 +35,7 @@ export default {
     };
   },
   created() {
-    EventBus.$on("newLobbyToggle", () => {
+    emitter.on("newLobbyToggle", () => {
       this.open = !this.open;
     });
   },

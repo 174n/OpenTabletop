@@ -1,6 +1,7 @@
 import Vue from "vue";
 import shuffle from "shuffle-array";
-import { EventBus } from "../helpers/event-bus.js";
+import emitter from "../helpers/event-bus.js";
+import { applyPatch } from "fast-json-patch";
 // mutations are operations that actually mutates the state.
 // each mutation handler gets the entire state tree as the
 // first argument, followed by additional payload arguments.
@@ -8,7 +9,7 @@ import { EventBus } from "../helpers/event-bus.js";
 // for debugging purposes.
 
 function randomColor() {
-  let colors = [
+  const colors = [
     "red",
     "pink",
     "purple",
@@ -36,43 +37,45 @@ export default {
   /* Objects
   =======================================*/
   takeCardFromDeck(state, [deckId, amount = 1, hand = false]) {
-    /*let deckId = params[0];
-    let amount = params[1] !== undefined ? params[1] : 1;*/
+    /*const deckId = params[0];
+    const amount = params[1] !== undefined ? params[1] : 1;*/
 
-    let deck = state.game.objects[deckId];
-    let card = deck.cards.slice(amount * -1);
+    const deck = state.lobby.game.objects[deckId];
+    const card = deck.cards.slice(amount * -1);
 
     card.forEach((v) => {
-      v.x = state.game.objects[deckId].x + 30;
-      v.y = state.game.objects[deckId].y + 30;
+      v.x = state.lobby.game.objects[deckId].x + 30;
+      v.y = state.lobby.game.objects[deckId].y + 30;
       v.hand = hand ? state.user.uid : false;
       v.new = true;
-      state.game.objects.push(v);
+      state.lobby.game.objects.push(v);
       deck.cards.splice(-1);
     });
 
     deck.new = true;
   },
 
-  takeCardFromDeckById(state, [deckId, id = 0]) {
-    /*let deckId = params[0];
-    let id = params[1] !== undefined ? params[1] : 0;*/
+  takeCardFromDeckById(state, { deckId, id }) {
+    /*const deckId = params[0];
+    const id = params[1] !== undefined ? params[1] : 0;*/
 
-    let deck = state.game.objects[deckId];
-    let card = deck.cards[id];
+    const deck = state.lobby.game.objects[deckId];
+    const card = deck.cards[id || 0];
+
+    if (!deck || !card) return;
 
     card.x = deck.x + 30;
     card.y = deck.y + 30;
     card.new = true;
 
-    state.game.objects.push(card);
+    state.lobby.game.objects.push(card);
     deck.cards.splice(id, 1);
     deck.new = true;
   },
 
   moveCardToDeck(state, [cardId, deckId]) {
-    let objects = state.game.objects;
-    let deck = objects[deckId];
+    const objects = state.lobby.game.objects;
+    const deck = objects[deckId];
 
     objects[cardId].rotation = 0;
     deck.cards.push(objects[cardId]);
@@ -84,7 +87,7 @@ export default {
   },
 
   removeObject(state, objectId) {
-    let objects = state.game.objects;
+    const objects = state.lobby.game.objects;
     if (objects[objectId] !== undefined) {
       objects.splice(objectId, 1);
       objects.push({
@@ -94,10 +97,10 @@ export default {
   },
 
   rotateCard(state, cardId) {
-    let card = state.game.objects[cardId];
+    const card = state.lobby.game.objects[cardId];
     if (card.type === "card")
       card.rotation =
-        state.game.fullRotation || false
+        state.lobby.game.fullRotation || false
           ? card.rotation < 360
             ? card.rotation + 90
             : 90
@@ -108,24 +111,25 @@ export default {
   },
 
   handMoveCard(state, cardId) {
-    let card = state.game.objects[cardId];
-    if (card.type === "card") card.hand = !card.hand ? state.user.uid : false;
+    const card = state.lobby.game.objects[cardId];
+    if (card.type === "card")
+      card.hand = !card.hand ? state.user.nickname : false;
     card.new = true;
   },
   flipCard(state, cardId) {
-    let card = state.game.objects[cardId];
+    const card = state.lobby.game.objects[cardId];
     if (card.type === "card") card.hand = !card.hand ? "fliped" : false;
     card.new = true;
   },
 
   pinCard(state, cardId) {
-    let card = state.game.objects[cardId];
+    const card = state.lobby.game.objects[cardId];
     if (card.type === "card") card.pin = card.pin ? false : true;
     card.new = true;
   },
 
   cardSizeChange(state, data) {
-    let card = state.game.objects[data.id];
+    const card = state.lobby.game.objects[data.id];
     if (card.type === "card") {
       card.size = data.custom_size === true ? data.size : 12;
       card.real_size = data.real_size;
@@ -134,8 +138,8 @@ export default {
   },
 
   addNewDeck(state, data) {
-    let id = data.index;
-    state.game.objects.push({
+    const id = data.index;
+    state.lobby.game.objects.push({
       type: "deck",
       x: data.x,
       y: data.y,
@@ -159,7 +163,7 @@ export default {
   },
 
   addNewDeckFromData(state, data) {
-    state.game.objects.push({
+    state.lobby.game.objects.push({
       type: "deck",
       x: data.x,
       y: data.y,
@@ -182,11 +186,11 @@ export default {
     });
   },
 
-  addNewCounter(state, event) {
-    state.game.objects.push({
+  addNewCounter(state, pos) {
+    state.lobby.game.objects.push({
       type: "counter",
-      x: event.clientX - 50,
-      y: event.clientY - 100,
+      x: pos.x - 50,
+      y: pos.y - 100,
       count: 0,
       color: randomColor(),
       new: true,
@@ -194,77 +198,102 @@ export default {
   },
 
   moveObject(state, data) {
-    let event = data.event,
-      scale = data.scale;
-    var target = event.target,
-      obj = state.game.objects[target.getAttribute("data-id")],
-      x = (parseFloat(obj.x) || 0) + event.dx / scale,
-      y = (parseFloat(obj.y) || 0) + event.dy / scale;
-    obj.x = x;
-    obj.y = y;
-    obj.new = true;
+    const obj = state.lobby.game.objects[data.id];
+    obj.x += data.dx;
+    obj.y += data.dy;
   },
 
   shuffleDeck(state, deckId) {
-    let deck = state.game.objects[deckId];
+    const deck = state.lobby.game.objects[deckId];
     deck.cards = shuffle(deck.cards);
     deck.new = true;
   },
 
   updateDeck(state, deckId) {
-    state.game.objects[deckId].new = true;
+    state.lobby.game.objects[deckId].new = true;
   },
 
   reverseDeck(state, deckId) {
-    let deck = state.game.objects[deckId];
+    const deck = state.lobby.game.objects[deckId];
     deck.cards.reverse();
     deck.new = true;
   },
 
   flipDeck(state, deckId) {
-    let deck = state.game.objects[deckId];
+    const deck = state.lobby.game.objects[deckId];
     deck.fliped = !deck.fliped ? true : false;
     deck.new = true;
   },
 
   counterChangeNumber(state, [id, num = 1]) {
-    let counter = state.game.objects[id];
+    const counter = state.lobby.game.objects[id];
     counter.count += num;
     counter.new = true;
   },
 
   counterChangeColor(state, id) {
-    let counter = state.game.objects[id];
+    const counter = state.lobby.game.objects[id];
     counter.color = randomColor();
     counter.new = true;
+  },
+
+  /* User
+  =======================================*/
+
+  setNickname(state, nickname) {
+    localStorage.setItem("nickname", nickname); // temporary
+    state.user = {
+      nickname,
+    };
+  },
+
+  initUser(state) {
+    //temporary
+    const nickname = localStorage.getItem("nickname");
+    if (nickname) {
+      state.user = { nickname: nickname };
+    }
+  },
+
+  logout(state) {
+    localStorage.removeItem("nickname");
+    state.user = null;
   },
 
   /* Chat
   =======================================*/
 
   chatAddMsg(state, data) {
-    state.game.chat.push({
-      title: data[0],
-      msg: data[1],
-      time: { ".sv": "timestamp" },
+    state.lobby.game.chat.push({
+      nickname: data.nickname,
+      msg: data.msg,
+      time: Date.now(),
     });
   },
 
   /* Lobby
   =======================================*/
 
+  setLobby(state, lobby) {
+    state.lobby = lobby;
+  },
+
+  setRedirect(state, path) {
+    state.redirect = path;
+  },
+
   updateGame(state, { id = "firstLoad", val }) {
     // Object.values(val.objects).forEach((v) => {
     //   if(v.type==="deck" && v.cards===undefined) v.cards = [];
     // });
-    // state.game = val;
+    // state.lobby.game = val;
 
     if (id === "chat") {
-      state.game.chat = val;
+      state.lobby.game.chat = val;
     } else if (id === "members") {
-      state.game.members = val;
+      state.lobby.game.members = val;
     } else if (id === "background") {
-      state.game.background = val;
+      state.lobby.game.background = val;
     } else if (id === "firstLoad") {
       if (val !== null || val !== undefined) {
         if (
@@ -276,16 +305,30 @@ export default {
           if (v.type === "deck" && v.cards === undefined) v.cards = [];
         });
       }
-      state.game = val;
+      state.lobby.game = val;
     } else {
       if (val.type === "deck" && val.cards === undefined) val.cards = [];
-      Vue.set(state.game.objects, id, val);
-      EventBus.$emit("deckViewUpdate");
+      Vue.set(state.lobby.game.objects, id, val);
+      emitter.emit("deckViewUpdate");
     }
   },
 
   lobbyAdminUpdate(state, admin) {
-    state.lobbyAdmin = admin;
+    state.lobby.admin = admin;
+  },
+
+  lobbySetBackground(state, background) {
+    state.lobby.game.background = background;
+  },
+
+  lobbyReplaceGame(state, game) {
+    Object.keys(game).forEach((key) => {
+      state.lobby.game[key] = game[key];
+    });
+  },
+
+  patchLobby(state, patch) {
+    applyPatch(state.lobby.game, patch);
   },
 
   /* Other

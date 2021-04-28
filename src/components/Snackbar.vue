@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { EventBus } from "../helpers/event-bus.js";
+import emitter from "../helpers/event-bus.js";
 
 export default {
   data() {
@@ -21,7 +21,7 @@ export default {
     };
   },
   created() {
-    EventBus.$on("snackbarOpen", (text = this.text, color = this.color) => {
+    emitter.on("snackbarOpen", (text = this.text, color = this.color) => {
       this.text = text;
       this.color = color;
       this.snackbar = true;

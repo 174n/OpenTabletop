@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { EventBus } from "../../helpers/event-bus.js";
+import emitter from "../../helpers/event-bus.js";
 import DecksList from "../DecksList.vue";
 import Imgur from "../Imgur.vue";
 import NewEmptyDeck from "../NewEmptyDeck.vue";
@@ -58,7 +58,7 @@ export default {
     };
   },
   created() {
-    EventBus.$on("placeUserDeckToggle", () => {
+    emitter.on("placeUserDeckToggle", () => {
       this.open = !this.open;
     });
   },
