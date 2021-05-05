@@ -38,7 +38,7 @@
 
 <script>
 import emitter from "../helpers/event-bus.js";
-import config from "../config/imgur.json";
+import config from "../../config.json";
 
 export default {
   data() {
@@ -60,7 +60,7 @@ export default {
         let imgur_id = /https:\/\/imgur.com\/a\/(.*)/g.exec(this.imgur_url)[1];
         this.$http
           .get("https://api.imgur.com/3/album/" + imgur_id, {
-            headers: { authorization: config.client_id },
+            headers: { authorization: config.imgur_client_id },
           })
           .then(
             (response) => {

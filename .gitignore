@@ -8,6 +8,7 @@ src/config
 *.sublime-workspace
 public/tools
 public/dist
+config.json
 
 # local env files
 .env.local

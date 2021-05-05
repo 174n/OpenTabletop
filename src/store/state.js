@@ -1,5 +1,5 @@
-// root state object.
-// each Vuex instance is just a single state tree.
+import config from "../../config.json";
+
 export default {
   user: null,
   redirect: null,
@@ -24,5 +24,5 @@ export default {
     ],
   },
   gameStarted: false,
-  signalhubUrl: "http://localhost:9000"
+  signalhubUrl: config?.signalhub_url || "http://localhost:9000",
 };
