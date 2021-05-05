@@ -1,9 +1,18 @@
-# OpenTabletop
-![DEPENDENCIES](https://david-dm.org/Rundik/OpenTabletop.svg)
-[![GitHub issues](https://img.shields.io/github/issues/Rundik/OpenTabletop.svg?style=flat-square)](https://github.com/Rundik/OpenTabletop/issues)
-[![GitHub stars](https://img.shields.io/github/stars/Rundik/OpenTabletop.svg?style=flat-square)](https://github.com/Rundik/OpenTabletop/stargazers)
+<h1 align="center">🎲 OpenTabletop</h1>
 
-Browser-based online project based on Vue.js and Firebase in which you can play any board games with your friends
+<p align="center">
+  <img src="https://badges.pufler.dev/created/Rundik/OpenTabletop" alt="Created">
+  <a href="https://github.com/Rundik/OpenTabletop/commits/main"><img src="https://img.shields.io/github/last-commit/Rundik/OpenTabletop.svg" alt="last commit"></a>
+  <img src="https://david-dm.org/Rundik/OpenTabletop.svg" alt="Dependencies">
+  <a href="https://github.com/Rundik/OpenTabletop/issues"><img src="https://img.shields.io/github/issues/Rundik/OpenTabletop.svg" alt="GitHub issues"></a>
+  <a href="https://github.com/Rundik/OpenTabletop/stargazers"><img src="https://img.shields.io/github/stars/Rundik/OpenTabletop.svg" alt="GitHub stars"></a>
+  <img src="https://badges.pufler.dev/visits/Rundik/OpenTabletop" alt="Visits">
+  <a href="https://github.com/Rundik/OpenTabletop/blob/main/LICENSE"><img src="https://img.shields.io/github/license/Rundik/OpenTabletop" alt="license"></a>
+</p>
+
+> This version is still in development. Check out old firebase version that is fully working [here](https://github.com/Rundik/OpenTabletop/tree/firebase)
+
+Browser-based online project built with Vue.js and WebRTC in which you can play any board games with your friends
 
 Here is the demo website: [DEMO](https://playopentabletop.firebaseapp.com/)
 
@@ -14,7 +23,6 @@ Here is the demo website: [DEMO](https://playopentabletop.firebaseapp.com/)
   * Any type of dices
   * Counters
   * Lobby customization
-  * Storage for your decks
 
 ## Screenshots
 <details>
@@ -58,15 +66,13 @@ Here is the demo website: [DEMO](https://playopentabletop.firebaseapp.com/)
 
 ## Development
 
-``` bash
+```bash
 # install dependencies
 npm install
 
 # serve with hot reload at localhost:8080
-npm run dev
+npm run serve
 
 # build for production with minification
 npm run build
 ```
-
-For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
