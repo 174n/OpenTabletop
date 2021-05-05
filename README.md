@@ -14,7 +14,7 @@
 
 Browser-based online project built with Vue.js and WebRTC in which you can play any board games with your friends
 
-Here is the demo website: [DEMO](https://playopentabletop.firebaseapp.com/)
+Here is the demo website: [DEMO](https://tabletop.rundik.ru/)
 
 ## Features
 
