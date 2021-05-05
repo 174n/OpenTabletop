@@ -4,7 +4,7 @@ export default {
   //   return state.firebase.auth().currentUser
   // },
   peerNames: (state) => {
-    return state.peers.map((p) => p.nickname);
+    return state.peers.map((p) => (p.established ? p.nickname : false));
   },
   peer: (state) => (nickname) => {
     return state.peers.find((p) => p.nickname === nickname);

@@ -24,4 +24,5 @@ export default {
     ],
   },
   gameStarted: false,
+  signalhubUrl: "http://localhost:9000"
 };

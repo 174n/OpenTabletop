@@ -3,7 +3,7 @@
 <p align="center">
   <img src="https://badges.pufler.dev/created/Rundik/OpenTabletop" alt="Created">
   <a href="https://github.com/Rundik/OpenTabletop/commits/main"><img src="https://img.shields.io/github/last-commit/Rundik/OpenTabletop.svg" alt="last commit"></a>
-  <img src="https://david-dm.org/Rundik/OpenTabletop.svg" alt="Dependencies">
+  <img src="https://status.david-dm.org/gh/Rundik/OpenTabletop.svg" alt="Dependencies">
   <a href="https://github.com/Rundik/OpenTabletop/issues"><img src="https://img.shields.io/github/issues/Rundik/OpenTabletop.svg" alt="GitHub issues"></a>
   <a href="https://github.com/Rundik/OpenTabletop/stargazers"><img src="https://img.shields.io/github/stars/Rundik/OpenTabletop.svg" alt="GitHub stars"></a>
   <img src="https://badges.pufler.dev/visits/Rundik/OpenTabletop" alt="Visits">

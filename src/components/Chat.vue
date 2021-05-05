@@ -67,6 +67,7 @@ export default {
       });
       this.$store.dispatch("lobbyUpdateChat");
       this.chatMsgValue = "";
+      // emitter.emit("gameChanged");
     },
     diceSet() {
       if (/^[0-9]{1,}d[0-9]{1,}$/.test(this.dice)) {

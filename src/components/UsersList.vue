@@ -2,23 +2,19 @@
   <v-list>
     <v-subheader>{{ title }}</v-subheader>
     <template v-for="(name, i) in users">
-      <v-list-item :key="i">
-        <template v-if="!name">
-          <v-progress-linear
-            indeterminate
-            rounded
-            height="6"
-          ></v-progress-linear>
-        </template>
-        <template v-else>
-          <v-list-item-avatar v-html="avatar(name)" />
-          <v-list-item-content>
-            <v-list-item-title>{{ name }}</v-list-item-title>
-            <v-list-item-subtitle>{{
-              randDescription(name)
-            }}</v-list-item-subtitle>
-          </v-list-item-content>
-        </template>
+      <v-skeleton-loader
+        :key="i"
+        type="list-item-avatar-two-line"
+        v-if="!name"
+      />
+      <v-list-item :key="i" v-else>
+        <v-list-item-avatar v-html="avatar(name)" />
+        <v-list-item-content>
+          <v-list-item-title>{{ name }}</v-list-item-title>
+          <v-list-item-subtitle>{{
+            randDescription(name)
+          }}</v-list-item-subtitle>
+        </v-list-item-content>
       </v-list-item>
     </template>
   </v-list>

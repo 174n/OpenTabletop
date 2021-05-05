@@ -70,7 +70,14 @@ export default {
   },
   methods: {
     startGame() {
-      this.$store.dispatch("broadcastToPeers", "startGame");
+      this.$store.dispatch(
+        "broadcastToPeers",
+        JSON.stringify({
+          nickname: this.user.nickname,
+          data: "startGame",
+          event: "encounter",
+        })
+      );
       this.$store.commit("startGame");
     },
   },
@@ -86,8 +93,20 @@ export default {
       this.$store.dispatch("initHub");
     }
     emitter.on("peer-broadcast", (msg) => {
-      if (msg === "startGame") {
-        this.$store.commit("startGame");
+      try {
+        const { data, event, nickname } = JSON.parse(msg);
+
+        if (nickname !== this.user.nickname) {
+          if (event === "encounter" && data === "startGame") {
+            this.$store.commit("startGame");
+          } else if (event === "patch") {
+            this.$store.commit("patchLobby", data);
+          } else if (event === "fetch") {
+            this.$store.commit("setGame", data);
+          }
+        }
+      } catch (err) {
+        console.log(err, msg);
       }
     });
     // this.$store.dispatch("connectToALobby", this.lobby.id);

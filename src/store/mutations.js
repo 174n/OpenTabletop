@@ -285,6 +285,7 @@ export default {
     state.peers.push({
       nickname,
       peer,
+      established: false,
     });
   },
 
@@ -293,11 +294,24 @@ export default {
     state.peers.splice(state.peers.indexOf(peer), 1);
   },
 
+  peerSetEstablished(state, nickname) {
+    const peer = state.peers.find((p) => p.nickname === nickname);
+    peer.established = true;
+  },
+
   /* Lobby
   =======================================*/
 
+  setSignalhubUrl(state, url) {
+    state.signalhubUrl = url;
+  },
+
   setLobby(state, lobby) {
     state.lobby = lobby;
+  },
+
+  setGame(state, game) {
+    state.lobby.game = game;
   },
 
   setRedirect(state, path) {

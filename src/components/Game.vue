@@ -90,16 +90,6 @@ export default {
     emitter.on("gameChanged", () => {
       this.$store.dispatch("sendPatch", generate(this.observer));
     });
-    emitter.on("peer-broadcast", (msg) => {
-      try {
-        const { patch, nickname } = JSON.parse(msg);
-        if (nickname !== this.user.nickname) {
-          this.$store.commit("patchLobby", patch);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    });
   },
   beforeUnmount() {
     unobserve(this.lobby?.game, this.observer);

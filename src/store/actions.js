@@ -90,13 +90,7 @@ export default {
   },
 
   initHub({ state, dispatch, commit, getters }) {
-    commit(
-      "setHub",
-      signalhub(
-        "open-tabletop",
-        `${location.protocol}//${location.hostname}:9000`
-      )
-    );
+    commit("setHub", signalhub("open-tabletop", state.signalhubUrl));
 
     const id = state.lobby.id;
 
@@ -160,7 +154,17 @@ export default {
         data,
       });
     });
-    peer.on("open", () => {
+    peer.on("open", (peer) => {
+      if (isInitiator) {
+        peer.send(
+          JSON.stringify({
+            data: state.lobby.game,
+            event: "fetch",
+            nickname: state.user.nickname,
+          })
+        );
+      }
+      commit("peerSetEstablished", nickname);
       emitter.emit("snackbarOpen", `${nickname} connected`);
     });
     peer.on("close", () => {
@@ -193,11 +197,11 @@ export default {
   //   });
   // },
 
-  sendPatch({ state, dispatch }, patch) {
+  sendPatch({ state, dispatch }, data) {
     if (state.peers) {
       dispatch(
         "broadcastToPeers",
-        JSON.stringify({ patch, nickname: state.user.nickname })
+        JSON.stringify({ data, event: "patch", nickname: state.user.nickname })
       );
     }
   },
