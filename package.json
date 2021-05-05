@@ -7,18 +7,26 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "signalhub": "signalhub listen --port 9000",
+    "signalhubhttps": "signalhub listen --port 9000 --key certs/desktop.lan.key --cert certs/decktop.lan.crt",
+    "gencerts": "openssl req -x509 -newkey rsa:4096 -sha256 -days 3650 -nodes -keyout certs/desktop.lan.key -out certs/decktop.lan.crt"
   },
   "dependencies": {
     "@dicebear/avatars": "^4.6.3",
     "@dicebear/avatars-female-sprites": "^4.6.3",
     "@dicebear/avatars-male-sprites": "^4.6.3",
+    "@mattkrick/fast-rtc-peer": "^0.4.1",
     "core-js": "^3.6.5",
     "fast-json-patch": "^3.0.0-1",
     "interactjs": "^1.10.11",
+    "json-patch-queue": "^3.0.0-rc.1",
     "mitt": "^2.1.0",
     "shortid": "^2.2.16",
     "shuffle-array": "^1.0.1",
+    "signalhub-light-client": "^1.0.0",
+    "simple-peer-light": "^9.10.0",
+    "txtgen": "^2.2.8",
     "vue": "^2.6.11",
     "vue-async-methods": "^0.9.1",
     "vue-resource": "^1.5.2",
@@ -29,6 +37,7 @@
     "vuex": "^3.4.0"
   },
   "devDependencies": {
+    "@rollup/plugin-image": "^2.0.6",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-plugin-router": "~4.5.0",
@@ -42,6 +51,7 @@
     "prettier": "^2.2.1",
     "sass": "^1.32.0",
     "sass-loader": "^10.0.0",
+    "signalhub": "^4.9.0",
     "vue-cli-plugin-vuetify": "~2.4.0",
     "vue-template-compiler": "^2.6.11",
     "vuetify-loader": "^1.7.0"

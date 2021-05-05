@@ -1,9 +1,12 @@
-import shortid from "shortid";
+import signalhub from "signalhub-light-client";
+import emitter from "../helpers/event-bus.js";
+// import Peer from "simple-peer-light";
+import FastRTCPeer from "@mattkrick/fast-rtc-peer";
 
 export default {
-  newLobby({ state, commit }) {
+  newLobby({ state, commit }, id) {
     commit("setLobby", {
-      id: shortid.generate(),
+      id,
       game: {
         objects: [
           {
@@ -75,7 +78,6 @@ export default {
       created: Date.now(),
       creator: state.user,
       admin: state.user.nickname,
-      peers: [],
     });
   },
 
@@ -87,22 +89,114 @@ export default {
     commit("logout");
   },
 
-  async connectToALobby({ state, commit }) {
-    state.lobby.socket = new WebSocket("ws://localhost:3000");
+  initHub({ state, dispatch, commit, getters }) {
+    commit(
+      "setHub",
+      signalhub(
+        "open-tabletop",
+        `${location.protocol}//${location.hostname}:9000`
+      )
+    );
 
-    state.lobby.socket.addEventListener("open", () => {
-      state.lobby.socket.addEventListener("message", (event) => {
-        const { patch, nickname } = JSON.parse(event.data);
-        if (nickname !== state.user.nickname) {
-          commit("patchLobby", patch);
+    const id = state.lobby.id;
+
+    state.hub.subscribe(id, (msg) => {
+      if (msg.nickname !== state.user.nickname) {
+        if (msg.hi && !getters.peer(msg.nickname)) {
+          dispatch("createPeer", { nickname: msg.nickname, isInitiator: true });
+        } else if (msg.data) {
+          if (!getters.peer(msg.nickname)) {
+            dispatch("createPeer", {
+              nickname: msg.nickname,
+              isInitiator: false,
+            });
+          }
+          getters.peer(msg.nickname).peer.dispatch(msg.data);
         }
+        console.log(msg);
+      }
+    });
+    setTimeout(() => {
+      state.hub.broadcast(id, {
+        nickname: state.user.nickname,
+        hi: true,
       });
+    }, 1);
+  },
+
+  destroyHub({ state }) {
+    state.hub.close();
+  },
+
+  createPeer({ state, commit, getters }, { nickname, isInitiator }) {
+    if (getters.peer(nickname)) return;
+    // const peer = new Peer({
+    //   initiator: isInitiator,
+    //   config: state.rtcConfig
+    // });
+    // peer.on("error", (err) => console.log("error", err));
+
+    // peer.on("signal", (data) => {
+    //   // console.log("SIGNAl:", data);
+    //   state.hub.broadcast(state.lobby.id, {
+    //     nickname: state.user.nickname,
+    //     data,
+    //   });
+    // });
+
+    // peer.on("connect", () => {
+    //   console.log("CONNECT");
+    //   peer.send("whatever" + Math.random());
+    // });
+
+    // peer.on("data", (data) => {
+    //   console.log("data: " + data);
+    // });
+
+    const peer = new FastRTCPeer({ isOfferer: isInitiator });
+    peer.on("signal", (data) => {
+      state.hub.broadcast(state.lobby.id, {
+        nickname: state.user.nickname,
+        data,
+      });
+    });
+    peer.on("open", () => {
+      emitter.emit("snackbarOpen", `${nickname} connected`);
+    });
+    peer.on("close", () => {
+      commit("removePeer", nickname);
+      emitter.emit("snackbarOpen", `${nickname} disconnected`);
+    });
+    peer.on("data", (data, peer) => {
+      emitter.emit("peer-broadcast", data, peer);
+    });
+
+    commit("addPeer", { nickname, peer });
+  },
+
+  broadcastToPeers({ state }, msg) {
+    state.peers.forEach((p) => {
+      p.peer.send(msg);
     });
   },
 
-  sendPatch({ state }, patch) {
-    if (state.lobby.socket) {
-      state.lobby.socket.send(
+  // async connectToALobby({ state, commit }) {
+  //   state.lobby.socket = new WebSocket("ws://localhost:3000");
+
+  //   state.lobby.socket.addEventListener("open", () => {
+  //     state.lobby.socket.addEventListener("message", (event) => {
+  //       const { patch, nickname } = JSON.parse(event.data);
+  //       if (nickname !== state.user.nickname) {
+  //         commit("patchLobby", patch);
+  //       }
+  //     });
+  //   });
+  // },
+
+  sendPatch({ state, dispatch }, patch) {
+    if (state.peers) {
+      dispatch(
+        "broadcastToPeers",
         JSON.stringify({ patch, nickname: state.user.nickname })
       );
     }

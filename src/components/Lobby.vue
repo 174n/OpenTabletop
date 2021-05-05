@@ -1,119 +1,105 @@
 <template>
-  <v-app>
-    <main v-if="readyToPlay">
-      <!-- {{$route.params.id}} -->
-      <div class="background" :style="backgroundStyle"></div>
-      <tabletop></tabletop>
-
-      <chat></chat>
-      <deck-list></deck-list>
-      <!-- <card-preview></card-preview> -->
-      <speed-dial></speed-dial>
-      <context-menu></context-menu>
-      <place-user-deck></place-user-deck>
-      <lobby-settings></lobby-settings>
-      <card-size></card-size>
-      <!-- <rules-view></rules-view> -->
-    </main>
-  </v-app>
+  <div v-if="user">
+    <interface-wrapper subtitle="Lobby" :backBtn="true" v-if="!gameStarted">
+      <v-container fluid grid-list-lg>
+        <v-layout row wrap>
+          <v-flex md6 offset-md3 sm12>
+            <user-info-card />
+            <div class="mt-5">
+              <lobby-info-card :lobbyId="$route.params.id" />
+            </div>
+            <div class="mt-5">
+              <v-card>
+                <users-list title="In Lobby" :users="users"></users-list>
+              </v-card>
+            </div>
+            <v-btn
+              class="mt-5"
+              depressed
+              color="primary"
+              block
+              large
+              @click="startGame"
+            >
+              Start the game
+            </v-btn>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </interface-wrapper>
+    <Game v-else />
+  </div>
 </template>
 
 <script>
-import Tabletop from "./Tabletop.vue";
-
-import Chat from "./Chat.vue";
-import DeckList from "./dialogs/DeckList.vue";
-// import CardPreview from './dialogs/CardPreview.vue';
-import SpeedDial from "./SpeedDial.vue";
-import ContextMenu from "./ContextMenu.vue";
-import PlaceUserDeck from "./dialogs/PlaceUserDeck.vue";
-import LobbySettings from "./dialogs/LobbySettings.vue";
-import CardSize from "./dialogs/CardSize.vue";
-// import RulesView from './dialogs/RulesView.vue';
-import { observe, unobserve, generate } from "fast-json-patch";
+import UserInfoCard from "./cards/UserInfoCard.vue";
+import LobbyInfoCard from "./cards/LobbyInfoCard.vue";
+import UsersList from "./UsersList.vue";
+import InterfaceWrapper from "./InterfaceWrapper.vue";
+import Game from "./Game.vue";
 import emitter from "../helpers/event-bus.js";
 
 export default {
+  name: "Lobby",
   components: {
-    "deck-list": DeckList,
-    chat: Chat,
-    // "card-preview": CardPreview,
-    "speed-dial": SpeedDial,
-    "context-menu": ContextMenu,
-    tabletop: Tabletop,
-    "place-user-deck": PlaceUserDeck,
-    "lobby-settings": LobbySettings,
-    "card-size": CardSize,
-    // "rules-view": RulesView,
+    UserInfoCard,
+    LobbyInfoCard,
+    InterfaceWrapper,
+    UsersList,
+    Game,
   },
   computed: {
-    background() {
-      return this.$store.state.lobby?.game?.background;
-    },
-    backgroundStyle() {
-      return this.background
-        ? {
-            backgroundImage: this.background.background_url
-              ? `url(${this.background.background_url})`
-              : "none",
-            backgroundColor: `url(${this.background.background_color})`,
-          }
-        : {};
-    },
     lobby() {
       return this.$store.state.lobby;
     },
+    user() {
+      return this.$store.state.user;
+    },
+    gameStarted() {
+      return this.$store.state.gameStarted;
+    },
+    peers() {
+      return this.$store.state.peers;
+    },
+    users() {
+      return [this.user.nickname, ...this.$store.getters.peerNames];
+    },
     readyToPlay() {
-      return this.lobby && this.$store.state.user;
+      return this.user;
     },
   },
-  data() {
-    return {
-      observer: null,
-    };
-  },
   methods: {
-    sendPatch(patches) {
-      this.$store.dispatch("sendPatch", patches);
+    startGame() {
+      this.$store.dispatch("broadcastToPeers", "startGame");
+      this.$store.commit("startGame");
     },
   },
   mounted() {
     if (!this.readyToPlay) {
       this.$store.commit("setRedirect", this.$router.history.current.path);
       this.$router.push("/");
+      return;
+    } else {
+      if (!this.lobby) {
+        this.$store.dispatch("newLobby", this.$route.params.id);
+      }
+      this.$store.dispatch("initHub");
     }
-    this.$store.dispatch("connectToALobby", this.lobby.id);
-    this.observer = observe(this.lobby?.game, this.sendPatch);
-    emitter.on("gameChanged", () => {
-      this.$store.dispatch("sendPatch", generate(this.observer));
+    emitter.on("peer-broadcast", (msg) => {
+      if (msg === "startGame") {
+        this.$store.commit("startGame");
+      }
     });
+    // this.$store.dispatch("connectToALobby", this.lobby.id);
+    // this.observer = observe(this.lobby?.game, this.sendPatch);
+    // emitter.on("gameChanged", () => {
+    //   this.$store.dispatch("sendPatch", generate(this.observer));
+    // });
   },
   beforeUnmount() {
-    unobserve(this.lobby?.game, this.observer);
+    this.$store.dispatch("destroyHub");
   },
 };
 </script>
 
-<style lang="scss">
-html,
-body {
-  position: static;
-  background: #fafafa;
-  overflow: hidden;
-  background-size: cover !important;
-}
-.speed-dial {
-  z-index: 4;
-}
-.application--light {
-  background-color: inherit;
-}
-.background {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 100vw;
-  height: 100vh;
-  background-size: cover;
-}
-</style>
+<style lang="scss" scoped></style>

@@ -11,10 +11,12 @@
 </template>
 
 <script>
+import shortid from "shortid";
+
 export default {
   methods: {
     newLobby() {
-      this.$store.dispatch("newLobby");
+      this.$store.dispatch("newLobby", shortid.generate());
       this.$router.push("lobby/" + this.$store.state.lobby.id);
     },
   },

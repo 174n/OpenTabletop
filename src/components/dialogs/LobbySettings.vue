@@ -15,28 +15,10 @@
           <v-tab-item>
             <v-card text>
               <v-card-text>
-                <v-list two-line>
-                  <v-subheader>Users online</v-subheader>
-                  <template v-for="(member, index) in game.members">
-                    <v-list-item :key="index">
-                      <v-list-item-avatar>
-                        <img :src="member.avatar" />
-                      </v-list-item-avatar>
-                      <v-list-item-content>
-                        <v-list-item-title>
-                          {{ member.name }}
-                          <small>{{ member.email }}</small>
-                        </v-list-item-title>
-                        <v-list-item-subtitle>
-                          <timeago
-                            :datetime="member.online"
-                            :auto-update="5"
-                          ></timeago>
-                        </v-list-item-subtitle>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </template>
-                </v-list>
+                <users-list
+                  title="Users online"
+                  :users="peerNames"
+                ></users-list>
               </v-card-text>
             </v-card>
           </v-tab-item>
@@ -105,11 +87,12 @@
                             :href="download_link"
                             download="export.json"
                             @click="download_link = ''"
-                            >Download</a
                           >
+                            Download
+                          </a>
                         </div>
                       </div>
-                      <div class="pt-md-4">
+                      <div class="pt-4">
                         <div class="file">
                           <v-btn block primary depressed>
                             Import lobby from file
@@ -117,7 +100,7 @@
                           </v-btn>
                         </div>
                       </div>
-                      <div class="pt-md-4" v-if="imported_lobby !== null">
+                      <div class="pt-4" v-if="imported_lobby !== null">
                         <v-btn
                           block
                           color="error"
@@ -144,9 +127,13 @@
 </template>
 
 <script>
+import UsersList from "../UsersList.vue";
 import emitter from "../../helpers/event-bus.js";
 
 export default {
+  components: {
+    UsersList,
+  },
   data() {
     return {
       open: false,
@@ -168,6 +155,9 @@ export default {
     },
     user() {
       return this.$store.state.user;
+    },
+    peerNames() {
+      return this.$store.getters.peerNames;
     },
   },
   created() {

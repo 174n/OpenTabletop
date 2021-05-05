@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import shortid from "shortid";
 import emitter from "../../helpers/event-bus.js";
 
 export default {
@@ -40,11 +41,10 @@ export default {
     });
   },
   methods: {
-    newLobby() {
+    async newLobby() {
       this.open = false;
-      this.$store.dispatch("newLobby").then((id) => {
-        this.$router.push("lobby/" + id);
-      });
+      const id = await this.$store.dispatch("newLobby", shortid.generate());
+      this.$router.push("lobby/" + id);
     },
   },
 };

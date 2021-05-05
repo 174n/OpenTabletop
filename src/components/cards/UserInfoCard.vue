@@ -2,7 +2,7 @@
   <v-card>
     <v-list>
       <v-list-item>
-        <v-list-item-avatar v-html="avatar"> </v-list-item-avatar>
+        <v-list-item-avatar v-html="avatar"></v-list-item-avatar>
         <v-list-item-content>
           <v-list-item-title>{{ user.nickname }}</v-list-item-title>
           <v-list-item-subtitle>That's you</v-list-item-subtitle>

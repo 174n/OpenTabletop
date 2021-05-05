@@ -9,5 +9,19 @@ export default {
   deckOptions: {},
   dice: "1d6",
   lobby: null,
-  socket: null,
+  hub: null,
+  peers: [],
+  rtcConfig: {
+    iceServers: [
+      {
+        urls: [
+          "stun:stun.l.google.com:19302",
+          "turn:turn.anyfirewall.com:443?transport=tcp",
+        ],
+        credential: "webrtc",
+        username: "webrtc",
+      },
+    ],
+  },
+  gameStarted: false,
 };

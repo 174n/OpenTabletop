@@ -17,6 +17,22 @@
           fab
           dark
           small
+          class="orange"
+          @click.stop="toggleGame"
+          v-bind="attrs"
+          v-on="on"
+        >
+          <v-icon>arrow_back</v-icon>
+        </v-btn>
+      </template>
+      <span>Back to lobby</span>
+    </v-tooltip>
+    <v-tooltip left>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+          fab
+          dark
+          small
           class="green"
           @click.stop="addNewDeck"
           v-bind="attrs"
@@ -165,6 +181,9 @@ export default {
     },
     openRules() {
       emitter.emit("toggleRules", this.rules);
+    },
+    toggleGame() {
+      this.$store.commit("toggleGameState");
     },
   },
   computed: {

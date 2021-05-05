@@ -271,6 +271,28 @@ export default {
     });
   },
 
+  /* Peers
+  =======================================*/
+
+  setHub(state, hub) {
+    if (!hub) return;
+    state.hub = hub;
+  },
+
+  addPeer(state, { nickname, peer }) {
+    if (!nickname || !peer) return;
+    // state.peers[nickname] = peer;
+    state.peers.push({
+      nickname,
+      peer,
+    });
+  },
+
+  removePeer(state, nickname) {
+    const peer = state.peers.find((p) => p.nickname === nickname);
+    state.peers.splice(state.peers.indexOf(peer), 1);
+  },
+
   /* Lobby
   =======================================*/
 
@@ -329,6 +351,14 @@ export default {
 
   patchLobby(state, patch) {
     applyPatch(state.lobby.game, patch);
+  },
+
+  startGame(state) {
+    state.gameStarted = true;
+  },
+
+  toggleGameState(state) {
+    state.gameStarted = !state.gameStarted;
   },
 
   /* Other

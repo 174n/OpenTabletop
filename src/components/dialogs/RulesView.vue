@@ -20,7 +20,7 @@
           color="red"
         ></v-progress-circular>
       </div>
-      <pdf
+      <!--       <pdf
         style="display: none"
         v-if="rules || false"
         :src="'https://cors-anywhere.herokuapp.com/' + rules"
@@ -34,18 +34,18 @@
         @progress="progress"
         @error="error"
         class="contract-container"
-      />
+      /> -->
     </v-card>
   </v-dialog>
 </template>
 
 <script>
 import emitter from "../../helpers/event-bus.js";
-import pdf from "vue-pdf";
+// import pdf from "vue-pdf";
 
 export default {
   components: {
-    pdf,
+    // pdf,
   },
   data() {
     return {
