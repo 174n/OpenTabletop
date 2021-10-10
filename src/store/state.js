@@ -12,6 +12,14 @@ export default {
   hub: null,
   peers: [],
   rtcConfig: {
+    optional: [
+      {
+        DtlsSrtpKeyAgreement: false,
+      },
+      {
+        RtpDataChannels: false,
+      },
+    ],
     iceServers: [
       {
         urls: [

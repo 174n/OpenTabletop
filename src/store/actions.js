@@ -4,68 +4,11 @@ import emitter from "../helpers/event-bus.js";
 import FastRTCPeer from "@mattkrick/fast-rtc-peer";
 
 export default {
-  newLobby({ state, commit }, id) {
-    commit("setLobby", {
+  async newLobby({ state, commit }, id) {
+    const lobby = {
       id,
       game: {
-        objects: [
-          {
-            type: "card",
-            back:
-              "https://upload.wikimedia.org/wikipedia/en/a/aa/Magic_the_gathering-card_back.jpg",
-            url:
-              "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=417720&type=card",
-            x: 0,
-            y: 0,
-            rotation: 0,
-          },
-          {
-            type: "card",
-            back:
-              "https://upload.wikimedia.org/wikipedia/en/a/aa/Magic_the_gathering-card_back.jpg",
-            url:
-              "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=423802&type=card",
-            x: 150,
-            y: 0,
-            rotation: 90,
-          },
-          {
-            type: "card",
-            back:
-              "https://upload.wikimedia.org/wikipedia/en/a/aa/Magic_the_gathering-card_back.jpg",
-            url:
-              "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=417690&type=card",
-            x: 0,
-            y: 150,
-            rotation: 0,
-          },
-          {
-            type: "deck",
-            x: 200,
-            y: 200,
-            color: "#ccc",
-            text: "Deck 1",
-            cards: [
-              {
-                type: "card",
-                back:
-                  "https://upload.wikimedia.org/wikipedia/en/a/aa/Magic_the_gathering-card_back.jpg",
-                url:
-                  "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=417720&type=card",
-                x: 0,
-                y: 0,
-                rotation: 0,
-              },
-            ],
-          },
-          {
-            type: "counter",
-            x: 400,
-            y: 300,
-            count: 0,
-            color: "blue",
-          },
-        ],
+        objects: [],
         chat: [],
         members: [],
         background: {
@@ -78,7 +21,8 @@ export default {
       created: Date.now(),
       creator: state.user,
       admin: state.user.nickname,
-    });
+    };
+    commit("setLobby", lobby);
   },
 
   async lobbySetGame({ commit }, game) {
@@ -147,7 +91,10 @@ export default {
     //   console.log("data: " + data);
     // });
 
-    const peer = new FastRTCPeer({ isOfferer: isInitiator });
+    const peer = new FastRTCPeer({
+      isOfferer: isInitiator,
+      rtcConfig: state.rtcConfig,
+    });
     peer.on("signal", (data) => {
       state.hub.broadcast(state.lobby.id, {
         nickname: state.user.nickname,

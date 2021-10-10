@@ -5,7 +5,7 @@
         <div class="headline">Lobby settings</div>
       </v-card-title>
       <v-card-text>
-        <v-tabs centered scrollable grow v-model="tab">
+        <v-tabs centered scrollable v-model="tab">
           <v-tabs-slider color="blue"></v-tabs-slider>
           <v-tab>Members</v-tab>
           <v-tab>Background</v-tab>
@@ -17,7 +17,7 @@
               <v-card-text>
                 <users-list
                   title="Users online"
-                  :users="peerNames"
+                  :users="[user.nickname, ...peerNames]"
                 ></users-list>
               </v-card-text>
             </v-card>

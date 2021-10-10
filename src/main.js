@@ -1,3 +1,6 @@
+import adapter from "webrtc-adapter";
+console.log(adapter);
+
 import Vue from "vue";
 import App from "./App.vue";
 

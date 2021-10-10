@@ -1,16 +1,16 @@
 {
   "name": "opentabletop",
-  "description": "Browser-based online project in which you can play any card games with your friends",
   "version": "2.2.0",
-  "author": "Rundik <rundik@ro.ru>",
   "private": true,
+  "description": "Browser-based online project in which you can play any card games with your friends",
+  "author": "Rundik <rundik@ro.ru>",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
+    "gencerts": "openssl req -x509 -newkey rsa:4096 -sha256 -days 3650 -nodes -keyout certs/desktop.lan.key -out certs/decktop.lan.crt",
     "signalhub": "signalhub listen --port 9000",
-    "signalhubhttps": "signalhub listen --port 9000 --key certs/desktop.lan.key --cert certs/decktop.lan.crt",
-    "gencerts": "openssl req -x509 -newkey rsa:4096 -sha256 -days 3650 -nodes -keyout certs/desktop.lan.key -out certs/decktop.lan.crt"
+    "signalhubhttps": "signalhub listen --port 9000 --key certs/desktop.lan.key --cert certs/decktop.lan.crt"
   },
   "dependencies": {
     "@dicebear/avatars": "^4.6.3",
@@ -19,9 +19,11 @@
     "@mattkrick/fast-rtc-peer": "^0.4.1",
     "core-js": "^3.6.5",
     "fast-json-patch": "^3.0.0-1",
+    "hover-hand": "^1.0.0",
     "interactjs": "^1.10.11",
     "json-patch-queue": "^3.0.0-rc.1",
     "mitt": "^2.1.0",
+    "peer-message": "^0.3.0",
     "shortid": "^2.2.16",
     "shuffle-array": "^1.0.1",
     "signalhub-light-client": "^1.0.0",
@@ -34,15 +36,16 @@
     "vue-timeago": "^5.1.3",
     "vuedraggable": "^2.24.3",
     "vuetify": "^2.4.11",
-    "vuex": "^3.4.0"
+    "vuex": "^3.4.0",
+    "webrtc-adapter": "^8.0.0"
   },
   "devDependencies": {
     "@rollup/plugin-image": "^2.0.6",
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-eslint": "~4.5.0",
-    "@vue/cli-plugin-router": "~4.5.0",
-    "@vue/cli-plugin-vuex": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
+    "@vue/cli-plugin-babel": "~4.5.13",
+    "@vue/cli-plugin-eslint": "~4.5.13",
+    "@vue/cli-plugin-router": "~4.5.13",
+    "@vue/cli-plugin-vuex": "~4.5.13",
+    "@vue/cli-service": "~4.5.13",
     "@vue/eslint-config-prettier": "^6.0.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
@@ -52,7 +55,7 @@
     "sass": "^1.32.0",
     "sass-loader": "^10.0.0",
     "signalhub": "^4.9.0",
-    "vue-cli-plugin-vuetify": "~2.4.0",
+    "vue-cli-plugin-vuetify": "~2.4.3",
     "vue-template-compiler": "^2.6.11",
     "vuetify-loader": "^1.7.0"
   }
