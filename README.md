@@ -1,13 +1,13 @@
 <h1 align="center">🎲 OpenTabletop</h1>
 
 <p align="center">
-  <img src="https://badges.pufler.dev/created/Rundik/OpenTabletop" alt="Created">
-  <a href="https://github.com/Rundik/OpenTabletop/commits/main"><img src="https://img.shields.io/github/last-commit/Rundik/OpenTabletop.svg" alt="last commit"></a>
-  <img src="https://status.david-dm.org/gh/Rundik/OpenTabletop.svg" alt="Dependencies">
-  <a href="https://github.com/Rundik/OpenTabletop/issues"><img src="https://img.shields.io/github/issues/Rundik/OpenTabletop.svg" alt="GitHub issues"></a>
-  <a href="https://github.com/Rundik/OpenTabletop/stargazers"><img src="https://img.shields.io/github/stars/Rundik/OpenTabletop.svg" alt="GitHub stars"></a>
-  <img src="https://badges.pufler.dev/visits/Rundik/OpenTabletop" alt="Visits">
-  <a href="https://github.com/Rundik/OpenTabletop/blob/main/LICENSE"><img src="https://img.shields.io/github/license/Rundik/OpenTabletop" alt="license"></a>
+  <img src="https://badges.pufler.dev/created/174n/OpenTabletop" alt="Created">
+  <a href="https://github.com/174n/OpenTabletop/commits/main"><img src="https://img.shields.io/github/last-commit/174n/OpenTabletop.svg" alt="last commit"></a>
+  <img src="https://status.david-dm.org/gh/174n/OpenTabletop.svg" alt="Dependencies">
+  <a href="https://github.com/174n/OpenTabletop/issues"><img src="https://img.shields.io/github/issues/174n/OpenTabletop.svg" alt="GitHub issues"></a>
+  <a href="https://github.com/174n/OpenTabletop/stargazers"><img src="https://img.shields.io/github/stars/174n/OpenTabletop.svg" alt="GitHub stars"></a>
+  <img src="https://badges.pufler.dev/visits/174n/OpenTabletop" alt="Visits">
+  <a href="https://github.com/174n/OpenTabletop/blob/main/LICENSE"><img src="https://img.shields.io/github/license/174n/OpenTabletop" alt="license"></a>
 </p>
 
 > This version is still in development. Check out old firebase version that is fully working [here](https://github.com/Rundik/OpenTabletop/tree/firebase)
