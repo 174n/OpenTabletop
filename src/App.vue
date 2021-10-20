@@ -9,11 +9,11 @@
 import Snackbar from "./components/Snackbar.vue";
 export default {
   components: {
-    snackbar: Snackbar,
+    snackbar: Snackbar
   },
   created() {
     this.$store.commit("initUser");
-  },
+  }
 };
 </script>
 

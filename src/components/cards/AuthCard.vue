@@ -26,13 +26,13 @@ export default {
   data() {
     return {
       nickname: "",
-      rules: [(v) => v.length <= 25 || "Max 25 characters"],
+      rules: [(v) => v.length <= 25 || "Max 25 characters"]
     };
   },
   computed: {
     redirect() {
       return this.$store.state.redirect;
-    },
+    }
   },
   methods: {
     auth() {
@@ -40,8 +40,8 @@ export default {
       if (this.redirect) {
         this.$router.push(this.redirect);
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

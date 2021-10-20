@@ -44,7 +44,7 @@ export default {
     tabletop: Tabletop,
     "place-user-deck": PlaceUserDeck,
     "lobby-settings": LobbySettings,
-    "card-size": CardSize,
+    "card-size": CardSize
     // "rules-view": RulesView,
   },
   computed: {
@@ -57,7 +57,7 @@ export default {
             backgroundImage: this.background.background_url
               ? `url(${this.background.background_url})`
               : "none",
-            backgroundColor: `url(${this.background.background_color})`,
+            backgroundColor: `url(${this.background.background_color})`
           }
         : {};
     },
@@ -69,17 +69,17 @@ export default {
     },
     readyToPlay() {
       return this.lobby && this.$store.state.user;
-    },
+    }
   },
   data() {
     return {
-      observer: null,
+      observer: null
     };
   },
   methods: {
     sendPatch(patches) {
       this.$store.dispatch("sendPatch", patches);
-    },
+    }
   },
   mounted() {
     if (!this.readyToPlay) {
@@ -93,7 +93,7 @@ export default {
   },
   beforeUnmount() {
     unobserve(this.lobby?.game, this.observer);
-  },
+  }
 };
 </script>
 

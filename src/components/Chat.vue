@@ -54,8 +54,8 @@ export default {
       chatMsgValue: "",
       dice: "1d6",
       diceRules: [
-        (v) => /^[0-9]{1,}d[0-9]{1,}$/.test(v) || "Dice code must be valid",
-      ],
+        (v) => /^[0-9]{1,}d[0-9]{1,}$/.test(v) || "Dice code must be valid"
+      ]
     };
   },
   methods: {
@@ -63,7 +63,7 @@ export default {
       if (e !== undefined) e.target.blur();
       this.$store.commit("chatAddMsg", {
         nickname: this.user.nickname,
-        msg: this.chatMsgValue,
+        msg: this.chatMsgValue
       });
       this.$store.dispatch("lobbyUpdateChat");
       this.chatMsgValue = "";
@@ -76,7 +76,7 @@ export default {
       } else {
         emitter.emit("snackbarOpen", "Wrong dice settings", "error");
       }
-    },
+    }
   },
   computed: {
     game() {
@@ -86,14 +86,14 @@ export default {
     },
     user() {
       return this.$store.state.user;
-    },
+    }
   },
   created() {
     emitter.on("toggleChat", (val) => {
       if (val === undefined) this.sidebar = !this.sidebar;
       else this.sidebar = val;
     });
-  },
+  }
 };
 </script>
 

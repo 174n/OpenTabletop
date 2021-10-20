@@ -130,10 +130,10 @@ export default {
             transform: `scale(${this.scale})`,
             marginLeft: this.left + "px",
             marginTop: this.top + "px",
-            transformOrigin: `${this.originX}px ${this.originY}px`,
+            transformOrigin: `${this.originX}px ${this.originY}px`
           }
         : {};
-    },
+    }
   },
   data() {
     return {
@@ -144,7 +144,7 @@ export default {
       top: 0,
       left: 0,
       originX: 0,
-      originY: 0,
+      originY: 0
     };
   },
   asyncMethods: {
@@ -159,14 +159,14 @@ export default {
         console.log(width, height);
         return { width, height };
       });
-    },
+    }
   },
   methods: {
     dragMoveListener(e) {
       this.$store.commit("moveObject", {
         id: e.target.getAttribute("data-id"),
         dx: e.dx / this.scale,
-        dy: e.dy / this.scale,
+        dy: e.dy / this.scale
       });
       emitter.emit("gameChanged");
     },
@@ -178,7 +178,7 @@ export default {
         id,
         type,
         x: offset.x,
-        y: offset.y,
+        y: offset.y
       });
     },
     cardMiddleClick(e, id) {
@@ -208,21 +208,21 @@ export default {
     dragTabletop(e) {
       this.left += e.dx;
       this.top += e.dy;
-    },
+    }
   },
   mounted() {
     interact(".draggable").draggable({
       ignoreFrom: ".pinned",
       inertia: {
-        resistance: 60,
+        resistance: 60
       },
       restrict: {
         restriction: "parent",
         endOnly: false,
-        elementRect: { top: 0, left: 0, bottom: 1, right: 1 },
+        elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
       },
       autoScroll: true,
-      onmove: this.dragMoveListener,
+      onmove: this.dragMoveListener
     });
 
     interact(".deck").dropzone({
@@ -244,7 +244,7 @@ export default {
         let deck = event.target.getAttribute("data-id");
 
         this.$store.commit("moveCardToDeck", [card, deck]);
-      },
+      }
     });
 
     document.body.addEventListener("wheel", this.tabletopScroll);
@@ -253,10 +253,10 @@ export default {
       .draggable({
         ignoreFrom: ".draggable",
         autoScroll: false,
-        onmove: this.dragTabletop,
+        onmove: this.dragTabletop
       })
       .gesturable({
-        onmove: this.tabletopScroll,
+        onmove: this.tabletopScroll
       });
   },
   beforeUnmount() {
@@ -264,7 +264,7 @@ export default {
     interact(".deck").unset();
     interact(".draggable").unset();
     document.body.removeEventListener("wheel", this.tabletopScroll);
-  },
+  }
 };
 </script>
 

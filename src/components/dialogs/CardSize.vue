@@ -53,14 +53,14 @@ export default {
         id: false,
         custom_size: false,
         real_size: false,
-        size: 12,
-      },
+        size: 12
+      }
     };
   },
   computed: {
     objects() {
       return this.$store.state.lobby.game.objects;
-    },
+    }
   },
   created() {
     emitter.on("cardSizeDialogToggle", (id) => {
@@ -78,8 +78,8 @@ export default {
     changeSize() {
       this.open = false;
       this.$store.commit("cardSizeChange", this.data);
-    },
-  },
+    }
+  }
 };
 </script>
 

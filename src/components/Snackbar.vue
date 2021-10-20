@@ -17,7 +17,7 @@ export default {
     return {
       snackbar: false,
       color: "error",
-      text: "There is an error",
+      text: "There is an error"
     };
   },
   created() {
@@ -26,7 +26,7 @@ export default {
       this.color = color;
       this.snackbar = true;
     });
-  },
+  }
 };
 </script>
 

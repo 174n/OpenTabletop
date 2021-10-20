@@ -11,26 +11,7 @@ export default {
   lobby: null,
   hub: null,
   peers: [],
-  rtcConfig: {
-    optional: [
-      {
-        DtlsSrtpKeyAgreement: false,
-      },
-      {
-        RtpDataChannels: false,
-      },
-    ],
-    iceServers: [
-      {
-        urls: [
-          "stun:stun.l.google.com:19302",
-          "turn:turn.anyfirewall.com:443?transport=tcp",
-        ],
-        credential: "webrtc",
-        username: "webrtc",
-      },
-    ],
-  },
   gameStarted: false,
   signalhubUrl: config?.signalhub_url || "http://localhost:9000",
+  customIceServers: localStorage.getItem("OT:customIceServers") || config?.custom_ice_servers || []
 };

@@ -46,7 +46,7 @@ export default {
     LobbyInfoCard,
     InterfaceWrapper,
     UsersList,
-    Game,
+    Game
   },
   computed: {
     lobby() {
@@ -66,7 +66,7 @@ export default {
     },
     readyToPlay() {
       return this.user;
-    },
+    }
   },
   methods: {
     startGame() {
@@ -75,11 +75,11 @@ export default {
         JSON.stringify({
           nickname: this.user.nickname,
           data: "startGame",
-          event: "encounter",
+          event: "encounter"
         })
       );
       this.$store.commit("startGame");
-    },
+    }
   },
   mounted() {
     if (!this.readyToPlay) {
@@ -117,7 +117,7 @@ export default {
   },
   beforeUnmount() {
     this.$store.dispatch("destroyHub");
-  },
+  }
 };
 </script>
 

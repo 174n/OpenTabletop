@@ -1,0 +1,5 @@
+{
+  "imgur_client_id": "000000000000000",
+  "signalhub_url": "http://localhost:9000",
+  "custom_ice_servers": "[]"
+}

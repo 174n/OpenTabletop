@@ -43,9 +43,9 @@ export default {
       },
       set: (newValue) => {
         this.$store.commit("deckOptionsChange", newValue);
-      },
-    },
-  },
+      }
+    }
+  }
 };
 </script>
 

@@ -61,14 +61,14 @@ export default {
         card_urls: undefined,
         custom_size: false,
         real_size: false,
-        size: 12,
-      },
+        size: 12
+      }
     };
   },
   computed: {
     decks() {
       return this.$store.state.decks;
-    },
+    }
   },
   created() {
     emitter.on("deckEditorToggle", (id) => {
@@ -93,8 +93,8 @@ export default {
             back: this.data.card_back,
             urls: this.data.card_urls ? this.data.card_urls.split("\n") : [],
             size: this.data.custom_size ? this.data.size : false,
-            real_size: this.data.real_size,
-          },
+            real_size: this.data.real_size
+          }
         })
         .then(() => {
           this.data.deck_name = undefined;
@@ -117,8 +117,8 @@ export default {
         this.data.size = 12;
         emitter.emit("snackbarOpen", "Deck deleted");
       });
-    },
-  },
+    }
+  }
 };
 </script>
 

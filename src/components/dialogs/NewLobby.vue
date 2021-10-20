@@ -32,7 +32,7 @@ import emitter from "../../helpers/event-bus.js";
 export default {
   data() {
     return {
-      open: false,
+      open: false
     };
   },
   created() {
@@ -45,8 +45,8 @@ export default {
       this.open = false;
       const id = await this.$store.dispatch("newLobby", shortid.generate());
       this.$router.push("lobby/" + id);
-    },
-  },
+    }
+  }
 };
 </script>
 

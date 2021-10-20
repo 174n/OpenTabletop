@@ -33,7 +33,7 @@ export default {
   computed: {
     decks() {
       return this.$store.state.decks;
-    },
+    }
   },
   props: ["put"],
   methods: {
@@ -42,8 +42,8 @@ export default {
     },
     putADeck(index) {
       this.$store.dispatch("addNewDeck", { index, x: 10, y: 10 });
-    },
-  },
+    }
+  }
 };
 </script>
 

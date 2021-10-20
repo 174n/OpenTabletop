@@ -132,7 +132,7 @@ import emitter from "../../helpers/event-bus.js";
 
 export default {
   components: {
-    UsersList,
+    UsersList
   },
   data() {
     return {
@@ -143,10 +143,10 @@ export default {
         tabletop_url: "",
         tabletop_color: "#eee",
         background_url: "",
-        background_color: "#fafafa",
+        background_color: "#fafafa"
       },
       download_link: "",
-      imported_lobby: null,
+      imported_lobby: null
     };
   },
   computed: {
@@ -158,7 +158,7 @@ export default {
     },
     peerNames() {
       return this.$store.getters.peerNames;
-    },
+    }
   },
   created() {
     emitter.on("LobbySettings", () => {
@@ -167,7 +167,7 @@ export default {
         tabletop_url: this.game.background.tabletop_url,
         tabletop_color: this.game.background.tabletop_color,
         background_url: this.game.background.background_url,
-        background_color: this.game.background.background_color,
+        background_color: this.game.background.background_color
       };
     });
   },
@@ -205,13 +205,13 @@ export default {
           objects: lobby.objects,
           fullRotation: lobby.fullRotation || false,
           rules: lobby.rules || false,
-          imported: Date.now(),
+          imported: Date.now()
         })
         .then(() => {
           emitter.emit("snackbarOpen", "Successfully imported!");
           this.imported_lobby = null;
         });
-    },
+    }
 
     // getMemberInfo(email){
     //   this.$http.get('http://picasaweb.google.com/data/entry/api/user/'+email+'?alt=json').then(response => {
@@ -221,7 +221,7 @@ export default {
     //     emitter.emit('snackbarOpen', "Error after loading users info", "error");
     //   });
     // }
-  },
+  }
 };
 </script>
 

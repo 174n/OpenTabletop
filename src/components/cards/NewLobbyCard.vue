@@ -23,7 +23,7 @@ import NewLobbySettings from "../dialogs/NewLobbySettings.vue";
 
 export default {
   components: {
-    NewLobbySettings,
+    NewLobbySettings
   },
   methods: {
     newLobby() {
@@ -32,8 +32,8 @@ export default {
     },
     openNewLobbySettings() {
       emitter.emit("newLobbySettingsToggle");
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -14,13 +14,13 @@
 <script>
 export default {
   props: {
-    lobbyId: String,
+    lobbyId: String
   },
   computed: {
     fullURL() {
       return location.href;
-    },
-  },
+    }
+  }
 };
 </script>
 

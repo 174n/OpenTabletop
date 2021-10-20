@@ -29,16 +29,16 @@ export default {
       return createAvatar(
         this.user.nickname.match(/(a|а)$/g) ? femaleStyle : maleStyle,
         {
-          seed: this.user.nickname,
+          seed: this.user.nickname
         }
       );
-    },
+    }
   },
   methods: {
     logout() {
       this.$store.dispatch("logout");
-    },
-  },
+    }
+  }
 };
 </script>
 

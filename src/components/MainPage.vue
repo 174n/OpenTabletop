@@ -39,7 +39,7 @@ export default {
     NewLobbyCard,
     // DecksCard,
     AuthCard,
-    UserInfoCard,
+    UserInfoCard
     // NewLobby,
     // NewDeck,
     // DeckEditor,
@@ -47,8 +47,8 @@ export default {
   computed: {
     userIsset() {
       return !this.$store.state.user;
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -14,7 +14,7 @@
 export default {
   data() {
     return {
-      deck_name: "",
+      deck_name: ""
     };
   },
   methods: {
@@ -26,13 +26,13 @@ export default {
         urls: [],
         title: this.deck_name,
         x: 10,
-        y: 10,
+        y: 10
       });
       this.deck_name = "";
-    },
+    }
   },
   computed: {},
-  created() {},
+  created() {}
 };
 </script>
 

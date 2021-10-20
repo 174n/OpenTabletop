@@ -49,12 +49,12 @@ export default {
   components: {
     "decks-list": DecksList,
     imgur: Imgur,
-    "new-empty-deck": NewEmptyDeck,
+    "new-empty-deck": NewEmptyDeck
   },
   data() {
     return {
       open: false,
-      tab: null,
+      tab: null
     };
   },
   created() {
@@ -65,8 +65,8 @@ export default {
   methods: {
     putADeck() {
       this.open = false;
-    },
-  },
+    }
+  }
 };
 </script>
 

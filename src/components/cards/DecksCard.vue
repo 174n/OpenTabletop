@@ -22,13 +22,13 @@ import DecksList from "../DecksList.vue";
 
 export default {
   components: {
-    "decks-list": DecksList,
+    "decks-list": DecksList
   },
   methods: {
     newDeckDialog() {
       emitter.emit("newDeckToggle");
-    },
-  },
+    }
+  }
 };
 </script>
 

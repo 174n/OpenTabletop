@@ -134,7 +134,7 @@ import emitter from "../helpers/event-bus.js";
 export default {
   data() {
     return {
-      speedDeal: false,
+      speedDeal: false
     };
   },
   methods: {
@@ -163,13 +163,13 @@ export default {
     addNewCounter(event) {
       this.$store.commit("addNewCounter", {
         x: event.clientX,
-        y: event.clientY,
+        y: event.clientY
       });
     },
     rollDice() {
       this.$store.commit("chatAddMsg", {
         nickname: "Dice roll: " + this.user.nickname,
-        msg: this.diceRoller(this.dice),
+        msg: this.diceRoller(this.dice)
       });
       this.openChat();
     },
@@ -184,7 +184,7 @@ export default {
     },
     toggleGame() {
       this.$store.commit("toggleGameState");
-    },
+    }
   },
   computed: {
     user() {
@@ -198,8 +198,8 @@ export default {
     },
     dice() {
       return this.$store.state.dice;
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss" scoped></style>

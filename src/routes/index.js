@@ -5,10 +5,10 @@ export default [
   // { path: '/', component: Component },
   {
     path: "/",
-    component: MainPage,
+    component: MainPage
   },
   {
     path: "/lobby/:id",
-    component: Lobby,
-  },
+    component: Lobby
+  }
 ];

@@ -54,7 +54,7 @@ export default {
       page: 1,
       pages: [],
       rules: false,
-      loading: 0,
+      loading: 0
     };
   },
   created() {
@@ -72,8 +72,8 @@ export default {
     },
     error() {
       emitter.emit("snackbarOpen", "Error while loading game rules", "error");
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -27,7 +27,7 @@
 export default {
   props: {
     subtitle: String,
-    backBtn: Boolean,
+    backBtn: Boolean
   },
   computed: {
     user() {
@@ -38,7 +38,7 @@ export default {
     },
     subtitleText() {
       return this.subtitle ? ` - ${this.subtitle}` : "";
-    },
-  },
+    }
+  }
 };
 </script>

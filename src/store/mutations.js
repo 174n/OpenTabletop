@@ -28,7 +28,7 @@ function randomColor() {
     "deep-orange",
     "brown",
     "blue-grey",
-    "grey",
+    "grey"
   ];
   return shuffle.pick(colors);
 }
@@ -82,7 +82,7 @@ export default {
 
     objects.splice(cardId, 1);
     objects.push({
-      type: "updateAll",
+      type: "updateAll"
     });
   },
 
@@ -91,7 +91,7 @@ export default {
     if (objects[objectId] !== undefined) {
       objects.splice(objectId, 1);
       objects.push({
-        type: "updateAll",
+        type: "updateAll"
       });
     }
   },
@@ -155,10 +155,10 @@ export default {
           hand: false,
           x: 0,
           y: 0,
-          rotation: 0,
+          rotation: 0
         };
       }),
-      new: true,
+      new: true
     });
   },
 
@@ -179,10 +179,10 @@ export default {
           size: data.size || 12,
           x: 0,
           y: 0,
-          rotation: 0,
+          rotation: 0
         };
       }),
-      new: true,
+      new: true
     });
   },
 
@@ -193,7 +193,7 @@ export default {
       y: pos.y - 100,
       count: 0,
       color: randomColor(),
-      new: true,
+      new: true
     });
   },
 
@@ -243,7 +243,7 @@ export default {
   setNickname(state, nickname) {
     localStorage.setItem("nickname", nickname); // temporary
     state.user = {
-      nickname,
+      nickname
     };
   },
 
@@ -267,7 +267,7 @@ export default {
     state.lobby.game.chat.push({
       nickname: data.nickname,
       msg: data.msg,
-      time: Date.now(),
+      time: Date.now()
     });
   },
 
@@ -285,7 +285,7 @@ export default {
     state.peers.push({
       nickname,
       peer,
-      established: false,
+      established: false
     });
   },
 
@@ -304,6 +304,10 @@ export default {
 
   setSignalhubUrl(state, url) {
     state.signalhubUrl = url;
+  },
+  
+  setCustomIceServers(state, json) {
+    state.customIceServers = json;
   },
 
   setLobby(state, lobby) {
@@ -389,5 +393,5 @@ export default {
 
   diceChange(state, dice) {
     state.dice = dice;
-  },
+  }
 };

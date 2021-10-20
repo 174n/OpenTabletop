@@ -49,13 +49,13 @@ import draggable from "vuedraggable";
 export default {
   components: {
     "card-preview": CardPreview,
-    draggable,
+    draggable
   },
   data() {
     return {
       open: false,
       deck: [],
-      deckId: false,
+      deckId: false
     };
   },
   computed: {
@@ -64,7 +64,7 @@ export default {
     },
     user() {
       return this.$store.state.user;
-    },
+    }
   },
   created() {
     emitter.on("deckViewToggle", (id) => {
@@ -74,7 +74,7 @@ export default {
       let name = this.user.nickname;
       this.$store.commit("chatAddMsg", [
         name + " viewed a deck",
-        name + ": " + this.game.objects[id].text,
+        name + ": " + this.game.objects[id].text
       ]);
       console.log(this.deckId);
     });
@@ -90,7 +90,7 @@ export default {
         id,
         x: event.pageX - 20,
         y: event.pageY - 20,
-        params: this.deckId,
+        params: this.deckId
       });
     },
     cardPreviewOpen(id) {
@@ -106,8 +106,8 @@ export default {
     },
     deckUpdate() {
       this.$store.commit("updateDeck", this.deckId);
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -11,6 +11,13 @@
             label="SignalHub instance url"
             required
           />
+          <v-textarea
+            name="input-7-1"
+            label="ICE Servers"
+            v-model="customIceServers"
+            value="[]"
+            hint="A JSON array of stun/turn servers"
+          ></v-textarea>
         </v-card-text>
         <v-card-actions>
           <v-btn color="green darken-1" text @click.stop="open = false"
@@ -28,7 +35,7 @@ import emitter from "../../helpers/event-bus.js";
 export default {
   data() {
     return {
-      open: false,
+      open: false
     };
   },
   computed: {
@@ -38,14 +45,22 @@ export default {
       },
       set(val) {
         this.$store.commit("setSignalhubUrl", val);
-      },
+      }
     },
+    customIceServers: {
+      get() {
+        return this.$store.state.customIceServers;
+      },
+      set(val) {
+        this.$store.commit("setCustomIceServers", val);
+      }
+    }
   },
   created() {
     emitter.on("newLobbySettingsToggle", () => {
       this.open = !this.open;
     });
-  },
+  }
 };
 </script>
 

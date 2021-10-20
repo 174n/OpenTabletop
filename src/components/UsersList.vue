@@ -12,7 +12,7 @@
         <v-list-item-content>
           <v-list-item-title>{{ name }}</v-list-item-title>
           <v-list-item-subtitle>{{
-            randDescription(name)
+            i === 0 ? "That's you" : randDescription(name)
           }}</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
@@ -36,11 +36,11 @@ export default {
       return createAvatar(
         name && name.match(/(a|а)$/g) ? femaleStyle : maleStyle,
         {
-          seed: name,
+          seed: name
         }
       );
-    },
+    }
   },
-  props: ["users", "title"],
+  props: ["users", "title"]
 };
 </script>

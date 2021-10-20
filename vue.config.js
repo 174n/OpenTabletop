@@ -10,6 +10,6 @@ module.exports = {
       // https: true,
       // key: fs.readFileSync(path.join(__dirname, "certs/desktop.lan.key")),
       // cert: fs.readFileSync(path.join(__dirname, "certs/decktop.lan.crt")),
-    },
-  },
+    }
+  }
 };

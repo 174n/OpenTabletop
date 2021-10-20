@@ -47,8 +47,8 @@ export default {
       data: {
         custom_size: false,
         real_size: false,
-        size: 12,
-      },
+        size: 12
+      }
     };
   },
   methods: {
@@ -60,7 +60,7 @@ export default {
         let imgur_id = /https:\/\/imgur.com\/a\/(.*)/g.exec(this.imgur_url)[1];
         this.$http
           .get("https://api.imgur.com/3/album/" + imgur_id, {
-            headers: { authorization: config.imgur_client_id },
+            headers: { authorization: config.imgur_client_id }
           })
           .then(
             (response) => {
@@ -72,7 +72,7 @@ export default {
                 y: 10,
                 back: this.imgurImageUrl(data.images[0].id),
                 real_size: this.data.real_size || false,
-                size: this.data.custom_size ? this.data.size : 12,
+                size: this.data.custom_size ? this.data.size : 12
               };
               data.images.slice(1).forEach((i) => {
                 params.urls.push(this.imgurImageUrl(i.id));
@@ -87,7 +87,7 @@ export default {
                 this.data = {
                   custom_size: false,
                   real_size: false,
-                  size: 12,
+                  size: 12
                 };
               }
             },
@@ -98,10 +98,10 @@ export default {
       } else {
         emitter.emit("snackbarOpen", "Wrong imgur url", "error");
       }
-    },
+    }
   },
   computed: {},
-  created() {},
+  created() {}
 };
 </script>
 

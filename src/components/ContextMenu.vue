@@ -31,88 +31,88 @@ export default {
         deck: [
           {
             title: "Take a card",
-            func: this.takeCard,
+            func: this.takeCard
           },
           {
             title: "Take a card to hand",
-            func: this.takeCardToHand,
+            func: this.takeCardToHand
           },
           {
             title: "Show cards",
-            func: this.deckListView,
+            func: this.deckListView
           },
           {
             title: "Reverse deck",
-            func: this.reverseDeck,
+            func: this.reverseDeck
           },
           {
             title: "Flip deck",
-            func: this.flipDeck,
+            func: this.flipDeck
           },
           {
             title: "Shuffle deck",
-            func: this.shuffleDeck,
+            func: this.shuffleDeck
           },
           {
             title: "Remove deck",
-            func: this.removeObject,
-          },
+            func: this.removeObject
+          }
         ],
         card: [
           {
             title: "Rotate card",
-            func: this.rotateCard,
+            func: this.rotateCard
           },
           {
             title: "Move to/from hand",
-            func: this.handMoveCard,
+            func: this.handMoveCard
           },
           {
             title: "Flip card",
-            func: this.flipCard,
+            func: this.flipCard
           },
           {
             title: "Pin / Unpin",
-            func: this.pinCard,
+            func: this.pinCard
           },
           {
             title: "Change size",
-            func: this.changeCardSize,
+            func: this.changeCardSize
           },
           {
             title: "Remove card",
-            func: this.removeObject,
-          },
+            func: this.removeObject
+          }
         ],
         counter: [
           {
             title: "Counter +1",
-            func: this.counterInc,
+            func: this.counterInc
           },
           {
             title: "Counter -1",
-            func: this.counterDecr,
+            func: this.counterDecr
           },
           {
             title: "Change color",
-            func: this.counterChangeColor,
+            func: this.counterChangeColor
           },
           {
             title: "Remove counter",
-            func: this.removeObject,
-          },
+            func: this.removeObject
+          }
         ],
         cardList: [
           {
             title: "View card",
-            func: this.viewCard,
+            func: this.viewCard
           },
           {
             title: "Take card",
-            func: this.takeCardToObjects,
-          },
-        ],
-      },
+            func: this.takeCardToObjects
+          }
+        ]
+      }
     };
   },
   methods: {
@@ -146,7 +146,7 @@ export default {
     takeCardToObjects() {
       this.$store.commit("takeCardFromDeckById", {
         deckId: this.params,
-        id: this.id,
+        id: this.id
       });
       emitter.emit("deckViewUpdate");
     },
@@ -173,7 +173,7 @@ export default {
     },
     counterChangeColor() {
       this.$store.commit("counterChangeColor", this.id);
-    },
+    }
   },
   created() {
     emitter.on("openContextMenu", ({ type, x, y, id, params }) => {
@@ -186,7 +186,7 @@ export default {
         this.show = true;
       }
     });
-  },
+  }
 };
 </script>
 

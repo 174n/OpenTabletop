@@ -34,7 +34,7 @@ export default {
       isOpen: false,
       url: "",
       rotation: 0,
-      zoom: 223,
+      zoom: 223
     };
   },
   created() {
@@ -56,8 +56,8 @@ export default {
       if (e.target.className === "cardDialog") {
         this.isOpen = false;
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
